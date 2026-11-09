@@ -1,0 +1,36 @@
+{
+  "variants": {
+    "bounded": {
+      "turns": 4,
+      "correct": 4,
+      "latency_misses": 0,
+      "speaker_render_p95_seconds": 1.482318333000876,
+      "latency_gate_passed": false,
+      "correctness_gate_passed": true,
+      "cases": {
+        "greeting": {
+          "turns": 2,
+          "correct": 2,
+          "generated_completion_median_seconds": 1.3765697284979979,
+          "service_completion_median_seconds": null,
+          "service_completed_within_10_seconds": 0,
+          "service_completion_p95_seconds": null,
+          "final_tool_result_median_seconds": null,
+          "final_tools_completed_within_10_seconds": 0
+        },
+        "calendar": {
+          "turns": 2,
+          "correct": 2,
+          "generated_completion_median_seconds": 15.869023353996454,
+          "service_completion_median_seconds": 8.10466156250186,
+          "service_completed_within_10_seconds": 2,
+          "service_completion_p95_seconds": 8.16222620800545,
+          "final_tool_result_median_seconds": 8.105817437499354,
+          "final_tools_completed_within_10_seconds": 2
+        }
+      }
+    }
+  },
+  "percentile_method": "Nearest rank; missing speaker output counts as infinity",
+  "completion_metric": "Final generated reply, measured separately from first speaker rendering"
+}

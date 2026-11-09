@@ -1,0 +1,43 @@
+{
+  "machine": "Mac17,8",
+  "chip": "Apple M5 Pro",
+  "memory": "48 GB",
+  "macos": "26.5",
+  "python": "3.14.7",
+  "pipecat": "1.12.0",
+  "mcp": "2.1.1",
+  "ollama": {
+    "version": "0.35.0"
+  },
+  "models": [
+    {
+      "name": "qwen3.8:27b-q4_K_M",
+      "model": "qwen3.8:27b-q4_K_M",
+      "size": 19508609678,
+      "digest": "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "qwen35",
+        "families": [
+          "qwen35"
+        ],
+        "parameter_size": "27.3B",
+        "quantization_level": "Q4_K_M"
+      },
+      "expires_at": "2026-10-03T15:37:56.302134-04:00",
+      "size_vram": 19508609678,
+      "context_length": 32768
+    }
+  ],
+  "files_sha256": {
+    "src/agent/services.py": "e47a05a63a73ad27124b88dbd0d4be0323bd03fc3c3562477f201203d6100a13",
+    "src/agent/turns.py": "63a96fbd5aadb2ea14b0140dd09061892051614aeccf3a6edf4646bbbdde2e6f",
+    "src/integrations/catalog.py": "ff5e7cf26661f64a54f040d7824f678fe6dbaa427399b79f266d047e037ed981",
+    "src/integrations/mcp.py": "333dbd6bf59bce6e209791dc829a8b9ce5db2a3c6165becc1c1c063e6d7ebe95",
+    "src/audio/apple.py": "69929b85ab33be5f5c0489183f3fd26d72ff4a0246c3e3aa8f3d8cc6028fa419",
+    "scripts/benchmark_tools.py": "9ea5ccf59e564abbce24531a0a9340680715bb325c19294f388b9accbcd4ebb6",
+    "scripts/fixtures/mcp-catalog.json": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "scripts/fixtures/latency-baseline.zip": "11f389a9535f50356c692ab020acbb256d72bec0b0299293547ae795183fb278"
+  }
+}

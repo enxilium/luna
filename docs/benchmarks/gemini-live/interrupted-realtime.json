@@ -1,0 +1,1701 @@
+[
+  {
+    "first_audio_seconds": 0.6701945409877226,
+    "first_speaker_delivery_seconds": 0.6730741659994237,
+    "first_speaker_render_seconds": 0.7082606659969315,
+    "final_tool_result_seconds": null,
+    "reply_complete_seconds": 2.735779458016623,
+    "token_usage": [
+      {
+        "prompt_tokens": 52898,
+        "completion_tokens": 56,
+        "total_tokens": 52954,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 23,
+        "input_audio_tokens": 156,
+        "output_audio_tokens": 56,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [],
+    "tool_results": [],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      }
+    ],
+    "ready_seconds": 0.7145703330170363,
+    "spoken_text": "Hello, I'm here to help you today.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "greeting",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [],
+    "service_complete_seconds": null
+  },
+  {
+    "first_audio_seconds": null,
+    "first_speaker_delivery_seconds": null,
+    "first_speaker_render_seconds": null,
+    "final_tool_result_seconds": 0.983587083988823,
+    "reply_complete_seconds": null,
+    "token_usage": [],
+    "errors": [
+      "timeout_or_connection_failure"
+    ],
+    "native_tool_calls": [
+      {
+        "tool": "google_calendar__list_events",
+        "arguments": {
+          "orderBy": "startTime",
+          "calendarId": "primary",
+          "pageSize": 5,
+          "endTime": "2026-10-06T00:00:00-04:00",
+          "startTime": "2026-10-05T00:00:00-04:00"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "google_calendar__list_events",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [],
+    "ready_seconds": 1.1538155839662068,
+    "spoken_text": "",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "calendar",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": false,
+    "service_calls": [
+      {
+        "integration": "google_calendar",
+        "name": "list_events",
+        "arguments": {
+          "orderBy": "startTime",
+          "calendarId": "primary",
+          "pageSize": 5,
+          "endTime": "2026-10-06T00:00:00-04:00",
+          "startTime": "2026-10-05T00:00:00-04:00"
+        }
+      }
+    ],
+    "service_complete_seconds": 0.9823606669669971
+  },
+  {
+    "first_audio_seconds": 3.482304417004343,
+    "first_speaker_delivery_seconds": 3.494085041980725,
+    "first_speaker_render_seconds": 3.5334548329701647,
+    "final_tool_result_seconds": 2.7434614169760607,
+    "reply_complete_seconds": 9.177272374974564,
+    "token_usage": [
+      {
+        "prompt_tokens": 160138,
+        "completion_tokens": 213,
+        "total_tokens": 160351,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 582,
+        "input_audio_tokens": 468,
+        "output_audio_tokens": 145,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "google_docs__update_doc",
+        "arguments": {
+          "documentId": "doc-example",
+          "requests": [
+            {
+              "replaceAllText": {
+                "containsText": {
+                  "text": "Project Alpha",
+                  "matchCase": true
+                },
+                "replaceText": "Project Luna"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "tool": "google_docs__read_doc",
+        "arguments": {
+          "documentId": "doc-example"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "google_docs__update_doc",
+        "status": "completed"
+      },
+      {
+        "tool": "google_docs__read_doc",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 8160
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 28800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      }
+    ],
+    "ready_seconds": 1.1939771249890327,
+    "spoken_text": "All instances of Project Alpha have been replaced with Project Luna, and the update has been verified.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "docs",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "google_docs",
+        "name": "update_doc",
+        "arguments": {
+          "documentId": "doc-example",
+          "requests": [
+            {
+              "replaceAllText": {
+                "containsText": {
+                  "text": "Project Alpha",
+                  "matchCase": true
+                },
+                "replaceText": "Project Luna"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "integration": "google_docs",
+        "name": "read_doc",
+        "arguments": {
+          "documentId": "doc-example"
+        }
+      }
+    ],
+    "service_complete_seconds": 2.7422799170017242
+  },
+  {
+    "first_audio_seconds": 2.8212589159957133,
+    "first_speaker_delivery_seconds": 3.0489180829608813,
+    "first_speaker_render_seconds": 3.091851915989537,
+    "final_tool_result_seconds": 1.0837154999608174,
+    "reply_complete_seconds": 6.259789832984097,
+    "token_usage": [
+      {
+        "prompt_tokens": 159483,
+        "completion_tokens": 142,
+        "total_tokens": 159625,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 174,
+        "input_audio_tokens": 468,
+        "output_audio_tokens": 86,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "spotify__searchSpotify",
+        "arguments": {
+          "type": "track",
+          "query": "Bohemian Rhapsody Queen"
+        }
+      },
+      {
+        "tool": "spotify__playMusic",
+        "arguments": {
+          "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "spotify__searchSpotify",
+        "status": "completed"
+      },
+      {
+        "tool": "spotify__playMusic",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2880
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 3840
+      }
+    ],
+    "ready_seconds": 0.5807848330005072,
+    "spoken_text": "Playing Bohemian Rhapsody by Queen on Spotify.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "playback",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "searchSpotify",
+        "arguments": {
+          "type": "track",
+          "query": "Bohemian Rhapsody Queen"
+        }
+      },
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv"
+        }
+      }
+    ],
+    "service_complete_seconds": 1.0825553329777904
+  },
+  {
+    "first_audio_seconds": null,
+    "first_speaker_delivery_seconds": null,
+    "first_speaker_render_seconds": null,
+    "final_tool_result_seconds": 1.1167000000132248,
+    "reply_complete_seconds": null,
+    "token_usage": [],
+    "errors": [
+      "timeout_or_connection_failure"
+    ],
+    "native_tool_calls": [
+      {
+        "tool": "spotify__searchSpotify",
+        "arguments": {
+          "query": "Bohemian Rhapsody Queen",
+          "type": "track"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "spotify__searchSpotify",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [],
+    "ready_seconds": 0.6525141670135781,
+    "spoken_text": "",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "history_playback",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": false,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "searchSpotify",
+        "arguments": {
+          "query": "Bohemian Rhapsody Queen",
+          "type": "track"
+        }
+      }
+    ],
+    "service_complete_seconds": null
+  },
+  {
+    "first_audio_seconds": null,
+    "first_speaker_delivery_seconds": null,
+    "first_speaker_render_seconds": null,
+    "final_tool_result_seconds": 0.5145984169794247,
+    "reply_complete_seconds": null,
+    "token_usage": [
+      {
+        "prompt_tokens": 105882,
+        "completion_tokens": 8,
+        "total_tokens": 105890,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 63,
+        "input_audio_tokens": 312,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [
+      "no_generated_audio"
+    ],
+    "native_tool_calls": [
+      {
+        "tool": "spotify__getNowPlaying",
+        "arguments": {}
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "spotify__getNowPlaying",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [],
+    "ready_seconds": 0.6243091670330614,
+    "spoken_text": "Nothing is currently playing on Spotify.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "spotify",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": false,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "getNowPlaying",
+        "arguments": {}
+      }
+    ],
+    "service_complete_seconds": 0.5129786669858731
+  },
+  {
+    "first_audio_seconds": 1.8292404580279253,
+    "first_speaker_delivery_seconds": 1.8368777080322616,
+    "first_speaker_render_seconds": 1.8763014170108363,
+    "final_tool_result_seconds": 1.2523810830316506,
+    "reply_complete_seconds": 6.325145957991481,
+    "token_usage": [
+      {
+        "prompt_tokens": 161678,
+        "completion_tokens": 190,
+        "total_tokens": 161868,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 238,
+        "input_audio_tokens": 468,
+        "output_audio_tokens": 115,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "google_docs__read_doc",
+        "arguments": {
+          "documentId": "doc-large"
+        }
+      },
+      {
+        "tool": "read_tool_result",
+        "arguments": {
+          "result_id": "fcc735daee204600b50e17416aec0d29",
+          "limit": 4096,
+          "offset": 8036
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "google_docs__read_doc",
+        "status": "completed"
+      },
+      {
+        "tool": "read_tool_result",
+        "status": "result_page"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 23040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 28800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      }
+    ],
+    "ready_seconds": 0.6129506670404226,
+    "spoken_text": "The validation code at the end of the document is LUNA-7429.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "large_result",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "google_docs",
+        "name": "read_doc",
+        "arguments": {
+          "documentId": "doc-large"
+        }
+      }
+    ],
+    "service_complete_seconds": 0.6497811670415103
+  },
+  {
+    "first_audio_seconds": 1.2754482910386287,
+    "first_speaker_delivery_seconds": 1.2763800829998218,
+    "first_speaker_render_seconds": 1.3143657080363482,
+    "final_tool_result_seconds": 0.7375449160463177,
+    "reply_complete_seconds": 2.7552880000439472,
+    "token_usage": [
+      {
+        "prompt_tokens": 106091,
+        "completion_tokens": 75,
+        "total_tokens": 106166,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 165,
+        "input_audio_tokens": 312,
+        "output_audio_tokens": 42,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "spotify__playMusic",
+        "arguments": {
+          "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "spotify__playMusic",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 12000
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 3840
+      }
+    ],
+    "ready_seconds": 1.1649182499968447,
+    "spoken_text": "Playing the track now.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "explicit_playback",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv"
+        }
+      }
+    ],
+    "service_complete_seconds": 0.7363205410074443
+  },
+  {
+    "first_audio_seconds": 26.528272708994336,
+    "first_speaker_delivery_seconds": 26.553226458956487,
+    "first_speaker_render_seconds": 26.594638541981112,
+    "final_tool_result_seconds": 1.0030284999520518,
+    "reply_complete_seconds": 38.35012849996565,
+    "token_usage": [
+      {
+        "prompt_tokens": 106578,
+        "completion_tokens": 308,
+        "total_tokens": 106886,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 56,
+        "input_audio_tokens": 312,
+        "output_audio_tokens": 300,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "google_calendar__list_events",
+        "arguments": {
+          "orderBy": "startTime",
+          "pageSize": 5,
+          "calendarId": "primary",
+          "startTime": "2026-10-05T00:00:00-04:00",
+          "endTime": "2026-10-06T00:00:00-04:00"
+        }
+      },
+      {
+        "tool": "spotify__getNowPlaying",
+        "arguments": {}
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "google_calendar__list_events",
+        "status": "completed"
+      },
+      {
+        "tool": "spotify__getNowPlaying",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 10080
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 23040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 3840
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 30720
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 32640
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 26880
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 3840
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 24960
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 23040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 23040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      }
+    ],
+    "ready_seconds": 1.1189951669657603,
+    "spoken_text": "The next five events are Design review 0, Design review 1, Design review 2, Design review 3, and Design review 4. Nothing is currently playing on Spotify.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "multi_service",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "google_calendar",
+        "name": "list_events",
+        "arguments": {
+          "orderBy": "startTime",
+          "pageSize": 5,
+          "calendarId": "primary",
+          "startTime": "2026-10-05T00:00:00-04:00",
+          "endTime": "2026-10-06T00:00:00-04:00"
+        }
+      },
+      {
+        "integration": "spotify",
+        "name": "getNowPlaying",
+        "arguments": {}
+      }
+    ],
+    "service_complete_seconds": 1.0009312919573858
+  },
+  {
+    "first_audio_seconds": 1.0337189999991097,
+    "first_speaker_delivery_seconds": 1.0345839580404572,
+    "first_speaker_render_seconds": 1.071632583043538,
+    "final_tool_result_seconds": null,
+    "reply_complete_seconds": 4.804588916013017,
+    "token_usage": [
+      {
+        "prompt_tokens": 52901,
+        "completion_tokens": 99,
+        "total_tokens": 53000,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 181,
+        "input_audio_tokens": 156,
+        "output_audio_tokens": 99,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [],
+    "tool_results": [],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 18240
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 3840
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 28800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      }
+    ],
+    "ready_seconds": 0.5547386670368724,
+    "spoken_text": "I cannot delete an entire Google Calendar with my current tools.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "unsupported",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [],
+    "service_complete_seconds": null
+  },
+  {
+    "first_audio_seconds": 0.7258218750357628,
+    "first_speaker_delivery_seconds": 0.7321553750080056,
+    "first_speaker_render_seconds": 0.7740753749967553,
+    "final_tool_result_seconds": null,
+    "reply_complete_seconds": 2.4168547090375796,
+    "token_usage": [
+      {
+        "prompt_tokens": 52898,
+        "completion_tokens": 48,
+        "total_tokens": 52946,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 14,
+        "input_audio_tokens": 156,
+        "output_audio_tokens": 48,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [],
+    "tool_results": [],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      }
+    ],
+    "ready_seconds": 0.5739804589538835,
+    "spoken_text": "Hello, I'm here to help you.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "greeting",
+    "repeat": 2,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [],
+    "service_complete_seconds": null
+  },
+  {
+    "first_audio_seconds": 1.442353499995079,
+    "first_speaker_delivery_seconds": 1.4428789590019733,
+    "first_speaker_render_seconds": 1.4827790000126697,
+    "final_tool_result_seconds": 0.8319382090121508,
+    "reply_complete_seconds": 9.430059375008568,
+    "token_usage": [
+      {
+        "prompt_tokens": 106430,
+        "completion_tokens": 292,
+        "total_tokens": 106722,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 231,
+        "input_audio_tokens": 312,
+        "output_audio_tokens": 205,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "google_calendar__list_events",
+        "arguments": {
+          "orderBy": "startTime",
+          "calendarId": "primary",
+          "startTime": "2026-10-05T00:00:00-04:00",
+          "endTime": "2026-10-06T00:00:00-04:00",
+          "pageSize": 5
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "google_calendar__list_events",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 32640
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 24960
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 26880
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 23040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      }
+    ],
+    "ready_seconds": 0.6648004169692285,
+    "spoken_text": "The next five events are Design review 0, Design review 1, Design review 2, Design review 3, and Design review 4.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "calendar",
+    "repeat": 2,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "google_calendar",
+        "name": "list_events",
+        "arguments": {
+          "orderBy": "startTime",
+          "calendarId": "primary",
+          "startTime": "2026-10-05T00:00:00-04:00",
+          "endTime": "2026-10-06T00:00:00-04:00",
+          "pageSize": 5
+        }
+      }
+    ],
+    "service_complete_seconds": 0.8306914590066299
+  },
+  {
+    "first_audio_seconds": 5.709294791973662,
+    "first_speaker_delivery_seconds": 5.710001708997879,
+    "first_speaker_render_seconds": 5.749414791993331,
+    "final_tool_result_seconds": 4.989679083984811,
+    "reply_complete_seconds": 11.194983124965802,
+    "token_usage": [
+      {
+        "prompt_tokens": 162227,
+        "completion_tokens": 207,
+        "total_tokens": 162434,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 1626,
+        "input_audio_tokens": 468,
+        "output_audio_tokens": 139,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "google_docs__update_doc",
+        "arguments": {
+          "requests": [
+            {
+              "replaceAllText": {
+                "replaceText": "Project Luna",
+                "containsText": {
+                  "matchCase": true,
+                  "text": "Project Alpha"
+                }
+              }
+            }
+          ],
+          "documentId": "doc-example"
+        }
+      },
+      {
+        "tool": "google_docs__read_doc",
+        "arguments": {
+          "documentId": "doc-example"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "google_docs__update_doc",
+        "status": "completed"
+      },
+      {
+        "tool": "google_docs__read_doc",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 3840
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 28800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      }
+    ],
+    "ready_seconds": 1.0910373330116272,
+    "spoken_text": "All instances of Project Alpha have been replaced with Project Luna, and the update has been verified.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "docs",
+    "repeat": 2,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "google_docs",
+        "name": "update_doc",
+        "arguments": {
+          "requests": [
+            {
+              "replaceAllText": {
+                "replaceText": "Project Luna",
+                "containsText": {
+                  "matchCase": true,
+                  "text": "Project Alpha"
+                }
+              }
+            }
+          ],
+          "documentId": "doc-example"
+        }
+      },
+      {
+        "integration": "google_docs",
+        "name": "read_doc",
+        "arguments": {
+          "documentId": "doc-example"
+        }
+      }
+    ],
+    "service_complete_seconds": 4.988559124991298
+  }
+]

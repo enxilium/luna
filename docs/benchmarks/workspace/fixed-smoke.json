@@ -1,0 +1,678 @@
+[
+  {
+    "first_audio_seconds": 0.8945322500076145,
+    "first_speaker_delivery_seconds": null,
+    "first_speaker_render_seconds": null,
+    "final_tool_result_seconds": null,
+    "reply_complete_seconds": 3.1438701660372317,
+    "token_usage": [
+      {
+        "prompt_tokens": 52898,
+        "completion_tokens": 59,
+        "total_tokens": 52957,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 18,
+        "input_audio_tokens": 156,
+        "output_audio_tokens": 59,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [],
+    "tool_results": [],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      }
+    ],
+    "ready_seconds": 0.7288191670086235,
+    "spoken_text": "Hello there, how can I help you today?",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "greeting",
+    "backend": "local",
+    "prompt": "Say hello in one short sentence.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [],
+    "service_complete_seconds": null,
+    "api_requests": []
+  },
+  {
+    "first_audio_seconds": 1.4857966669951566,
+    "first_speaker_delivery_seconds": null,
+    "first_speaker_render_seconds": null,
+    "final_tool_result_seconds": 0.797631207969971,
+    "reply_complete_seconds": 3.6395542079699226,
+    "token_usage": [
+      {
+        "prompt_tokens": 105914,
+        "completion_tokens": 70,
+        "total_tokens": 105984,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 74,
+        "input_audio_tokens": 312,
+        "output_audio_tokens": 60,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "google_gmail__list_labels",
+        "arguments": {}
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "google_gmail__list_labels",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      }
+    ],
+    "ready_seconds": 1.152318250038661,
+    "spoken_text": "Your Gmail label is INBOX.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "gmail",
+    "backend": "local",
+    "prompt": "List the names of my Gmail labels.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "google_gmail",
+        "name": "list_labels",
+        "arguments": {}
+      }
+    ],
+    "service_complete_seconds": 0.7929639169597067,
+    "api_requests": [
+      {
+        "method": "GET",
+        "url": "https://gmail.googleapis.com/gmail/v1/users/me/labels",
+        "path": "/gmail/v1/users/me/labels",
+        "params": {},
+        "body": null
+      }
+    ]
+  },
+  {
+    "first_audio_seconds": 2.725939250027295,
+    "first_speaker_delivery_seconds": null,
+    "first_speaker_render_seconds": null,
+    "final_tool_result_seconds": 1.2154489579843357,
+    "reply_complete_seconds": 10.40968929202063,
+    "token_usage": [
+      {
+        "prompt_tokens": 106855,
+        "completion_tokens": 283,
+        "total_tokens": 107138,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 234,
+        "input_audio_tokens": 312,
+        "output_audio_tokens": 196,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "google_calendar__list_events",
+        "arguments": {
+          "pageSize": 5,
+          "startTime": "2026-10-05T00:00:00-04:00",
+          "orderBy": "startTime",
+          "endTime": "2026-10-06T00:00:00-04:00",
+          "calendarId": "primary"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "google_calendar__list_events",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 8640
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 24960
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 23040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      }
+    ],
+    "ready_seconds": 1.1291847089887597,
+    "spoken_text": "The next five events are Design review 0, Design review 1, Design review 2, Design review 3, and Design review 4.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "calendar",
+    "backend": "local",
+    "prompt": "Show the next five events on my primary Google calendar between 2026-10-05T00:00:00-04:00 and 2026-10-06T00:00:00-04:00. Give their titles.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "google_calendar",
+        "name": "list_events",
+        "arguments": {
+          "pageSize": 5,
+          "startTime": "2026-10-05T00:00:00-04:00",
+          "orderBy": "startTime",
+          "endTime": "2026-10-06T00:00:00-04:00",
+          "calendarId": "primary"
+        }
+      }
+    ],
+    "service_complete_seconds": 1.1993679580045864,
+    "api_requests": [
+      {
+        "method": "GET",
+        "url": "https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=2026-10-05T00%3A00%3A00-04%3A00&timeMax=2026-10-06T00%3A00%3A00-04%3A00&orderBy=startTime&maxResults=5&singleEvents=true&eventTypes=default&eventTypes=outOfOffice&eventTypes=focusTime&eventTypes=fromGmail",
+        "path": "/calendar/v3/calendars/primary/events",
+        "params": {
+          "timeMin": "2026-10-05T00:00:00-04:00",
+          "timeMax": "2026-10-06T00:00:00-04:00",
+          "orderBy": "startTime",
+          "maxResults": "5",
+          "singleEvents": "true",
+          "eventTypes": "default"
+        },
+        "body": null
+      }
+    ]
+  },
+  {
+    "first_audio_seconds": 5.65166491700802,
+    "first_speaker_delivery_seconds": null,
+    "first_speaker_render_seconds": null,
+    "final_tool_result_seconds": 4.922677082999144,
+    "reply_complete_seconds": 11.752763832977507,
+    "token_usage": [
+      {
+        "prompt_tokens": 161807,
+        "completion_tokens": 225,
+        "total_tokens": 162032,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 1396,
+        "input_audio_tokens": 468,
+        "output_audio_tokens": 157,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "google_docs__update_doc",
+        "arguments": {
+          "requests": [
+            {
+              "replaceAllText": {
+                "replaceText": "Project Luna",
+                "containsText": {
+                  "matchCase": true,
+                  "text": "Project Alpha"
+                }
+              }
+            }
+          ],
+          "documentId": "doc-example"
+        }
+      },
+      {
+        "tool": "google_docs__read_doc",
+        "arguments": {
+          "documentId": "doc-example"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "google_docs__update_doc",
+        "status": "completed"
+      },
+      {
+        "tool": "google_docs__read_doc",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 4320
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 24960
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 28800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      }
+    ],
+    "ready_seconds": 0.6469273749971762,
+    "spoken_text": "The edit has been applied successfully, and verification confirms the document now reads \"Project Luna\".",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "docs",
+    "backend": "local",
+    "prompt": "Replace all Project Alpha with Project Luna in the Google document with documentId=doc-example, matching case. The document has already been read. Apply and verify the edit.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "google_docs",
+        "name": "update_doc",
+        "arguments": {
+          "requests": [
+            {
+              "replaceAllText": {
+                "replaceText": "Project Luna",
+                "containsText": {
+                  "matchCase": true,
+                  "text": "Project Alpha"
+                }
+              }
+            }
+          ],
+          "documentId": "doc-example"
+        }
+      },
+      {
+        "integration": "google_docs",
+        "name": "read_doc",
+        "arguments": {
+          "documentId": "doc-example"
+        }
+      }
+    ],
+    "service_complete_seconds": 4.920065333019011,
+    "api_requests": [
+      {
+        "method": "POST",
+        "url": "https://docs.googleapis.com/v1/documents/doc-example:batchUpdate",
+        "path": "/v1/documents/doc-example:batchUpdate",
+        "params": {},
+        "body": {
+          "requests": [
+            {
+              "replaceAllText": {
+                "replaceText": "Project Luna",
+                "containsText": {
+                  "matchCase": true,
+                  "text": "Project Alpha"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "method": "GET",
+        "url": "https://docs.googleapis.com/v1/documents/doc-example?includeTabsContent=true&commentsViewMode=COMMENTS_VIEW_MODE_OMITTED",
+        "path": "/v1/documents/doc-example",
+        "params": {
+          "includeTabsContent": "true",
+          "commentsViewMode": "COMMENTS_VIEW_MODE_OMITTED"
+        },
+        "body": null
+      }
+    ]
+  }
+]

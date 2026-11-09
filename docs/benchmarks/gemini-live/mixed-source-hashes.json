@@ -1,0 +1,7 @@
+{
+  "src/agent/services.py": "d664c1c54b1e0e977cda5239ab59a59eae148eb72bb4676a68e71bd778ffbf56",
+  "src/integrations/mcp.py": "21bf37d3ddb50b6f222ab6743008a197fef38118ff1e804d89b4aaf7f98224e4",
+  "src/integrations/schemas.py": "9103f90e02ab6e451add99b26183149347c2cea9c2d88c2f36354deeb89449ff",
+  "scripts/benchmark_tools.py": "4fb306e3e0b1636e3a5d9f4186638b1965c887e7c72df340075b05dbb56479b7",
+  "scripts/fixtures/mcp-catalog.json": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6"
+}

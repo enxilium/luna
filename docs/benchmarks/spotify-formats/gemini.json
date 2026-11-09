@@ -1,0 +1,1130 @@
+[
+  {
+    "first_audio_seconds": 1.769927582994569,
+    "first_speaker_delivery_seconds": 1.7830216669826768,
+    "first_speaker_render_seconds": 1.8162361669819802,
+    "final_tool_result_seconds": 1.1117458749795333,
+    "reply_complete_seconds": 4.110153124958742,
+    "token_usage": [
+      {
+        "prompt_tokens": 159250,
+        "completion_tokens": 113,
+        "total_tokens": 159363,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 129,
+        "input_audio_tokens": 468,
+        "output_audio_tokens": 62,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "spotify__getMyPlaylists",
+        "arguments": {
+          "limit": 50
+        }
+      },
+      {
+        "tool": "spotify__playMusic",
+        "arguments": {
+          "uri": "spotify:playlist:37i9dQZF1DXcBWIGoYBM5M",
+          "type": "playlist"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "spotify__getMyPlaylists",
+        "status": "completed"
+      },
+      {
+        "tool": "spotify__playMusic",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      }
+    ],
+    "ready_seconds": 0.6420020000077784,
+    "spoken_text": "I'm now playing your playlist, \"the hermit\".",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "playlist",
+    "backend": "local",
+    "prompt": "Play my Spotify playlist named \"the hermit\". Find it in my playlists first and use its identifier.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "getMyPlaylists",
+        "arguments": {
+          "limit": 50
+        }
+      },
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "uri": "spotify:playlist:37i9dQZF1DXcBWIGoYBM5M",
+          "type": "playlist"
+        }
+      }
+    ],
+    "service_complete_seconds": 1.1107721249572933,
+    "api_requests": []
+  },
+  {
+    "first_audio_seconds": 2.456905083032325,
+    "first_speaker_delivery_seconds": 2.4646585829905234,
+    "first_speaker_render_seconds": 2.4983319170423783,
+    "final_tool_result_seconds": 1.7002370420377702,
+    "reply_complete_seconds": 4.877085000043735,
+    "token_usage": [
+      {
+        "prompt_tokens": 159567,
+        "completion_tokens": 121,
+        "total_tokens": 159688,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 211,
+        "input_audio_tokens": 468,
+        "output_audio_tokens": 63,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "spotify__searchSpotify",
+        "arguments": {
+          "query": "Bohemian Rhapsody Queen",
+          "type": "track"
+        }
+      },
+      {
+        "tool": "spotify__playMusic",
+        "arguments": {
+          "id": "4u7EnebtmKWzUH433cf5Qv",
+          "type": "track"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "spotify__searchSpotify",
+        "status": "completed"
+      },
+      {
+        "tool": "spotify__playMusic",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      }
+    ],
+    "ready_seconds": 0.5929865830112249,
+    "spoken_text": "Playing Bohemian Rhapsody by Queen.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "playback",
+    "backend": "local",
+    "prompt": "Play Bohemian Rhapsody by Queen on Spotify. Use the original studio recording.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "searchSpotify",
+        "arguments": {
+          "query": "Bohemian Rhapsody Queen",
+          "type": "track"
+        }
+      },
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "id": "4u7EnebtmKWzUH433cf5Qv",
+          "type": "track"
+        }
+      }
+    ],
+    "service_complete_seconds": 1.6987805000389926,
+    "api_requests": []
+  },
+  {
+    "first_audio_seconds": 3.276112916006241,
+    "first_speaker_delivery_seconds": 3.2768280409509316,
+    "first_speaker_render_seconds": 3.3196788329514675,
+    "final_tool_result_seconds": 2.3617258750018664,
+    "reply_complete_seconds": 6.253399124951102,
+    "token_usage": [
+      {
+        "prompt_tokens": 159424,
+        "completion_tokens": 145,
+        "total_tokens": 159569,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 204,
+        "input_audio_tokens": 468,
+        "output_audio_tokens": 79,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "spotify__searchSpotify",
+        "arguments": {
+          "type": "track",
+          "limit": 1,
+          "query": "Bohemian Rhapsody Queen"
+        }
+      },
+      {
+        "tool": "spotify__playMusic",
+        "arguments": {
+          "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv",
+          "type": "track"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "spotify__searchSpotify",
+        "status": "completed"
+      },
+      {
+        "tool": "spotify__playMusic",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      }
+    ],
+    "ready_seconds": 1.3509402089985088,
+    "spoken_text": "Playing Bohemian Rhapsody by Queen on Spotify.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "history_playback",
+    "backend": "local",
+    "prompt": "Play my favorite song on Spotify. Use the original studio recording.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "searchSpotify",
+        "arguments": {
+          "type": "track",
+          "limit": 1,
+          "query": "Bohemian Rhapsody Queen"
+        }
+      },
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv",
+          "type": "track"
+        }
+      }
+    ],
+    "service_complete_seconds": 2.360528332996182,
+    "api_requests": []
+  },
+  {
+    "first_audio_seconds": 1.331736583961174,
+    "first_speaker_delivery_seconds": 1.3323797920020297,
+    "first_speaker_render_seconds": 1.3679107089992613,
+    "final_tool_result_seconds": 0.6302169589907862,
+    "reply_complete_seconds": 3.8218043340020813,
+    "token_usage": [
+      {
+        "prompt_tokens": 105896,
+        "completion_tokens": 74,
+        "total_tokens": 105970,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 42,
+        "input_audio_tokens": 312,
+        "output_audio_tokens": 66,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "spotify__getNowPlaying",
+        "arguments": {}
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "spotify__getNowPlaying",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 4800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      }
+    ],
+    "ready_seconds": 0.6682833330123685,
+    "spoken_text": "Nothing is currently playing on Spotify.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "spotify",
+    "backend": "local",
+    "prompt": "Check what is currently playing on Spotify.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "getNowPlaying",
+        "arguments": {}
+      }
+    ],
+    "service_complete_seconds": 0.6289357499917969,
+    "api_requests": []
+  },
+  {
+    "first_audio_seconds": 2.525254250038415,
+    "first_speaker_delivery_seconds": 2.535377916006837,
+    "first_speaker_render_seconds": 2.5742812910466455,
+    "final_tool_result_seconds": 1.3923608330078423,
+    "reply_complete_seconds": 5.0492144580348395,
+    "token_usage": [
+      {
+        "prompt_tokens": 159215,
+        "completion_tokens": 119,
+        "total_tokens": 159334,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 131,
+        "input_audio_tokens": 468,
+        "output_audio_tokens": 68,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "spotify__getMyPlaylists",
+        "arguments": {
+          "limit": 50
+        }
+      },
+      {
+        "tool": "spotify__playMusic",
+        "arguments": {
+          "type": "playlist",
+          "uri": "spotify:playlist:37i9dQZF1DXcBWIGoYBM5M"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "spotify__getMyPlaylists",
+        "status": "completed"
+      },
+      {
+        "tool": "spotify__playMusic",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      }
+    ],
+    "ready_seconds": 0.7390753750223666,
+    "spoken_text": "I'm now playing your playlist \"the hermit\".",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "playlist",
+    "backend": "local",
+    "prompt": "Play my Spotify playlist named \"the hermit\". Find it in my playlists first and use its identifier.",
+    "repeat": 2,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "getMyPlaylists",
+        "arguments": {
+          "limit": 50
+        }
+      },
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "type": "playlist",
+          "uri": "spotify:playlist:37i9dQZF1DXcBWIGoYBM5M"
+        }
+      }
+    ],
+    "service_complete_seconds": 1.391460333019495,
+    "api_requests": []
+  },
+  {
+    "first_audio_seconds": 1.8201752080349252,
+    "first_speaker_delivery_seconds": 1.8207072080112994,
+    "first_speaker_render_seconds": 1.8627259580534883,
+    "final_tool_result_seconds": 1.2080925420159474,
+    "reply_complete_seconds": 4.241805375029799,
+    "token_usage": [
+      {
+        "prompt_tokens": 159297,
+        "completion_tokens": 128,
+        "total_tokens": 159425,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 166,
+        "input_audio_tokens": 468,
+        "output_audio_tokens": 66,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "spotify__searchSpotify",
+        "arguments": {
+          "type": "track",
+          "limit": 1,
+          "query": "Bohemian Rhapsody Queen"
+        }
+      },
+      {
+        "tool": "spotify__playMusic",
+        "arguments": {
+          "id": "4u7EnebtmKWzUH433cf5Qv",
+          "type": "track"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "spotify__searchSpotify",
+        "status": "completed"
+      },
+      {
+        "tool": "spotify__playMusic",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      }
+    ],
+    "ready_seconds": 0.9838332919753157,
+    "spoken_text": "I'm playing Bohemian Rhapsody by Queen.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "playback",
+    "backend": "local",
+    "prompt": "Play Bohemian Rhapsody by Queen on Spotify. Use the original studio recording.",
+    "repeat": 2,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "searchSpotify",
+        "arguments": {
+          "type": "track",
+          "limit": 1,
+          "query": "Bohemian Rhapsody Queen"
+        }
+      },
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "id": "4u7EnebtmKWzUH433cf5Qv",
+          "type": "track"
+        }
+      }
+    ],
+    "service_complete_seconds": 1.206987542042043,
+    "api_requests": []
+  },
+  {
+    "first_audio_seconds": 3.347151666006539,
+    "first_speaker_delivery_seconds": 3.3475880000041798,
+    "first_speaker_render_seconds": 3.3864090829738416,
+    "final_tool_result_seconds": 1.8700044159777462,
+    "reply_complete_seconds": 6.683380500006024,
+    "token_usage": [
+      {
+        "prompt_tokens": 159514,
+        "completion_tokens": 146,
+        "total_tokens": 159660,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 134,
+        "input_audio_tokens": 468,
+        "output_audio_tokens": 88,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "spotify__searchSpotify",
+        "arguments": {
+          "query": "Bohemian Rhapsody Queen",
+          "type": "track"
+        }
+      },
+      {
+        "tool": "spotify__playMusic",
+        "arguments": {
+          "id": "4u7EnebtmKWzUH433cf5Qv",
+          "type": "track"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "spotify__searchSpotify",
+        "status": "completed"
+      },
+      {
+        "tool": "spotify__playMusic",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      }
+    ],
+    "ready_seconds": 0.5930590420030057,
+    "spoken_text": "Now playing Bohemian Rhapsody by Queen on Spotify.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "history_playback",
+    "backend": "local",
+    "prompt": "Play my favorite song on Spotify. Use the original studio recording.",
+    "repeat": 2,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "searchSpotify",
+        "arguments": {
+          "query": "Bohemian Rhapsody Queen",
+          "type": "track"
+        }
+      },
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "id": "4u7EnebtmKWzUH433cf5Qv",
+          "type": "track"
+        }
+      }
+    ],
+    "service_complete_seconds": 1.8695699580130167,
+    "api_requests": []
+  },
+  {
+    "first_audio_seconds": 1.639267667022068,
+    "first_speaker_delivery_seconds": 1.640409792016726,
+    "first_speaker_render_seconds": 1.6740592499845661,
+    "final_tool_result_seconds": 0.8254210000159219,
+    "reply_complete_seconds": 3.765157582995016,
+    "token_usage": [
+      {
+        "prompt_tokens": 105915,
+        "completion_tokens": 66,
+        "total_tokens": 105981,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 92,
+        "input_audio_tokens": 312,
+        "output_audio_tokens": 58,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "spotify__getNowPlaying",
+        "arguments": {}
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "spotify__getNowPlaying",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 6720
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 3840
+      }
+    ],
+    "ready_seconds": 1.3223294999916106,
+    "spoken_text": "Nothing is currently playing on Spotify.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "spotify",
+    "backend": "local",
+    "prompt": "Check what is currently playing on Spotify.",
+    "repeat": 2,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "getNowPlaying",
+        "arguments": {}
+      }
+    ],
+    "service_complete_seconds": 0.824140458018519,
+    "api_requests": []
+  }
+]

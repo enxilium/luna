@@ -1,0 +1,25 @@
+{
+  "prompts": {
+    "greeting": "Say hello in one short sentence.",
+    "calendar": "Show the next five events on my primary Google calendar between 2026-10-05T00:00:00-04:00 and 2026-10-06T00:00:00-04:00. Give their titles.",
+    "docs": "Replace all Project Alpha with Project Luna in Google document doc-example, matching case. The document has already been read. Apply and verify the edit.",
+    "discovery": "Show the next five items on my agenda between 2026-10-05T00:00:00-04:00 and 2026-10-06T00:00:00-04:00. Give their titles.",
+    "spotify": "Check what is currently playing on Spotify.",
+    "playback": "Play Bohemian Rhapsody by Queen on Spotify. Use the original studio recording.",
+    "history_playback": "Play my favorite song on Spotify. Use the original studio recording.",
+    "multi_service": "Show the next five events on my primary Google calendar between 2026-10-05T00:00:00-04:00 and 2026-10-06T00:00:00-04:00. Give their titles. Also check what is currently playing on Spotify.",
+    "unsupported": "Delete my Google calendar, including the calendar itself.",
+    "large_result": "Read the Google document with documentId=doc-large and tell me the validation code at the very end. Retrieve stored response pages as needed.",
+    "explicit_playback": "Play this Spotify track: https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv"
+  },
+  "history_playback_seed": [
+    {
+      "role": "user",
+      "content": "My favorite song is Bohemian Rhapsody by Queen, the original studio recording."
+    },
+    {
+      "role": "assistant",
+      "content": "Understood."
+    }
+  ]
+}

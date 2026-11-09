@@ -1,0 +1,31 @@
+{
+  "turns": 8,
+  "correct": 8,
+  "speaker_misses": 4,
+  "cases": {
+    "playlist": {
+      "first_speaker_render_seconds": 2.195258729014313,
+      "service_complete_seconds": 1.2511162289883941,
+      "final_tool_result_seconds": 1.2520533539936878,
+      "reply_complete_seconds": 4.579683791496791
+    },
+    "playback": {
+      "first_speaker_render_seconds": 2.1805289375479333,
+      "service_complete_seconds": 1.4528840210405178,
+      "final_tool_result_seconds": 1.4541647920268588,
+      "reply_complete_seconds": 4.559445187536767
+    },
+    "history_playback": {
+      "first_speaker_render_seconds": 3.3530439579626545,
+      "service_complete_seconds": 2.1150491455045994,
+      "final_tool_result_seconds": 2.1158651454898063,
+      "reply_complete_seconds": 6.468389812478563
+    },
+    "spotify": {
+      "first_speaker_render_seconds": 1.5209849794919137,
+      "service_complete_seconds": 0.726538104005158,
+      "final_tool_result_seconds": 0.7278189795033541,
+      "reply_complete_seconds": 3.7934809584985487
+    }
+  }
+}

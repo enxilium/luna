@@ -1,0 +1,46 @@
+{
+  "variants": {
+    "bounded": {
+      "turns": 6,
+      "correct": 6,
+      "latency_misses": 5,
+      "speaker_render_p95_seconds": 11.978669791002176,
+      "latency_gate_passed": false,
+      "correctness_gate_passed": true,
+      "cases": {
+        "calendar": {
+          "turns": 2,
+          "correct": 2,
+          "generated_completion_median_seconds": 24.999182125502557,
+          "service_completion_median_seconds": 17.150879417000397,
+          "service_completed_within_10_seconds": 0,
+          "service_completion_p95_seconds": 18.687207166993176,
+          "final_tool_result_median_seconds": 17.152211624998017,
+          "final_tools_completed_within_10_seconds": 0
+        },
+        "docs": {
+          "turns": 2,
+          "correct": 2,
+          "generated_completion_median_seconds": 12.667308999996749,
+          "service_completion_median_seconds": 9.564574083495245,
+          "service_completed_within_10_seconds": 1,
+          "service_completion_p95_seconds": 11.16902437499084,
+          "final_tool_result_median_seconds": 9.565722708495741,
+          "final_tools_completed_within_10_seconds": 1
+        },
+        "spotify": {
+          "turns": 2,
+          "correct": 2,
+          "generated_completion_median_seconds": 4.298952541495964,
+          "service_completion_median_seconds": 3.0673670834949007,
+          "service_completed_within_10_seconds": 2,
+          "service_completion_p95_seconds": 4.7936812919942895,
+          "final_tool_result_median_seconds": 3.0690447709930595,
+          "final_tools_completed_within_10_seconds": 2
+        }
+      }
+    }
+  },
+  "percentile_method": "Nearest rank; missing speaker output counts as infinity",
+  "completion_metric": "Final generated reply, measured separately from first speaker rendering"
+}

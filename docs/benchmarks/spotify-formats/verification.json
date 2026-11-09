@@ -1,0 +1,27 @@
+{
+  "checked_at_utc": "2026-11-02T17:41:44.978339+00:00",
+  "python_suite": {
+    "run": 89,
+    "passed": 88,
+    "skipped": 1
+  },
+  "upstream_envelopes": 150,
+  "upstream_tools": 30,
+  "real_playback_or_mutations": false,
+  "source_sha256": {
+    "src/integrations/spotify.py": "eb3b13338373b4e926113a18353ac6cf271d37e91aa98e10abec23ced36cc551",
+    "src/integrations/mcp.py": "3a5bd2c1ddf5b7b99b1d5cf39f5ee28ea93789875057f32846fa3090f6c49f42",
+    "scripts/benchmark_tools.py": "4c6f0f818b08f53d15ea103e11f56bea40e81937243e6fd4b5a04354f999b75d",
+    "scripts/fixtures/capture_spotify_formats.mjs": "b3073743b81d68e51eb114b08f223d4b5ce0b0d15cfc3957abf099d981c5ca06",
+    "scripts/fixtures/spotify-results.json": "527a6d5c11b7288c926a461842e7708505f585dda7bbb1b0c1313ee080f2684a",
+    "tests/test_spotify_results.py": "3c2f94e08fbcd4fd6821df3b8c87ef9bf6006144ba49f4944964b43b0ad608a8",
+    "tests/test_tool_benchmark.py": "af7537641720692d0da32d0e74f360850a58a68182badfa6b9b8b9740fbad1d0"
+  },
+  "artifact_sha256": {
+    "capture-tests.log": "f9032c8f71cf6812e96a95cbea8faf0ad33c5e8e32758e526b15eb44a489ed4e",
+    "gemini.json": "fdec5bac158ae7771ebae4d3c3359f52c2e1521357248ae0ca3ac53f77879a53",
+    "offline-tests.log": "ffd1a5e0b9a14616211ed7b7a2a0b585fbad46e11672940fabf26a515ac69b53",
+    "readonly.json": "3100158c980a757dbf04554491e03d969742a0b09cd8ac1a12bd67d04d8a2302",
+    "summary.json": "fe769578a80229135110c5d9770dff3d7762ed1b8c1c89629f91f8d6176653de"
+  }
+}

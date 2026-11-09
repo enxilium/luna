@@ -1,0 +1,64 @@
+{
+  "real_writes": false,
+  "reads": [
+    {
+      "tool": "getMyPlaylists",
+      "status": "completed",
+      "seconds": 0.34588037501089275,
+      "content_types": [
+        "text"
+      ],
+      "new_typed_music_identifiers": 24
+    },
+    {
+      "tool": "searchSpotify",
+      "status": "completed",
+      "seconds": 0.6211782500031404,
+      "content_types": [
+        "text"
+      ],
+      "new_typed_music_identifiers": 3
+    },
+    {
+      "tool": "getNowPlaying",
+      "status": "completed",
+      "seconds": 0.29285779100609943,
+      "content_types": [
+        "text"
+      ],
+      "new_typed_music_identifiers": 1
+    },
+    {
+      "tool": "getAvailableDevices",
+      "status": "completed",
+      "seconds": 0.12355187500361353,
+      "content_types": [
+        "text"
+      ],
+      "new_typed_music_identifiers": 0
+    }
+  ],
+  "playlist_checks": [
+    {
+      "argument_form": [
+        "type",
+        "id"
+      ],
+      "status": "completed"
+    },
+    {
+      "argument_form": [
+        "uri"
+      ],
+      "status": "completed"
+    },
+    {
+      "argument_form": [
+        "context_uri"
+      ],
+      "status": "completed"
+    }
+  ],
+  "stub_calls": 3,
+  "wrong_type_rejected": true
+}

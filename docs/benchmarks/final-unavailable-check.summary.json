@@ -1,0 +1,46 @@
+{
+  "variants": {
+    "baseline": {
+      "turns": 3,
+      "correct": 3,
+      "latency_misses": 3,
+      "speaker_render_p95_seconds": 7.7329288339969935,
+      "latency_gate_passed": false,
+      "correctness_gate_passed": true,
+      "cases": {
+        "unsupported": {
+          "turns": 3,
+          "correct": 3,
+          "generated_completion_median_seconds": 5.107087083000806,
+          "service_completion_median_seconds": null,
+          "service_completed_within_10_seconds": 0,
+          "service_completion_p95_seconds": null,
+          "final_tool_result_median_seconds": null,
+          "final_tools_completed_within_10_seconds": 0
+        }
+      }
+    },
+    "bounded": {
+      "turns": 3,
+      "correct": 3,
+      "latency_misses": 0,
+      "speaker_render_p95_seconds": 0.1917370420123916,
+      "latency_gate_passed": false,
+      "correctness_gate_passed": true,
+      "cases": {
+        "unsupported": {
+          "turns": 3,
+          "correct": 3,
+          "generated_completion_median_seconds": 5.807759792005527,
+          "service_completion_median_seconds": null,
+          "service_completed_within_10_seconds": 0,
+          "service_completion_p95_seconds": null,
+          "final_tool_result_median_seconds": 2.1676506670046365,
+          "final_tools_completed_within_10_seconds": 3
+        }
+      }
+    }
+  },
+  "percentile_method": "Nearest rank; missing speaker output counts as infinity",
+  "completion_metric": "Final generated reply, measured separately from first speaker rendering"
+}

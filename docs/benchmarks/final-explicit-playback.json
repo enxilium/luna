@@ -1,0 +1,368 @@
+[
+  {
+    "case": "explicit_playback",
+    "prompt": "Play this Spotify track: https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 2.300445166998543,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 10.40146491699852,
+    "task_complete_seconds": 11.35841362499923,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv"
+        }
+      }
+    ],
+    "first_text_seconds": 10.863334792011301,
+    "first_audio_seconds": 0.14413212500221562,
+    "first_service_result_seconds": 10.402852458006237,
+    "final_tool_result_seconds": 10.402852458006237,
+    "first_speaker_delivery_seconds": 0.15250541700515896,
+    "first_speaker_render_seconds": 0.19152950000716373,
+    "generated_reply_complete_seconds": 11.358155958005227,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 5601,
+        "message_characters": 3670,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 5601,
+        "message_characters": 4174,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 2256,
+        "completion_tokens": 49,
+        "total_tokens": 2305,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 2389,
+        "completion_tokens": 6,
+        "total_tokens": 2395,
+        "cache_read_input_tokens": 2304,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [
+      {
+        "tool": "spotify.playMusic",
+        "seconds": 0.006675708005786873,
+        "status": "completed"
+      }
+    ],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 2,
+    "tool_calls": [
+      "spotify__playMusic"
+    ],
+    "tool_statuses": [
+      "completed"
+    ],
+    "audio_bytes": 178800,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "",
+        "tools": [
+          "spotify__playMusic"
+        ]
+      },
+      {
+        "text": "Playing that track now.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 11.35841362499923,
+    "spoken_text": "I'll look into your music. Playing that track now.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 4620,
+    "intermediate_speech": false,
+    "progress_label": "I'll look into your music.",
+    "latency_miss": false
+  },
+  {
+    "case": "explicit_playback",
+    "prompt": "Play this Spotify track: https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv",
+    "variant": "bounded",
+    "repeat": 2,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 2.300445166998543,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 3.5194009160040878,
+    "task_complete_seconds": 4.472180208002101,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv"
+        }
+      }
+    ],
+    "first_text_seconds": 3.972016875006375,
+    "first_audio_seconds": 0.1214111250010319,
+    "first_service_result_seconds": 3.5210093750065425,
+    "final_tool_result_seconds": 3.5210093750065425,
+    "first_speaker_delivery_seconds": 0.12356170800921973,
+    "first_speaker_render_seconds": 0.15981566600385122,
+    "generated_reply_complete_seconds": 4.471918625000399,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 5601,
+        "message_characters": 3670,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 5601,
+        "message_characters": 4174,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 2256,
+        "completion_tokens": 49,
+        "total_tokens": 2305,
+        "cache_read_input_tokens": 2252,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 2389,
+        "completion_tokens": 6,
+        "total_tokens": 2395,
+        "cache_read_input_tokens": 2304,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [
+      {
+        "tool": "spotify.playMusic",
+        "seconds": 0.004250041994964704,
+        "status": "completed"
+      }
+    ],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 2,
+    "tool_calls": [
+      "spotify__playMusic"
+    ],
+    "tool_statuses": [
+      "completed"
+    ],
+    "audio_bytes": 178800,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "",
+        "tools": [
+          "spotify__playMusic"
+        ]
+      },
+      {
+        "text": "Playing that track now.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 4.472180208002101,
+    "spoken_text": "I'll look into your music. Playing that track now.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 4620,
+    "intermediate_speech": false,
+    "progress_label": "I'll look into your music.",
+    "latency_miss": false
+  },
+  {
+    "case": "explicit_playback",
+    "prompt": "Play this Spotify track: https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv",
+    "variant": "bounded",
+    "repeat": 3,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 2.300445166998543,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 3.5305099169927416,
+    "task_complete_seconds": 4.493913332989905,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv"
+        }
+      }
+    ],
+    "first_text_seconds": 3.9893794169911416,
+    "first_audio_seconds": 0.11850774999766145,
+    "first_service_result_seconds": 3.5316524999943795,
+    "final_tool_result_seconds": 3.5316524999943795,
+    "first_speaker_delivery_seconds": 0.1203121669968823,
+    "first_speaker_render_seconds": 0.1599064170004567,
+    "generated_reply_complete_seconds": 4.493578541994793,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 5601,
+        "message_characters": 3670,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 5601,
+        "message_characters": 4174,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 2256,
+        "completion_tokens": 49,
+        "total_tokens": 2305,
+        "cache_read_input_tokens": 2252,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 2389,
+        "completion_tokens": 6,
+        "total_tokens": 2395,
+        "cache_read_input_tokens": 2304,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [
+      {
+        "tool": "spotify.playMusic",
+        "seconds": 0.004187040991382673,
+        "status": "completed"
+      }
+    ],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 2,
+    "tool_calls": [
+      "spotify__playMusic"
+    ],
+    "tool_statuses": [
+      "completed"
+    ],
+    "audio_bytes": 178800,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "",
+        "tools": [
+          "spotify__playMusic"
+        ]
+      },
+      {
+        "text": "Playing that track now.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 4.493913332989905,
+    "spoken_text": "I'll look into your music. Playing that track now.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 4620,
+    "intermediate_speech": false,
+    "progress_label": "I'll look into your music.",
+    "latency_miss": false
+  }
+]

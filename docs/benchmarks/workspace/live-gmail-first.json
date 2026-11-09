@@ -1,0 +1,24 @@
+{
+  "checked_at": "2026-11-02T17:02:32.546779+00:00",
+  "rows": [
+    {
+      "repeat": 1,
+      "seconds": 1.1394832080113702,
+      "status": "completed",
+      "labels_count": 19
+    },
+    {
+      "repeat": 2,
+      "seconds": 0.2904979159939103,
+      "status": "completed",
+      "labels_count": 19
+    },
+    {
+      "repeat": 3,
+      "seconds": 0.2385512079927139,
+      "status": "completed",
+      "labels_count": 19
+    }
+  ],
+  "private_data": "Only label counts retained; no messages read or modified."
+}

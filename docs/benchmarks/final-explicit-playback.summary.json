@@ -1,0 +1,26 @@
+{
+  "variants": {
+    "bounded": {
+      "turns": 3,
+      "correct": 3,
+      "latency_misses": 0,
+      "speaker_render_p95_seconds": 0.19152950000716373,
+      "latency_gate_passed": false,
+      "correctness_gate_passed": true,
+      "cases": {
+        "explicit_playback": {
+          "turns": 3,
+          "correct": 3,
+          "generated_completion_median_seconds": 4.493578541994793,
+          "service_completion_median_seconds": 3.5305099169927416,
+          "service_completed_within_10_seconds": 2,
+          "service_completion_p95_seconds": 10.40146491699852,
+          "final_tool_result_median_seconds": 3.5316524999943795,
+          "final_tools_completed_within_10_seconds": 2
+        }
+      }
+    }
+  },
+  "percentile_method": "Nearest rank; missing speaker output counts as infinity",
+  "completion_metric": "Final generated reply, measured separately from first speaker rendering"
+}

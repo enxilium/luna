@@ -1,0 +1,108 @@
+{
+  "variants": {
+    "baseline": {
+      "turns": 25,
+      "correct": 24,
+      "latency_misses": 23,
+      "speaker_render_p95_seconds": 19.445052333001513,
+      "latency_gate_passed": false,
+      "cases": {
+        "playback": {
+          "turns": 4,
+          "correct": 3,
+          "generated_completion_median_seconds": 21.580420875492564,
+          "service_completion_median_seconds": 19.258651666990772
+        },
+        "greeting": {
+          "turns": 6,
+          "correct": 6,
+          "generated_completion_median_seconds": 3.840445333495154,
+          "service_completion_median_seconds": 6.283406375499908
+        },
+        "calendar": {
+          "turns": 4,
+          "correct": 4,
+          "generated_completion_median_seconds": 18.36444447901158,
+          "service_completion_median_seconds": 13.326540312504221
+        },
+        "history_playback": {
+          "turns": 2,
+          "correct": 2,
+          "generated_completion_median_seconds": 25.531723583495477,
+          "service_completion_median_seconds": 23.394825104005577
+        },
+        "docs": {
+          "turns": 3,
+          "correct": 3,
+          "generated_completion_median_seconds": 22.51419541699579,
+          "service_completion_median_seconds": 19.308858791991952
+        },
+        "discovery": {
+          "turns": 3,
+          "correct": 3,
+          "generated_completion_median_seconds": 60.07172824999725,
+          "service_completion_median_seconds": 41.83752266700321
+        },
+        "spotify": {
+          "turns": 3,
+          "correct": 3,
+          "generated_completion_median_seconds": 10.674323167011607,
+          "service_completion_median_seconds": 6.522229292007978
+        }
+      }
+    },
+    "bounded": {
+      "turns": 100,
+      "correct": 100,
+      "latency_misses": 9,
+      "speaker_render_p95_seconds": 3.839983709010994,
+      "latency_gate_passed": false,
+      "cases": {
+        "playback": {
+          "turns": 14,
+          "correct": 14,
+          "generated_completion_median_seconds": 12.977292604002287,
+          "service_completion_median_seconds": 11.085771250007383
+        },
+        "discovery": {
+          "turns": 14,
+          "correct": 14,
+          "generated_completion_median_seconds": 18.452128541495767,
+          "service_completion_median_seconds": 11.953748041494691
+        },
+        "spotify": {
+          "turns": 14,
+          "correct": 14,
+          "generated_completion_median_seconds": 5.637799875003111,
+          "service_completion_median_seconds": 4.500013562501408
+        },
+        "docs": {
+          "turns": 14,
+          "correct": 14,
+          "generated_completion_median_seconds": 12.388216437502706,
+          "service_completion_median_seconds": 9.116901854504249
+        },
+        "greeting": {
+          "turns": 15,
+          "correct": 15,
+          "generated_completion_median_seconds": 3.611067957986961,
+          "service_completion_median_seconds": 4.960496165993391
+        },
+        "history_playback": {
+          "turns": 14,
+          "correct": 14,
+          "generated_completion_median_seconds": 22.66044039549888,
+          "service_completion_median_seconds": 20.522855416500533
+        },
+        "calendar": {
+          "turns": 15,
+          "correct": 15,
+          "generated_completion_median_seconds": 18.018009541003266,
+          "service_completion_median_seconds": 10.857576666996465
+        }
+      }
+    }
+  },
+  "percentile_method": "Nearest rank; missing speaker output counts as infinity",
+  "completion_metric": "Final generated reply, measured separately from first speaker rendering"
+}

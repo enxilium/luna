@@ -1,0 +1,53 @@
+{
+  "recorded_at_utc": "2026-11-01T22:35:55.229250+00:00",
+  "model": "gemini-3.8-live",
+  "python": "3.14.8 (main, Sep 30 2026, 17:55:09) [Clang 21.0.0 (clang-2100.3.34.2)]",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "hardware": "Apple M5 Pro",
+  "memory_bytes": 51539607552,
+  "packages": {
+    "pipecat-ai": "1.12.0",
+    "google-genai": "2.34.0",
+    "mcp": "2.1.1",
+    "python-dotenv": "1.2.3",
+    "jsonschema": "4.26.0"
+  },
+  "source_sha256": {
+    "src/agent/services.py": "d664c1c54b1e0e977cda5239ab59a59eae148eb72bb4676a68e71bd778ffbf56",
+    "src/agent/conversation.py": "4eb5a65a61c7e39ade41ce40ecdb913658edb8631f4b02ad50b2cc4e9f04b283",
+    "src/audio/apple.py": "70be6f0ec8b14c7ab567ac612bb72933d43b75390e4d8ce2f0a119ff03daa383",
+    "src/integrations/mcp.py": "b3236ff1c4df4d0399c9b671f36e74285de63e685fbd04ada17ef4f048ef038b",
+    "src/integrations/schemas.py": "9103f90e02ab6e451add99b26183149347c2cea9c2d88c2f36354deeb89449ff",
+    "scripts/inference_tts.py": "0aa91a38151facc43998ef2b02374ac75ecec51dab9a4bfeca75b026f7f978e4",
+    "scripts/benchmark_tools.py": "3d28569463768c2676f2b27620ed72492409e7b61e1b04c797f17e7de770d94d",
+    "scripts/fixtures/mcp-catalog.json": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "pyproject.toml": "7f587a1b389a71135f2d991f5b4d653f559a3b784f986a2a4ae84eec103ad1b8",
+    "uv.lock": "f817aab6fbd3da18851b350d96502bb27c658eb69d56b207f5443d55e118e411"
+  },
+  "setup_tool_count": 69,
+  "setup_schema_bytes": 202949,
+  "offline_suite": {
+    "run": 61,
+    "passed": 60,
+    "skipped": 1,
+    "skip": "opt-in real Gemini test run separately"
+  },
+  "real_gemini_authorization_test": {
+    "run": 1,
+    "passed": 1
+  },
+  "artifact_sha256": {
+    "explicit-docs.summary.json": "24a2954267961fb0c41f26c088acf9d6740f52b8068a09088cf48d8b79dd697b",
+    "mixed.summary.json": "662da6fb8f04064440bdba63dfeb95b3ef863a06058f4c0067cfc43fee2690c6",
+    "interrupted-realtime.json": "e30ee3835287adb92c19a995a8f874024618c33e6df461a23bb49cddc621ff31",
+    "offline-tests.log": "363151aa61218d72db43f7b3dbc6c8b20e0e52e6bde3273aac2d0663878be62a",
+    "mixed.json": "61160df48b9c6979d64568a9983957bc2c3d9712e477d979679a42bca0344a81",
+    "mixed-source-hashes.json": "9d239907d683f6847af6039e9a0c000f23f0fda26077046c501d1f4a04c44b5c",
+    "explicit-docs.json": "6444cbebfee35c16014175a211166ead3c2b31511d01eaf938039e30cc1810a5",
+    "live-auth.log": "54685f588069be2d360c1fc23560f55bb4ce21f710844c7e54fef3b4bf91584f",
+    "mixed-prompts.json": "708f7b90dc09bed7bacc94b6239826a33be4e6e9cef453ac5128d0caa90e3769",
+    "failed-client-content-only.json": "16ef2e27ccadfa459974e62365c01b068851fe7a8f3f411e4ba3a2069cfc0998",
+    "reviewed-summary.json": "80f6d8b8afcc422b22b12bb1f86ad2b52a2cfd1c6005be3e14ffcab0a14f6747",
+    "trigger-smoke.json": "3f41a5fe6a1631856677e3ac1f5056ae6f65ae97387a1a40638dedf24de29993"
+  }
+}

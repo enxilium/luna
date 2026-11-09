@@ -1,0 +1,51 @@
+{
+  "turns": 22,
+  "correct": 18,
+  "latency_misses": 5,
+  "cases": {
+    "greeting": {
+      "turns": 2,
+      "first_audio_median_seconds": 0.7219892915163655
+    },
+    "calendar": {
+      "turns": 2,
+      "first_audio_median_seconds": 1.9680385414976627
+    },
+    "docs": {
+      "turns": 2,
+      "first_audio_median_seconds": 4.061059521016432
+    },
+    "discovery": {
+      "turns": 2,
+      "first_audio_median_seconds": 1.3980897089932114
+    },
+    "playback": {
+      "turns": 2,
+      "first_audio_median_seconds": 1.5934093125106301
+    },
+    "history_playback": {
+      "turns": 2,
+      "first_audio_median_seconds": 2.204608082975028
+    },
+    "spotify": {
+      "turns": 2,
+      "first_audio_median_seconds": 1.3276634579815436
+    },
+    "large_result": {
+      "turns": 2,
+      "first_audio_median_seconds": 2.2181469789939
+    },
+    "explicit_playback": {
+      "turns": 2,
+      "first_audio_median_seconds": 1.302023583004484
+    },
+    "multi_service": {
+      "turns": 2,
+      "first_audio_median_seconds": 1.6202254794770852
+    },
+    "unsupported": {
+      "turns": 2,
+      "first_audio_median_seconds": 1.1180576249898877
+    }
+  }
+}

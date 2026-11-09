@@ -1,0 +1,279 @@
+[
+  {
+    "first_audio_seconds": 0.7090642919647507,
+    "first_speaker_delivery_seconds": 0.7109307500068098,
+    "first_speaker_render_seconds": 0.7484991669771262,
+    "final_tool_result_seconds": null,
+    "reply_complete_seconds": 2.5525657499674708,
+    "token_usage": [
+      {
+        "prompt_tokens": 52899,
+        "completion_tokens": 52,
+        "total_tokens": 52951,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 32,
+        "input_audio_tokens": 156,
+        "output_audio_tokens": 52,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [],
+    "tool_results": [],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 6720
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      }
+    ],
+    "ready_seconds": 0.6488685000222176,
+    "spoken_text": "Hello, how can I help you today?",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "greeting",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [],
+    "service_complete_seconds": null
+  },
+  {
+    "first_audio_seconds": 1.4088367500226013,
+    "first_speaker_delivery_seconds": 1.425356833031401,
+    "first_speaker_render_seconds": 1.4643702910398133,
+    "final_tool_result_seconds": 0.7632347080507316,
+    "reply_complete_seconds": 9.16496270801872,
+    "token_usage": [
+      {
+        "prompt_tokens": 106421,
+        "completion_tokens": 287,
+        "total_tokens": 106708,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 241,
+        "input_audio_tokens": 312,
+        "output_audio_tokens": 200,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "google_calendar__list_events",
+        "arguments": {
+          "pageSize": 5,
+          "startTime": "2026-10-05T00:00:00-04:00",
+          "calendarId": "primary",
+          "endTime": "2026-10-06T00:00:00-04:00",
+          "orderBy": "startTime"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "google_calendar__list_events",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 30720
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 28800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 23040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 26880
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 28800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 28800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      }
+    ],
+    "ready_seconds": 0.6363429999910295,
+    "spoken_text": "The next five events are Design review 0, Design review 1, Design review 2, Design review 3, and Design review 4.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "calendar",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "google_calendar",
+        "name": "list_events",
+        "arguments": {
+          "pageSize": 5,
+          "startTime": "2026-10-05T00:00:00-04:00",
+          "calendarId": "primary",
+          "endTime": "2026-10-06T00:00:00-04:00",
+          "orderBy": "startTime"
+        }
+      }
+    ],
+    "service_complete_seconds": 0.7618653330137022
+  }
+]

@@ -1,0 +1,782 @@
+[
+  {
+    "case": "greeting",
+    "prompt": "Say hello in one short sentence.",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 2.2811257499997737,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": null,
+    "task_complete_seconds": 4.203240999995614,
+    "service_calls": [],
+    "llm_start_seconds": 0.000688290994730778,
+    "first_text_seconds": 0.4540686659893254,
+    "first_audio_seconds": 1.443828040995868,
+    "first_service_result_seconds": null,
+    "final_tool_result_seconds": null,
+    "first_speaker_delivery_seconds": 1.4470523329946445,
+    "first_speaker_render_seconds": 1.482266040999093,
+    "generated_reply_complete_seconds": 1.5132778749975841,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 2,
+        "message_characters": 510,
+        "tools": []
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 105,
+        "completion_tokens": 12,
+        "total_tokens": 117,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 1,
+    "tool_calls": [],
+    "tool_statuses": [],
+    "audio_bytes": 130800,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "Hello, I'm Luna, ready to assist you.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 4.203240999995614,
+    "spoken_text": "Hello, I'm Luna, ready to assist you.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 0,
+    "intermediate_speech": false,
+    "speech_source": "main_llm",
+    "latency_miss": false
+  },
+  {
+    "case": "calendar",
+    "prompt": "Show the next five events on my primary Google calendar between 2026-10-05T00:00:00-04:00 and 2026-10-06T00:00:00-04:00. Give their titles.",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 2.2811257499997737,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 15.295750457997201,
+    "task_complete_seconds": 41.86745816699113,
+    "service_calls": [
+      {
+        "integration": "google_calendar",
+        "name": "list_events",
+        "arguments": {
+          "startTime": "2026-10-05T00:00:00-04:00",
+          "endTime": "2026-10-06T00:00:00-04:00",
+          "orderBy": "startTime",
+          "pageSize": 5
+        }
+      }
+    ],
+    "llm_start_seconds": 0.001003166995360516,
+    "first_text_seconds": 16.43380333299865,
+    "first_audio_seconds": 18.089332624993403,
+    "first_service_result_seconds": 15.29698041699885,
+    "final_tool_result_seconds": 15.29698041699885,
+    "first_speaker_delivery_seconds": 18.091206207987852,
+    "first_speaker_render_seconds": 18.13333529199008,
+    "generated_reply_complete_seconds": 23.193442042000243,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 6104,
+        "message_characters": 3869,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_calendar__list_events",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 6104,
+        "message_characters": 4910,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_calendar__list_events",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 2434,
+        "completion_tokens": 114,
+        "total_tokens": 2548,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 2815,
+        "completion_tokens": 88,
+        "total_tokens": 2903,
+        "cache_read_input_tokens": 2547,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [
+      {
+        "tool": "google_calendar.list_events",
+        "seconds": 0.005357625006581657,
+        "status": "completed"
+      }
+    ],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 2,
+    "tool_calls": [
+      "google_calendar__list_events"
+    ],
+    "tool_statuses": [
+      "completed"
+    ],
+    "audio_bytes": 1138800,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "",
+        "tools": [
+          "google_calendar__list_events"
+        ]
+      },
+      {
+        "text": "Here are the next five events on your primary calendar for that window:\n\n1. Design review 0 \u2014 9:00 AM\n2. Design review 1 \u2014 10:00 AM\n3. Design review 2 \u2014 11:00 AM\n4. Design review 3 \u2014 12:00 PM\n5. Design review 4 \u2014 1:00 PM",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 41.86745816699113,
+    "spoken_text": "Here are the next five events on your primary calendar for that window: 1. Design review 0 \u2014 9:00 AM 2. Design review 1 \u2014 10:00 AM 3. Design review 2 \u2014 11:00 AM 4. Design review 3 \u2014 12:00 PM 5. Design review 4 \u2014 1:00 PM",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 5159,
+    "intermediate_speech": false,
+    "speech_source": "main_llm",
+    "latency_miss": true
+  },
+  {
+    "case": "docs",
+    "prompt": "Replace all Project Alpha with Project Luna in Google document doc-example, matching case. The document has already been read. Apply and verify the edit.",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 2.2811257499997737,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 13.846282416998292,
+    "task_complete_seconds": 24.21394549999968,
+    "service_calls": [
+      {
+        "integration": "google_docs",
+        "name": "update_doc",
+        "arguments": {
+          "documentId": "doc-example",
+          "requests": [
+            {
+              "replaceAllText": {
+                "containsText": {
+                  "text": "Project Alpha",
+                  "matchCase": true
+                },
+                "replaceText": "Project Luna"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "integration": "google_docs",
+        "name": "read_doc",
+        "arguments": {
+          "documentId": "doc-example"
+        }
+      }
+    ],
+    "llm_start_seconds": 0.0009567499946570024,
+    "first_text_seconds": 14.289443625006243,
+    "first_audio_seconds": 14.618712666997453,
+    "first_service_result_seconds": 11.036704333993839,
+    "final_tool_result_seconds": 13.847732875001384,
+    "first_speaker_delivery_seconds": 14.620556459005456,
+    "first_speaker_render_seconds": 14.655939250005758,
+    "generated_reply_complete_seconds": 16.795663666998735,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 4523,
+        "message_characters": 3883,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_docs__read_doc",
+          "google_docs__replace_text",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 4523,
+        "message_characters": 4429,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_docs__read_doc",
+          "google_docs__replace_text",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 4523,
+        "message_characters": 4936,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_docs__read_doc",
+          "google_docs__replace_text",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 2016,
+        "completion_tokens": 71,
+        "total_tokens": 2087,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 2150,
+        "completion_tokens": 31,
+        "total_tokens": 2181,
+        "cache_read_input_tokens": 2012,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 2255,
+        "completion_tokens": 28,
+        "total_tokens": 2283,
+        "cache_read_input_tokens": 2180,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [
+      {
+        "tool": "google_docs.update_doc",
+        "seconds": 0.00497804100450594,
+        "status": "completed"
+      },
+      {
+        "tool": "google_docs.read_doc",
+        "seconds": 0.003663291994598694,
+        "status": "completed"
+      }
+    ],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 3,
+    "tool_calls": [
+      "google_docs__replace_text",
+      "google_docs__read_doc"
+    ],
+    "tool_statuses": [
+      "completed",
+      "completed"
+    ],
+    "audio_bytes": 423600,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "",
+        "tools": [
+          "google_docs__replace_text"
+        ]
+      },
+      {
+        "text": "",
+        "tools": [
+          "google_docs__read_doc"
+        ]
+      },
+      {
+        "text": "Done. Replaced \"Project Alpha\" with \"Project Luna\" (case-sensitive) and verified the document now reads \"Project Luna\".",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 24.21394549999968,
+    "spoken_text": "Done. Replaced \"Project Alpha\" with \"Project Luna\" (case-sensitive) and verified the document now reads \"Project Luna\".",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 3542,
+    "intermediate_speech": false,
+    "speech_source": "main_llm",
+    "latency_miss": true
+  },
+  {
+    "case": "spotify",
+    "prompt": "Check what is currently playing on Spotify.",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 2.2811257499997737,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 6.594139583990909,
+    "task_complete_seconds": 10.635264499986079,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "getNowPlaying",
+        "arguments": {}
+      }
+    ],
+    "llm_start_seconds": 0.0007526249974034727,
+    "first_text_seconds": 7.022732083991286,
+    "first_audio_seconds": 7.743562499992549,
+    "first_service_result_seconds": 6.595153208996635,
+    "final_tool_result_seconds": 6.595153208996635,
+    "first_speaker_delivery_seconds": 7.744481416986673,
+    "first_speaker_render_seconds": 7.786497166991467,
+    "generated_reply_complete_seconds": 7.7997180839884095,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 3380,
+        "message_characters": 3773,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__getNowPlaying",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 3380,
+        "message_characters": 4195,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__getNowPlaying",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 1716,
+        "completion_tokens": 18,
+        "total_tokens": 1734,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 1797,
+        "completion_tokens": 9,
+        "total_tokens": 1806,
+        "cache_read_input_tokens": 1733,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [
+      {
+        "tool": "spotify.getNowPlaying",
+        "seconds": 0.004557332998956554,
+        "status": "completed"
+      }
+    ],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 2,
+    "tool_calls": [
+      "spotify__getNowPlaying"
+    ],
+    "tool_statuses": [
+      "completed"
+    ],
+    "audio_bytes": 136800,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "",
+        "tools": [
+          "spotify__getNowPlaying"
+        ]
+      },
+      {
+        "text": "Nothing is playing on Spotify right now.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 10.635264499986079,
+    "spoken_text": "Nothing is playing on Spotify right now.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 2435,
+    "intermediate_speech": false,
+    "speech_source": "main_llm",
+    "latency_miss": true
+  },
+  {
+    "case": "history_playback",
+    "prompt": "Play my favorite song on Spotify. Use the original studio recording.",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 2.2811257499997737,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 24.87203587499971,
+    "task_complete_seconds": 26.944336917003966,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "searchSpotify",
+        "arguments": {
+          "query": "Bohemian Rhapsody Queen",
+          "type": "track",
+          "limit": 5
+        }
+      },
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv"
+        }
+      }
+    ],
+    "llm_start_seconds": 0.0009795829973882064,
+    "first_text_seconds": 13.327585292005097,
+    "first_audio_seconds": 15.189237750004395,
+    "first_service_result_seconds": 18.73509550000017,
+    "final_tool_result_seconds": 24.873009375005495,
+    "first_speaker_delivery_seconds": 15.190914457998588,
+    "first_speaker_render_seconds": 15.231557667008019,
+    "generated_reply_complete_seconds": 26.944057458007592,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 5601,
+        "message_characters": 14182,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 5601,
+        "message_characters": 15301,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 5601,
+        "message_characters": 15805,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 4282,
+        "completion_tokens": 77,
+        "total_tokens": 4359,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 4584,
+        "completion_tokens": 49,
+        "total_tokens": 4633,
+        "cache_read_input_tokens": 4278,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 4717,
+        "completion_tokens": 18,
+        "total_tokens": 4735,
+        "cache_read_input_tokens": 4632,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [
+      {
+        "tool": "spotify.searchSpotify",
+        "seconds": 0.004766709011164494,
+        "status": "completed"
+      },
+      {
+        "tool": "spotify.playMusic",
+        "seconds": 0.004808083001989871,
+        "status": "completed"
+      }
+    ],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 3,
+    "tool_calls": [
+      "spotify__searchSpotify",
+      "spotify__playMusic"
+    ],
+    "tool_statuses": [
+      "completed",
+      "completed"
+    ],
+    "audio_bytes": 489600,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "I'll find and play the original studio recording of Bohemian Rhapsody.",
+        "tools": [
+          "spotify__searchSpotify"
+        ]
+      },
+      {
+        "text": "",
+        "tools": [
+          "spotify__playMusic"
+        ]
+      },
+      {
+        "text": "Bohemian Rhapsody by Queen is now playing \u2014 the original studio recording.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 26.944336917003966,
+    "spoken_text": "I'll find and play the original studio recording of Bohemian Rhapsody. Bohemian Rhapsody by Queen is now playing \u2014 the original studio recording.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 4620,
+    "intermediate_speech": false,
+    "speech_source": "main_llm",
+    "latency_miss": true
+  },
+  {
+    "case": "explicit_playback",
+    "prompt": "Play this Spotify track: https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 2.2811257499997737,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 10.448155584002961,
+    "task_complete_seconds": 13.301969791995361,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv"
+        }
+      }
+    ],
+    "llm_start_seconds": 0.0008238750015152618,
+    "first_text_seconds": 10.902774624992162,
+    "first_audio_seconds": 11.37813762499718,
+    "first_service_result_seconds": 10.44938416700461,
+    "final_tool_result_seconds": 10.44938416700461,
+    "first_speaker_delivery_seconds": 11.379578124993714,
+    "first_speaker_render_seconds": 11.413145041995449,
+    "generated_reply_complete_seconds": 11.407590709000942,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 5601,
+        "message_characters": 3808,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 5601,
+        "message_characters": 4312,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 2283,
+        "completion_tokens": 49,
+        "total_tokens": 2332,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 2416,
+        "completion_tokens": 6,
+        "total_tokens": 2422,
+        "cache_read_input_tokens": 2331,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [
+      {
+        "tool": "spotify.playMusic",
+        "seconds": 0.004885417001787573,
+        "status": "completed"
+      }
+    ],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 2,
+    "tool_calls": [
+      "spotify__playMusic"
+    ],
+    "tool_statuses": [
+      "completed"
+    ],
+    "audio_bytes": 91200,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "",
+        "tools": [
+          "spotify__playMusic"
+        ]
+      },
+      {
+        "text": "Playing that track now.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 13.301969791995361,
+    "spoken_text": "Playing that track now.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 4620,
+    "intermediate_speech": false,
+    "speech_source": "main_llm",
+    "latency_miss": true
+  }
+]

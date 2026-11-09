@@ -1,0 +1,530 @@
+[
+  {
+    "case": "unsupported",
+    "prompt": "Delete my Google calendar, including the calendar itself.",
+    "variant": "baseline",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 0.2530691249994561,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": null,
+    "task_complete_seconds": 22.582058624990168,
+    "service_calls": [],
+    "first_text_seconds": 5.340983333997428,
+    "first_audio_seconds": 7.689788666990353,
+    "first_service_result_seconds": null,
+    "final_tool_result_seconds": null,
+    "first_speaker_delivery_seconds": 7.693111542001134,
+    "first_speaker_render_seconds": 7.7329288339969935,
+    "generated_reply_complete_seconds": 9.640019333994132,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 4075,
+        "message_characters": 3022,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "google_calendar__delete_event",
+          "google_calendar__list_calendars",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 1706,
+        "completion_tokens": 53,
+        "total_tokens": 1759,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 1,
+    "tool_calls": [],
+    "tool_statuses": [],
+    "audio_bytes": 712800,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "I can't delete your primary Google Calendar \u2014 it's the default calendar that holds your events and can't be removed. If you meant a specific secondary calendar (like a work or family calendar), let me know which one and I'll remove it for you.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 22.582058624990168,
+    "spoken_text": "I can't delete your primary Google Calendar \u2014 it's the default calendar that holds your events and can't be removed. If you meant a specific secondary calendar (like a work or family calendar), let me know which one and I'll remove it for you.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 3130,
+    "intermediate_speech": false,
+    "progress_label": null,
+    "latency_miss": true
+  },
+  {
+    "case": "unsupported",
+    "prompt": "Delete my Google calendar, including the calendar itself.",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 0.2530691249994561,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": null,
+    "task_complete_seconds": 10.624315915993066,
+    "service_calls": [],
+    "first_text_seconds": 7.457068916002754,
+    "first_audio_seconds": 0.1533184580039233,
+    "first_service_result_seconds": null,
+    "final_tool_result_seconds": 7.00033650000114,
+    "first_speaker_delivery_seconds": 0.1558355000015581,
+    "first_speaker_render_seconds": 0.1916527080029482,
+    "generated_reply_complete_seconds": 10.62402133300202,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 3086,
+        "message_characters": 3649,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 3086,
+        "message_characters": 4242,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 1636,
+        "completion_tokens": 28,
+        "total_tokens": 1664,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 1750,
+        "completion_tokens": 40,
+        "total_tokens": 1790,
+        "cache_read_input_tokens": 1663,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 2,
+    "tool_calls": [
+      "search_tools"
+    ],
+    "tool_statuses": [
+      "no_matching_tools"
+    ],
+    "audio_bytes": 679200,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "",
+        "tools": [
+          "search_tools"
+        ]
+      },
+      {
+        "text": "I don't have a tool to delete a Google Calendar. I can only manage events and view calendars, not remove the calendar itself. You'd need to do that directly in Google Calendar settings.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 10.624315915993066,
+    "spoken_text": "I'll look into your calendar. I don't have a tool to delete a Google Calendar. I can only manage events and view calendars, not remove the calendar itself. You'd need to do that directly in Google Calendar settings.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 2177,
+    "intermediate_speech": false,
+    "progress_label": "I'll look into your calendar.",
+    "latency_miss": false
+  },
+  {
+    "case": "unsupported",
+    "prompt": "Delete my Google calendar, including the calendar itself.",
+    "variant": "baseline",
+    "repeat": 2,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 0.2530691249994561,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": null,
+    "task_complete_seconds": 17.21703233299195,
+    "service_calls": [],
+    "first_text_seconds": 0.19817262499418575,
+    "first_audio_seconds": 2.5270229579909937,
+    "first_service_result_seconds": null,
+    "final_tool_result_seconds": null,
+    "first_speaker_delivery_seconds": 2.5279365000023972,
+    "first_speaker_render_seconds": 2.570665999999619,
+    "generated_reply_complete_seconds": 4.5293825409899,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 4075,
+        "message_characters": 3022,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "google_calendar__delete_event",
+          "google_calendar__list_calendars",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 1706,
+        "completion_tokens": 53,
+        "total_tokens": 1759,
+        "cache_read_input_tokens": 1702,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 1,
+    "tool_calls": [],
+    "tool_statuses": [],
+    "audio_bytes": 703200,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "I can't delete your primary Google Calendar \u2014 it's the default calendar that holds your events and can't be removed. If you meant a specific secondary calendar (like a work or family calendar), let me know which one and I'll take care of it.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 17.21703233299195,
+    "spoken_text": "I can't delete your primary Google Calendar \u2014 it's the default calendar that holds your events and can't be removed. If you meant a specific secondary calendar (like a work or family calendar), let me know which one and I'll take care of it.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 3130,
+    "intermediate_speech": false,
+    "progress_label": null,
+    "latency_miss": true
+  },
+  {
+    "case": "unsupported",
+    "prompt": "Delete my Google calendar, including the calendar itself.",
+    "variant": "bounded",
+    "repeat": 2,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 0.2530691249994561,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": null,
+    "task_complete_seconds": 5.808053875007317,
+    "service_calls": [],
+    "first_text_seconds": 2.6201872500096215,
+    "first_audio_seconds": 0.15248020899889525,
+    "first_service_result_seconds": null,
+    "final_tool_result_seconds": 2.1676506670046365,
+    "first_speaker_delivery_seconds": 0.15422404200944584,
+    "first_speaker_render_seconds": 0.1917370420123916,
+    "generated_reply_complete_seconds": 5.807759792005527,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 3086,
+        "message_characters": 3649,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 3086,
+        "message_characters": 4242,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 1636,
+        "completion_tokens": 28,
+        "total_tokens": 1664,
+        "cache_read_input_tokens": 1632,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 1750,
+        "completion_tokens": 40,
+        "total_tokens": 1790,
+        "cache_read_input_tokens": 1663,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 2,
+    "tool_calls": [
+      "search_tools"
+    ],
+    "tool_statuses": [
+      "no_matching_tools"
+    ],
+    "audio_bytes": 679200,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "",
+        "tools": [
+          "search_tools"
+        ]
+      },
+      {
+        "text": "I don't have a tool to delete a Google Calendar. I can only manage events and view calendars, not remove the calendar itself. You'd need to do that directly in Google Calendar settings.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 5.808053875007317,
+    "spoken_text": "I'll look into your calendar. I don't have a tool to delete a Google Calendar. I can only manage events and view calendars, not remove the calendar itself. You'd need to do that directly in Google Calendar settings.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 2177,
+    "intermediate_speech": false,
+    "progress_label": "I'll look into your calendar.",
+    "latency_miss": false
+  },
+  {
+    "case": "unsupported",
+    "prompt": "Delete my Google calendar, including the calendar itself.",
+    "variant": "bounded",
+    "repeat": 3,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 0.2530691249994561,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": null,
+    "task_complete_seconds": 5.754551708989311,
+    "service_calls": [],
+    "first_text_seconds": 2.5757996669999557,
+    "first_audio_seconds": 0.1244074999995064,
+    "first_service_result_seconds": null,
+    "final_tool_result_seconds": 2.095640708997962,
+    "first_speaker_delivery_seconds": 0.126097916989238,
+    "first_speaker_render_seconds": 0.15983287499693688,
+    "generated_reply_complete_seconds": 5.7542426669970155,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 3086,
+        "message_characters": 3649,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 3086,
+        "message_characters": 4242,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 1636,
+        "completion_tokens": 28,
+        "total_tokens": 1664,
+        "cache_read_input_tokens": 1632,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 1750,
+        "completion_tokens": 40,
+        "total_tokens": 1790,
+        "cache_read_input_tokens": 1663,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 2,
+    "tool_calls": [
+      "search_tools"
+    ],
+    "tool_statuses": [
+      "no_matching_tools"
+    ],
+    "audio_bytes": 679200,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "",
+        "tools": [
+          "search_tools"
+        ]
+      },
+      {
+        "text": "I don't have a tool to delete a Google Calendar. I can only manage events and view calendars, not remove the calendar itself. You'd need to do that directly in Google Calendar settings.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 5.754551708989311,
+    "spoken_text": "I'll look into your calendar. I don't have a tool to delete a Google Calendar. I can only manage events and view calendars, not remove the calendar itself. You'd need to do that directly in Google Calendar settings.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 2177,
+    "intermediate_speech": false,
+    "progress_label": "I'll look into your calendar.",
+    "latency_miss": false
+  },
+  {
+    "case": "unsupported",
+    "prompt": "Delete my Google calendar, including the calendar itself.",
+    "variant": "baseline",
+    "repeat": 3,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 0.2530691249994561,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": null,
+    "task_complete_seconds": 21.333950415995787,
+    "service_calls": [],
+    "first_text_seconds": 0.1528120410075644,
+    "first_audio_seconds": 2.5302720409963513,
+    "first_service_result_seconds": null,
+    "final_tool_result_seconds": null,
+    "first_speaker_delivery_seconds": 2.53117120800016,
+    "first_speaker_render_seconds": 2.5706446660042275,
+    "generated_reply_complete_seconds": 5.107087083000806,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 4075,
+        "message_characters": 3022,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "google_calendar__delete_event",
+          "google_calendar__list_calendars",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 1706,
+        "completion_tokens": 59,
+        "total_tokens": 1765,
+        "cache_read_input_tokens": 1702,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 1,
+    "tool_calls": [],
+    "tool_statuses": [],
+    "audio_bytes": 901200,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "I can't delete your primary Google Calendar \u2014 it's the default calendar that holds your events and can't be removed. I can, however, delete any secondary calendars you've created (like a work or family calendar), or delete specific events from your primary calendar. Which would you like?",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 21.333950415995787,
+    "spoken_text": "I can't delete your primary Google Calendar \u2014 it's the default calendar that holds your events and can't be removed. I can, however, delete any secondary calendars you've created (like a work or family calendar), or delete specific events from your primary calendar. Which would you like?",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 3130,
+    "intermediate_speech": false,
+    "progress_label": null,
+    "latency_miss": true
+  }
+]

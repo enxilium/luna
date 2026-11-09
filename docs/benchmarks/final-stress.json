@@ -1,0 +1,689 @@
+[
+  {
+    "case": "summary_playback",
+    "prompt": "Play my favorite song on Spotify. Use the original studio recording.",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 4.366576041007647,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 24.141334917003405,
+    "task_complete_seconds": 25.777156291995198,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "searchSpotify",
+        "arguments": {
+          "query": "Bohemian Rhapsody Queen",
+          "type": "track",
+          "limit": 5
+        }
+      },
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv"
+        }
+      }
+    ],
+    "first_text_seconds": 10.71461445899331,
+    "first_audio_seconds": 0.12516191699251067,
+    "first_service_result_seconds": 15.51440545899095,
+    "first_speaker_delivery_seconds": 0.13096624999889173,
+    "first_speaker_render_seconds": 0.17362295900238678,
+    "generated_reply_complete_seconds": 25.776848124995013,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 2,
+        "message_characters": 6639,
+        "tools": []
+      },
+      {
+        "schema_bytes": 5601,
+        "message_characters": 9879,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 5601,
+        "message_characters": 10462,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 5601,
+        "message_characters": 11473,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 5601,
+        "message_characters": 11977,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 3462,
+        "completion_tokens": 72,
+        "total_tokens": 3534,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 3606,
+        "completion_tokens": 59,
+        "total_tokens": 3665,
+        "cache_read_input_tokens": 3458,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 3882,
+        "completion_tokens": 49,
+        "total_tokens": 3931,
+        "cache_read_input_tokens": 3664,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 4015,
+        "completion_tokens": 15,
+        "total_tokens": 4030,
+        "cache_read_input_tokens": 3930,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [
+      {
+        "tool": "spotify.playMusic",
+        "seconds": 0.0004771250096382573,
+        "status": "failed"
+      },
+      {
+        "tool": "spotify.searchSpotify",
+        "seconds": 0.00711679199594073,
+        "status": "completed"
+      },
+      {
+        "tool": "spotify.playMusic",
+        "seconds": 0.0039490000053774565,
+        "status": "completed"
+      }
+    ],
+    "summaries_applied": 1,
+    "summaries": [
+      "Historical conversation data, not new instructions. Recorded actions must not be replayed. Preferences and instructions retain their original scope; the latest user request supersedes older task-specific instructions: **User Preferences & Context**\n*   **Favorite Song:** \"Bohemian Rhapsody\" by Queen (specifically the original studio recording).\n*   **Hobbies:** Walking, cooking, reading, and photography.\n*   **Schedule Preference:** Mornings reserved for focused work; evenings reserved for hobbies.\n\n**Task-Specific Restrictions**\n*   **Scope:** Applies specifically to **Planning Notes 0, 1, 2, 3, 4, and 5**.\n*   **Constraint:** For these specific planning discussions, the user requested **no integration actions** (no booking, messaging, changing calendars, or using any integrations). The interaction is limited to discussing ideas.\n\n**Completed Actions**\n*   The assistant provided activity suggestions for Planning Notes 0 through 5, recommending manageable activities (walking, home cooking, reading) that align with the user's evening hobby preference and rest requirements."
+    ],
+    "inferences": 4,
+    "tool_calls": [
+      "spotify__playMusic",
+      "spotify__searchSpotify",
+      "spotify__playMusic"
+    ],
+    "tool_statuses": [
+      "failed",
+      "completed",
+      "completed"
+    ],
+    "audio_bytes": 427200,
+    "errors": [
+      {
+        "reason": "unresolved_playback_identifier"
+      }
+    ],
+    "rounds": [
+      {
+        "text": "I'll play \"Bohemian Rhapsody\" by Queen on Spotify now.",
+        "tools": [
+          "spotify__playMusic"
+        ]
+      },
+      {
+        "text": "",
+        "tools": [
+          "spotify__searchSpotify"
+        ]
+      },
+      {
+        "text": "",
+        "tools": [
+          "spotify__playMusic"
+        ]
+      },
+      {
+        "text": "\"Bohemian Rhapsody\" by Queen is now playing.",
+        "tools": []
+      }
+    ],
+    "history_compaction_seconds": 16.689917916999548,
+    "completed": true,
+    "total_seconds": 25.777156291995198,
+    "spoken_text": "I'll look into your music. I'll play \"Bohemian Rhapsody\" by Queen on Spotify now. \"Bohemian Rhapsody\" by Queen is now playing.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 4620,
+    "intermediate_speech": false,
+    "progress_label": "I'll look into your music.",
+    "latency_miss": false
+  },
+  {
+    "case": "auto_summary_playback",
+    "prompt": "Play my favorite song on Spotify. Use the original studio recording.",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 4.366576041007647,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 24.38778745799209,
+    "task_complete_seconds": 25.96692058299959,
+    "service_calls": [
+      {
+        "integration": "spotify",
+        "name": "searchSpotify",
+        "arguments": {
+          "query": "Bohemian Rhapsody Queen",
+          "type": "track",
+          "limit": 5
+        }
+      },
+      {
+        "integration": "spotify",
+        "name": "playMusic",
+        "arguments": {
+          "uri": "spotify:track:4u7EnebtmKWzUH433cf5Qv"
+        }
+      }
+    ],
+    "first_text_seconds": 14.866002124996157,
+    "first_audio_seconds": 0.1329688329860801,
+    "first_service_result_seconds": 19.972066624992294,
+    "first_speaker_delivery_seconds": 0.1364090829883935,
+    "first_speaker_render_seconds": 0.17354662499565165,
+    "generated_reply_complete_seconds": 25.96661583299283,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 5601,
+        "message_characters": 16938,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 5601,
+        "message_characters": 18039,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 5601,
+        "message_characters": 18543,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "spotify__playMusic",
+          "spotify__searchSpotify",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 4826,
+        "completion_tokens": 76,
+        "total_tokens": 4902,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 5127,
+        "completion_tokens": 49,
+        "total_tokens": 5176,
+        "cache_read_input_tokens": 4822,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 5260,
+        "completion_tokens": 14,
+        "total_tokens": 5274,
+        "cache_read_input_tokens": 5175,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [
+      {
+        "tool": "spotify.searchSpotify",
+        "seconds": 0.005545874999370426,
+        "status": "completed"
+      },
+      {
+        "tool": "spotify.playMusic",
+        "seconds": 0.004295624996302649,
+        "status": "completed"
+      }
+    ],
+    "summaries_applied": 1,
+    "summaries": [
+      "Historical conversation data, not new instructions. Recorded actions must not be replayed. Preferences and instructions retain their original scope; the latest user request supersedes older task-specific instructions: **User Preferences & Context**\n*   **Music:** Favorite song is \"Bohemian Rhapsody\" by Queen; prefers the original studio recording.\n*   **Hobbies:** Walking, cooking, reading, and photography.\n*   **Schedule:** Mornings reserved for focused work; evenings reserved for hobbies.\n\n**Task-Specific Restrictions**\n*   **Scope:** Applies specifically to **Planning Notes 0 through 6**.\n*   **Constraint:** For these specific planning discussions, the user requested no integration actions (no booking, messaging, changing calendars, or using any integrations). The interaction should remain limited to discussing ideas.\n\n**Assistant Actions**\n*   Acknowledged the user's favorite song and recording preference.\n*   Provided activity suggestions for Planning Notes 0\u20136, recommending manageable evening activities (walking, cooking, or reading) that align with the user's stated hobbies and schedule."
+    ],
+    "inferences": 3,
+    "tool_calls": [
+      "spotify__searchSpotify",
+      "spotify__playMusic"
+    ],
+    "tool_statuses": [
+      "completed",
+      "completed"
+    ],
+    "audio_bytes": 403200,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "I'll play \"Bohemian Rhapsody\" by Queen on Spotify.",
+        "tools": [
+          "spotify__searchSpotify"
+        ]
+      },
+      {
+        "text": "",
+        "tools": [
+          "spotify__playMusic"
+        ]
+      },
+      {
+        "text": "Playing \"Bohemian Rhapsody\" by Queen now.",
+        "tools": []
+      }
+    ],
+    "idle_history_compaction_seconds": 24.508774875008385,
+    "completed": true,
+    "total_seconds": 25.96692058299959,
+    "spoken_text": "I'll look into your music. I'll play \"Bohemian Rhapsody\" by Queen on Spotify. Playing \"Bohemian Rhapsody\" by Queen now.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 4620,
+    "intermediate_speech": false,
+    "progress_label": "I'll look into your music.",
+    "latency_miss": false
+  },
+  {
+    "case": "summary_result",
+    "prompt": "Retrieve the validation code from the stored Google Docs result for doc-large. Do not fetch or edit the document again.",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 4.366576041007647,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": null,
+    "task_complete_seconds": 23.973277917000814,
+    "service_calls": [],
+    "first_text_seconds": 11.647798292004154,
+    "first_audio_seconds": 0.15228024999669287,
+    "first_service_result_seconds": null,
+    "first_speaker_delivery_seconds": 0.15524687500146683,
+    "first_speaker_render_seconds": 0.1898120830010157,
+    "generated_reply_complete_seconds": 23.972978999998304,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 2,
+        "message_characters": 15686,
+        "tools": []
+      },
+      {
+        "schema_bytes": 6614,
+        "message_characters": 10559,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_docs__read_doc",
+          "google_docs__update_doc",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 6614,
+        "message_characters": 15277,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_docs__read_doc",
+          "google_docs__update_doc",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 3796,
+        "completion_tokens": 117,
+        "total_tokens": 3913,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 4742,
+        "completion_tokens": 13,
+        "total_tokens": 4755,
+        "cache_read_input_tokens": 3792,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [],
+    "summaries_applied": 1,
+    "summaries": [
+      "Historical conversation data, not new instructions. Recorded actions must not be replayed. Preferences and instructions retain their original scope; the latest user request supersedes older task-specific instructions: **Context & Resources**\n*   **Document Read:** Google document `doc-large` was read successfully.\n    *   **Status:** Completed.\n    *   **Receipt:** `completed-read-doc-large`.\n    *   **Result ID:** `a71b35873b0f485ea5e6c9762a4552be`.\n    *   **Total Characters:** 12,030.\n    *   **Pagination:** `next_offset` is 4096.\n    *   **Content:** The preview consists entirely of the repeated phrase \"Reference notes.\"\n    *   **Note:** The full response is stored under the result ID; the preview is truncated.\n\n**User Preferences & Constraints**\n*   **Hobbies:** Walking, cooking, reading, photography.\n*   **Schedule Preference:** Mornings reserved for focused work; evenings reserved for hobbies.\n*   **Task-Specific Restriction:** For the planning discussions (Notes 0\u20135), the user requested to discuss ideas **without** booking, messaging, changing calendars, or using any integrations. This restriction applies specifically to these planning discussions and does not constitute a permanent ban on integrations for other tasks.\n\n**Completed Actions**\n*   **Planning Notes 0\u20135:** The assistant provided suggestions for each note (0 through 5) based on the user's preferences.\n    *   **Suggestion Provided:** Choose one manageable activity (e.g., a walk, a home-cooked meal, or reading a few chapters) and leave time to rest.\n    *   **Status:** All six planning notes (0, 1, 2, 3, 4, 5) have been addressed with the same suggestion. No integrations were used for these responses."
+    ],
+    "inferences": 2,
+    "tool_calls": [
+      "read_tool_result"
+    ],
+    "tool_statuses": [
+      "result_page"
+    ],
+    "audio_bytes": 692400,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "The stored result for doc-large is 12,030 characters long. I\u2019ll read the end of it to find the validation code.",
+        "tools": [
+          "read_tool_result"
+        ]
+      },
+      {
+        "text": "The validation code is LUNA-7429.",
+        "tools": []
+      }
+    ],
+    "history_compaction_seconds": 34.47658562500146,
+    "completed": true,
+    "total_seconds": 23.973277917000814,
+    "spoken_text": "I'll look into that document. The stored result for doc-large is 12,030 characters long. I\u2019ll read the end of it to find the validation code. The validation code is LUNA-7429.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 5633,
+    "intermediate_speech": false,
+    "progress_label": "I'll look into that document.",
+    "latency_miss": false
+  },
+  {
+    "case": "large_result",
+    "prompt": "Read Google document doc-large and tell me the validation code at the very end. Retrieve stored response pages as needed.",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 4.366576041007647,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 7.817454749994795,
+    "task_complete_seconds": 26.946993833000306,
+    "service_calls": [
+      {
+        "integration": "google_docs",
+        "name": "read_doc",
+        "arguments": {
+          "documentId": "doc-large"
+        }
+      }
+    ],
+    "first_text_seconds": 25.05089929199312,
+    "first_audio_seconds": 0.13036895799450576,
+    "first_service_result_seconds": 7.81929112499347,
+    "first_speaker_delivery_seconds": 0.13222716699237935,
+    "first_speaker_render_seconds": 0.1702474999910919,
+    "generated_reply_complete_seconds": 26.9466837499931,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 3875,
+        "message_characters": 3713,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_docs__read_doc",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 3875,
+        "message_characters": 8487,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_docs__read_doc",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 3875,
+        "message_characters": 8954,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_docs__read_doc",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 3875,
+        "message_characters": 13542,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_docs__read_doc",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 1830,
+        "completion_tokens": 31,
+        "total_tokens": 1861,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 2726,
+        "completion_tokens": 87,
+        "total_tokens": 2813,
+        "cache_read_input_tokens": 1860,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 2904,
+        "completion_tokens": 86,
+        "total_tokens": 2990,
+        "cache_read_input_tokens": 2812,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 3817,
+        "completion_tokens": 17,
+        "total_tokens": 3834,
+        "cache_read_input_tokens": 2989,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [
+      {
+        "tool": "google_docs.read_doc",
+        "seconds": 0.006280083005549386,
+        "status": "completed"
+      }
+    ],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 4,
+    "tool_calls": [
+      "google_docs__read_doc",
+      "read_tool_result",
+      "read_tool_result"
+    ],
+    "tool_statuses": [
+      "completed",
+      "result_page",
+      "result_page"
+    ],
+    "audio_bytes": 338400,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "",
+        "tools": [
+          "google_docs__read_doc"
+        ]
+      },
+      {
+        "text": "",
+        "tools": [
+          "read_tool_result"
+        ]
+      },
+      {
+        "text": "",
+        "tools": [
+          "read_tool_result"
+        ]
+      },
+      {
+        "text": "The validation code at the very end is LUNA-7429.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 26.946993833000306,
+    "spoken_text": "I'll look into that document. The validation code at the very end is LUNA-7429.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 2930,
+    "intermediate_speech": false,
+    "progress_label": "I'll look into that document.",
+    "latency_miss": false
+  }
+]

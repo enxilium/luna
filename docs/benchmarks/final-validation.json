@@ -1,0 +1,18 @@
+{
+  "note": "Final working sources after the matrix: no-match result guidance, Spotify URL/response identifier compatibility, native startup failure handling, and summary analysis corrections have focused/live verification. The original measurement-source hashes remain in environment.json.",
+  "test_command": "LUNA_LIVE_TESTS=1 .venv/bin/python -m unittest discover -s tests -q",
+  "tests_run": 73,
+  "tests_passed": 73,
+  "files_sha256": {
+    "src/agent/services.py": "e47a05a63a73ad27124b88dbd0d4be0323bd03fc3c3562477f201203d6100a13",
+    "src/agent/turns.py": "63a96fbd5aadb2ea14b0140dd09061892051614aeccf3a6edf4646bbbdde2e6f",
+    "src/integrations/catalog.py": "ff5e7cf26661f64a54f040d7824f678fe6dbaa427399b79f266d047e037ed981",
+    "src/integrations/mcp.py": "65c5ab236d61d3bba3b824a60e78f0b120be503e0f5b84a7e67c98933cbd6104",
+    "src/audio/apple.py": "70be6f0ec8b14c7ab567ac612bb72933d43b75390e4d8ce2f0a119ff03daa383",
+    "src/agent/conversation.py": "18e4d6b0b22cb8392f9ea94416f93857389d12a73fcbf971bb05a795c1eb2fbd",
+    "scripts/inference_tts.py": "efefa833cacf57633cc6d01fc7e9ba39bfe7bd79170539b79e0160723ba24b18",
+    "scripts/benchmark_tools.py": "635fd09320e71e222e4d0e445cc1a264dbfa3d9fbd67aedeb52485748ce28333",
+    "scripts/fixtures/mcp-catalog.json": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "scripts/fixtures/latency-baseline.zip": "11f389a9535f50356c692ab020acbb256d72bec0b0299293547ae795183fb278"
+  }
+}

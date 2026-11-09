@@ -1,0 +1,76 @@
+{
+  "variants": {
+    "bounded": {
+      "turns": 6,
+      "correct": 6,
+      "latency_misses": 5,
+      "speaker_render_p95_seconds": 18.13333529199008,
+      "latency_gate_passed": false,
+      "correctness_gate_passed": true,
+      "cases": {
+        "greeting": {
+          "turns": 1,
+          "correct": 1,
+          "generated_completion_median_seconds": 1.5132778749975841,
+          "service_completion_median_seconds": null,
+          "service_completed_within_10_seconds": 0,
+          "service_completion_p95_seconds": null,
+          "final_tool_result_median_seconds": null,
+          "final_tools_completed_within_10_seconds": 0
+        },
+        "calendar": {
+          "turns": 1,
+          "correct": 1,
+          "generated_completion_median_seconds": 23.193442042000243,
+          "service_completion_median_seconds": 15.295750457997201,
+          "service_completed_within_10_seconds": 0,
+          "service_completion_p95_seconds": 15.295750457997201,
+          "final_tool_result_median_seconds": 15.29698041699885,
+          "final_tools_completed_within_10_seconds": 0
+        },
+        "docs": {
+          "turns": 1,
+          "correct": 1,
+          "generated_completion_median_seconds": 16.795663666998735,
+          "service_completion_median_seconds": 13.846282416998292,
+          "service_completed_within_10_seconds": 0,
+          "service_completion_p95_seconds": 13.846282416998292,
+          "final_tool_result_median_seconds": 13.847732875001384,
+          "final_tools_completed_within_10_seconds": 0
+        },
+        "spotify": {
+          "turns": 1,
+          "correct": 1,
+          "generated_completion_median_seconds": 7.7997180839884095,
+          "service_completion_median_seconds": 6.594139583990909,
+          "service_completed_within_10_seconds": 1,
+          "service_completion_p95_seconds": 6.594139583990909,
+          "final_tool_result_median_seconds": 6.595153208996635,
+          "final_tools_completed_within_10_seconds": 1
+        },
+        "history_playback": {
+          "turns": 1,
+          "correct": 1,
+          "generated_completion_median_seconds": 26.944057458007592,
+          "service_completion_median_seconds": 24.87203587499971,
+          "service_completed_within_10_seconds": 0,
+          "service_completion_p95_seconds": 24.87203587499971,
+          "final_tool_result_median_seconds": 24.873009375005495,
+          "final_tools_completed_within_10_seconds": 0
+        },
+        "explicit_playback": {
+          "turns": 1,
+          "correct": 1,
+          "generated_completion_median_seconds": 11.407590709000942,
+          "service_completion_median_seconds": 10.448155584002961,
+          "service_completed_within_10_seconds": 0,
+          "service_completion_p95_seconds": 10.448155584002961,
+          "final_tool_result_median_seconds": 10.44938416700461,
+          "final_tools_completed_within_10_seconds": 0
+        }
+      }
+    }
+  },
+  "percentile_method": "Nearest rank; missing speaker output counts as infinity",
+  "completion_metric": "Final generated reply, measured separately from first speaker rendering"
+}

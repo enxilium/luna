@@ -1,0 +1,516 @@
+[
+  {
+    "first_audio_seconds": 0.5976197079871781,
+    "first_speaker_delivery_seconds": 0.6037195830140263,
+    "first_speaker_render_seconds": 0.6400259580113925,
+    "final_tool_result_seconds": null,
+    "reply_complete_seconds": 2.30479333299445,
+    "token_usage": [
+      {
+        "prompt_tokens": 2450,
+        "completion_tokens": 48,
+        "total_tokens": 2498,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 20,
+        "input_audio_tokens": 156,
+        "output_audio_tokens": 48,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [],
+    "tool_results": [],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 1920
+      }
+    ],
+    "ready_seconds": 0.5365903340280056,
+    "spoken_text": "Hello, it's great to meet you!",
+    "setup_schema_bytes": 6119,
+    "setup_tool_count": 10,
+    "latency_miss": false,
+    "case": "greeting",
+    "backend": "local",
+    "prompt": "Say hello in one short sentence.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [],
+    "service_complete_seconds": null,
+    "api_requests": []
+  },
+  {
+    "first_audio_seconds": 1.3431224579690024,
+    "first_speaker_delivery_seconds": 1.344689332996495,
+    "first_speaker_render_seconds": 1.3844882079865783,
+    "final_tool_result_seconds": 0.6580875409999862,
+    "reply_complete_seconds": 6.728907374956179,
+    "token_usage": [
+      {
+        "prompt_tokens": 5253,
+        "completion_tokens": 152,
+        "total_tokens": 5405,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 207,
+        "input_audio_tokens": 312,
+        "output_audio_tokens": 136,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "connect_integration",
+        "arguments": {
+          "integration_id": "google_calendar"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "connect_integration",
+        "status": "failed",
+        "reason": "integration_unavailable"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2880
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 23040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      }
+    ],
+    "ready_seconds": 0.8258082089596428,
+    "spoken_text": "I am unable to access your Google Calendar right now because the integration is currently unavailable.",
+    "setup_schema_bytes": 6119,
+    "setup_tool_count": 10,
+    "latency_miss": false,
+    "case": "calendar",
+    "backend": "local",
+    "prompt": "Show the next five events on my primary Google calendar between 2026-10-05T00:00:00-04:00 and 2026-10-06T00:00:00-04:00. Give their titles.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": false,
+    "service_calls": [],
+    "service_complete_seconds": null,
+    "api_requests": []
+  },
+  {
+    "first_audio_seconds": 2.207317874999717,
+    "first_speaker_delivery_seconds": 2.2083682090160437,
+    "first_speaker_render_seconds": 2.248499916982837,
+    "final_tool_result_seconds": 1.017921958991792,
+    "reply_complete_seconds": 9.310752667021006,
+    "token_usage": [
+      {
+        "prompt_tokens": 5342,
+        "completion_tokens": 197,
+        "total_tokens": 5539,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 377,
+        "input_audio_tokens": 312,
+        "output_audio_tokens": 181,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "connect_integration",
+        "arguments": {
+          "integration_id": "google_docs"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "connect_integration",
+        "status": "failed",
+        "reason": "integration_unavailable"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 6720
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 28800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 3840
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 24960
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 23040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 30720
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 24960
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      }
+    ],
+    "ready_seconds": 0.4647731250151992,
+    "spoken_text": "I'm sorry, I can't access Google Docs right now because the integration is unavailable, so I can't make the requested changes to the document.",
+    "setup_schema_bytes": 6119,
+    "setup_tool_count": 10,
+    "latency_miss": true,
+    "case": "docs",
+    "backend": "local",
+    "prompt": "Replace all Project Alpha with Project Luna in the Google document with documentId=doc-example, matching case. The document has already been read. Apply and verify the edit.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": false,
+    "service_calls": [],
+    "service_complete_seconds": null,
+    "api_requests": []
+  },
+  {
+    "first_audio_seconds": 1.301022625004407,
+    "first_speaker_delivery_seconds": 1.3015187089913525,
+    "first_speaker_render_seconds": 1.3396172089851461,
+    "final_tool_result_seconds": 0.5777377500198781,
+    "reply_complete_seconds": 4.794727667002007,
+    "token_usage": [
+      {
+        "prompt_tokens": 5066,
+        "completion_tokens": 107,
+        "total_tokens": 5173,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 176,
+        "input_audio_tokens": 312,
+        "output_audio_tokens": 91,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "connect_integration",
+        "arguments": {
+          "integration_id": "google_gmail"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "connect_integration",
+        "status": "failed",
+        "reason": "integration_unavailable"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2880
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 34560
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 23040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      }
+    ],
+    "ready_seconds": 0.4723041249671951,
+    "spoken_text": "I'm sorry, I'm unable to access your Gmail labels at the moment.",
+    "setup_schema_bytes": 6119,
+    "setup_tool_count": 10,
+    "latency_miss": false,
+    "case": "gmail",
+    "backend": "local",
+    "prompt": "List the names of my Gmail labels.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": false,
+    "service_calls": [],
+    "service_complete_seconds": null,
+    "api_requests": []
+  }
+]

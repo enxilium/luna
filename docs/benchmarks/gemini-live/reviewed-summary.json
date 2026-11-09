@@ -1,0 +1,42 @@
+{
+  "mixed": {
+    "turns": 22,
+    "original_automated_correct": 18,
+    "correct_after_refusal_checker_fix": 20,
+    "speaker_under_two_seconds": 17,
+    "speaker_median_seconds": 1.5917441249766853,
+    "speaker_empirical_p95_seconds": 2.7252871250384487,
+    "speaker_range_seconds": [
+      0.7166154170408845,
+      5.474667917005718
+    ],
+    "ready_range_seconds": [
+      0.5198525409796275,
+      1.1740386669989675
+    ]
+  },
+  "explicit_document_id_and_unsupported": {
+    "turns": 4,
+    "correct": 4,
+    "document_final_tool_result_seconds": [
+      4.4522320840042084,
+      5.010521625052206
+    ],
+    "document_reply_complete_seconds": [
+      11.310220709012356,
+      10.49519979202887
+    ]
+  },
+  "correct_service_task_final_result_range_seconds": [
+    0.5150776659720577,
+    5.010521625052206
+  ],
+  "limits": [
+    "Synthetic MCP effects, real Gemini and native playback; no microphone capture or real external service effects.",
+    "Sequential fresh-session trials, not a 100-turn promotion gate.",
+    "Original mixed docs prompt used Google document doc-example; both requests searched rather than edited. Explicit documentId prompt is a separate follow-up.",
+    "Original checker missed two valid refusals phrased do not have using contractions. Raw results remain unchanged.",
+    "Render callback is a software output proxy; no acoustic timing or subjective useful-speech classification.",
+    "Failed client-content-only and interrupted realtime experiments remain separate, not merged into final latency statistics."
+  ]
+}

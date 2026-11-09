@@ -1,0 +1,627 @@
+[
+  {
+    "first_audio_seconds": 5.016262334014755,
+    "first_speaker_delivery_seconds": 5.023102959035896,
+    "first_speaker_render_seconds": 5.059117208991665,
+    "final_tool_result_seconds": 4.4522320840042084,
+    "reply_complete_seconds": 11.310220709012356,
+    "token_usage": [
+      {
+        "prompt_tokens": 161937,
+        "completion_tokens": 230,
+        "total_tokens": 162167,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 1491,
+        "input_audio_tokens": 468,
+        "output_audio_tokens": 162,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "google_docs__update_doc",
+        "arguments": {
+          "documentId": "doc-example",
+          "requests": [
+            {
+              "replaceAllText": {
+                "replaceText": "Project Luna",
+                "containsText": {
+                  "matchCase": true,
+                  "text": "Project Alpha"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "tool": "google_docs__read_doc",
+        "arguments": {
+          "documentId": "doc-example"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "google_docs__update_doc",
+        "status": "completed"
+      },
+      {
+        "tool": "google_docs__read_doc",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 2
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 28800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 3840
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      }
+    ],
+    "ready_seconds": 0.6164408749900758,
+    "spoken_text": "All instances of Project Alpha have been successfully replaced with Project Luna in the document, and the edit has been verified.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "docs",
+    "prompt": "Replace all Project Alpha with Project Luna in the Google document with documentId=doc-example, matching case. The document has already been read. Apply and verify the edit.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "google_docs",
+        "name": "update_doc",
+        "arguments": {
+          "documentId": "doc-example",
+          "requests": [
+            {
+              "replaceAllText": {
+                "replaceText": "Project Luna",
+                "containsText": {
+                  "matchCase": true,
+                  "text": "Project Alpha"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "integration": "google_docs",
+        "name": "read_doc",
+        "arguments": {
+          "documentId": "doc-example"
+        }
+      }
+    ],
+    "service_complete_seconds": 4.451246834010817
+  },
+  {
+    "first_audio_seconds": 1.0200693749939092,
+    "first_speaker_delivery_seconds": 1.0207489159656689,
+    "first_speaker_render_seconds": 1.0559832499711774,
+    "final_tool_result_seconds": null,
+    "reply_complete_seconds": 5.238300791010261,
+    "token_usage": [
+      {
+        "prompt_tokens": 52902,
+        "completion_tokens": 111,
+        "total_tokens": 53013,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 163,
+        "input_audio_tokens": 156,
+        "output_audio_tokens": 111,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [],
+    "tool_results": [],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 4800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 13440
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 28800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 3840
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 24960
+      }
+    ],
+    "ready_seconds": 0.572067542001605,
+    "spoken_text": "I'm sorry, but I don't have the ability to delete an entire Google Calendar.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "unsupported",
+    "prompt": "Delete my Google calendar, including the calendar itself.",
+    "repeat": 1,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [],
+    "service_complete_seconds": null
+  },
+  {
+    "first_audio_seconds": 5.810061084048357,
+    "first_speaker_delivery_seconds": 5.810911959037185,
+    "first_speaker_render_seconds": 5.844546250009444,
+    "final_tool_result_seconds": 5.010521625052206,
+    "reply_complete_seconds": 10.49519979202887,
+    "token_usage": [
+      {
+        "prompt_tokens": 163011,
+        "completion_tokens": 184,
+        "total_tokens": 163195,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 2010,
+        "input_audio_tokens": 468,
+        "output_audio_tokens": 116,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [
+      {
+        "tool": "google_docs__update_doc",
+        "arguments": {
+          "documentId": "doc-example",
+          "requests": [
+            {
+              "replaceAllText": {
+                "containsText": {
+                  "matchCase": true,
+                  "text": "Project Alpha"
+                },
+                "replaceText": "Project Luna"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "tool": "google_docs__read_doc",
+        "arguments": {
+          "documentId": "doc-example"
+        }
+      }
+    ],
+    "tool_results": [
+      {
+        "tool": "google_docs__update_doc",
+        "status": "completed"
+      },
+      {
+        "tool": "google_docs__read_doc",
+        "status": "completed"
+      }
+    ],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 10080
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 5760
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 9600
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 26880
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 3840
+      }
+    ],
+    "ready_seconds": 0.7415092919836752,
+    "spoken_text": "The edit has been applied and verified. The document now contains \"Project Luna\".",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": true,
+    "case": "docs",
+    "prompt": "Replace all Project Alpha with Project Luna in the Google document with documentId=doc-example, matching case. The document has already been read. Apply and verify the edit.",
+    "repeat": 2,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [
+      {
+        "integration": "google_docs",
+        "name": "update_doc",
+        "arguments": {
+          "documentId": "doc-example",
+          "requests": [
+            {
+              "replaceAllText": {
+                "containsText": {
+                  "matchCase": true,
+                  "text": "Project Alpha"
+                },
+                "replaceText": "Project Luna"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "integration": "google_docs",
+        "name": "read_doc",
+        "arguments": {
+          "documentId": "doc-example"
+        }
+      }
+    ],
+    "service_complete_seconds": 5.009489250020124
+  },
+  {
+    "first_audio_seconds": 1.2511586250038818,
+    "first_speaker_delivery_seconds": 1.2517387500265613,
+    "first_speaker_render_seconds": 1.2910801250254735,
+    "final_tool_result_seconds": null,
+    "reply_complete_seconds": 7.478107667004224,
+    "token_usage": [
+      {
+        "prompt_tokens": 52902,
+        "completion_tokens": 161,
+        "total_tokens": 53063,
+        "cache_read_input_tokens": null,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": 182,
+        "input_audio_tokens": 156,
+        "output_audio_tokens": 161,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "errors": [],
+    "native_tool_calls": [],
+    "tool_results": [],
+    "model_parts": [
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 16800
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 3840
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 21120
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 24960
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 7680
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 23040
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 17280
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 30720
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 15360
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 19200
+      },
+      {
+        "text": false,
+        "mime_type": "audio/pcm;rate=24000",
+        "audio_bytes": 11520
+      }
+    ],
+    "ready_seconds": 1.100363041041419,
+    "spoken_text": "I'm sorry, but I don't have the ability to delete an entire calendar. I can only delete individual events from it.",
+    "setup_schema_bytes": 202949,
+    "setup_tool_count": 69,
+    "latency_miss": false,
+    "case": "unsupported",
+    "prompt": "Delete my Google calendar, including the calendar itself.",
+    "repeat": 2,
+    "model": "gemini-3.8-live",
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "task_correct": true,
+    "service_calls": [],
+    "service_complete_seconds": null
+  }
+]

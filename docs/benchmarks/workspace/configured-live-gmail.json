@@ -1,0 +1,46 @@
+{
+  "checked_at": "2026-11-02T17:13:55.730903+00:00",
+  "discovery_seconds": 0.14786458300659433,
+  "discovered_tools": {
+    "google_gmail": 23,
+    "google_drive": 8,
+    "google_docs": 2,
+    "google_sheets": 6,
+    "google_slides": 4,
+    "google_calendar": 9,
+    "google_chat": 4,
+    "google_people": 3,
+    "spotify": 30
+  },
+  "rows": [
+    {
+      "operation": "list_labels",
+      "repeat": 1,
+      "seconds": 0.4014803330064751,
+      "status": "completed",
+      "labels_count": 19
+    },
+    {
+      "operation": "list_labels",
+      "repeat": 2,
+      "seconds": 0.24058508296729997,
+      "status": "completed",
+      "labels_count": 19
+    },
+    {
+      "operation": "list_labels",
+      "repeat": 3,
+      "seconds": 0.2087386249913834,
+      "status": "completed",
+      "labels_count": 19
+    },
+    {
+      "operation": "search_threads",
+      "seconds": 0.5761125420103781,
+      "status": "completed",
+      "thread_count": 1,
+      "pagination_available": true
+    }
+  ],
+  "private_data": "Only counts and timings retained. Read-only label listing and one inbox thread metadata result; no mutations."
+}

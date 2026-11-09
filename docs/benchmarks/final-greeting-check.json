@@ -1,0 +1,376 @@
+[
+  {
+    "case": "greeting",
+    "prompt": "Say hello in one short sentence.",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 0.5795770830009133,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 4.203512832988054,
+    "task_complete_seconds": 4.203512832988054,
+    "service_calls": [],
+    "first_text_seconds": 0.4581181249959627,
+    "first_audio_seconds": 1.439143832991249,
+    "first_service_result_seconds": null,
+    "final_tool_result_seconds": null,
+    "first_speaker_delivery_seconds": 1.4411193749983795,
+    "first_speaker_render_seconds": 1.482318333000876,
+    "generated_reply_complete_seconds": 1.4987414159986656,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 2,
+        "message_characters": 510,
+        "tools": []
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 105,
+        "completion_tokens": 12,
+        "total_tokens": 117,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 1,
+    "tool_calls": [],
+    "tool_statuses": [],
+    "audio_bytes": 130800,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "Hello, I'm Luna, ready to assist you.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 4.203512832988054,
+    "spoken_text": "Hello, I'm Luna, ready to assist you.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 0,
+    "intermediate_speech": false,
+    "progress_label": null,
+    "latency_miss": false
+  },
+  {
+    "case": "calendar",
+    "prompt": "Show the next five events on my primary Google calendar between 2026-10-05T00:00:00-04:00 and 2026-10-06T00:00:00-04:00. Give their titles.",
+    "variant": "bounded",
+    "repeat": 1,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 0.5795770830009133,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 8.047096916998271,
+    "task_complete_seconds": 15.819647458003601,
+    "service_calls": [
+      {
+        "integration": "google_calendar",
+        "name": "list_events",
+        "arguments": {
+          "startTime": "2026-10-05T00:00:00-04:00",
+          "endTime": "2026-10-06T00:00:00-04:00",
+          "orderBy": "startTime",
+          "pageSize": 5
+        }
+      }
+    ],
+    "first_text_seconds": 9.188431417001993,
+    "first_audio_seconds": 0.15726212499430403,
+    "first_service_result_seconds": 8.048185207997449,
+    "final_tool_result_seconds": 8.048185207997449,
+    "first_speaker_delivery_seconds": 0.1595062499982305,
+    "first_speaker_render_seconds": 0.20245879200228956,
+    "generated_reply_complete_seconds": 15.81932312498975,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 6104,
+        "message_characters": 3731,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_calendar__list_events",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 6104,
+        "message_characters": 4772,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_calendar__list_events",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 2407,
+        "completion_tokens": 114,
+        "total_tokens": 2521,
+        "cache_read_input_tokens": 2403,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 2788,
+        "completion_tokens": 86,
+        "total_tokens": 2874,
+        "cache_read_input_tokens": 2520,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [
+      {
+        "tool": "google_calendar.list_events",
+        "seconds": 0.0057909579918487,
+        "status": "completed"
+      }
+    ],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 2,
+    "tool_calls": [
+      "google_calendar__list_events"
+    ],
+    "tool_statuses": [
+      "completed"
+    ],
+    "audio_bytes": 1190400,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "",
+        "tools": [
+          "google_calendar__list_events"
+        ]
+      },
+      {
+        "text": "Here are your next five events on October 5th:\n\n1. Design review 0 \u2014 9:00 AM\n2. Design review 1 \u2014 10:00 AM\n3. Design review 2 \u2014 11:00 AM\n4. Design review 3 \u2014 12:00 PM\n5. Design review 4 \u2014 1:00 PM",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 15.819647458003601,
+    "spoken_text": "I'll look into your calendar. Here are your next five events on October 5th: 1. Design review 0 \u2014 9:00 AM 2. Design review 1 \u2014 10:00 AM 3. Design review 2 \u2014 11:00 AM 4. Design review 3 \u2014 12:00 PM 5. Design review 4 \u2014 1:00 PM",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 5159,
+    "intermediate_speech": false,
+    "progress_label": "I'll look into your calendar.",
+    "latency_miss": false
+  },
+  {
+    "case": "greeting",
+    "prompt": "Say hello in one short sentence.",
+    "variant": "bounded",
+    "repeat": 2,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 0.5795770830009133,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 3.958182999995188,
+    "task_complete_seconds": 3.958182999995188,
+    "service_calls": [],
+    "first_text_seconds": 0.28185995799140073,
+    "first_audio_seconds": 1.196830457993201,
+    "first_service_result_seconds": null,
+    "final_tool_result_seconds": null,
+    "first_speaker_delivery_seconds": 1.1985668330016779,
+    "first_speaker_render_seconds": 1.2371333749906626,
+    "generated_reply_complete_seconds": 1.25439804099733,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 2,
+        "message_characters": 510,
+        "tools": []
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 105,
+        "completion_tokens": 12,
+        "total_tokens": 117,
+        "cache_read_input_tokens": 101,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 1,
+    "tool_calls": [],
+    "tool_statuses": [],
+    "audio_bytes": 130800,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "Hello, I'm Luna, ready to assist you.",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 3.958182999995188,
+    "spoken_text": "Hello, I'm Luna, ready to assist you.",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 0,
+    "intermediate_speech": false,
+    "progress_label": null,
+    "latency_miss": false
+  },
+  {
+    "case": "calendar",
+    "prompt": "Show the next five events on my primary Google calendar between 2026-10-05T00:00:00-04:00 and 2026-10-06T00:00:00-04:00. Give their titles.",
+    "variant": "bounded",
+    "repeat": 2,
+    "first_utterance_only": true,
+    "cold_model_before_ready": false,
+    "snapshot_sha256": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6",
+    "ready_warmup_seconds": 0.5795770830009133,
+    "arguments_correct": true,
+    "task_correct": true,
+    "service_complete_seconds": 8.16222620800545,
+    "task_complete_seconds": 15.919003999995766,
+    "service_calls": [
+      {
+        "integration": "google_calendar",
+        "name": "list_events",
+        "arguments": {
+          "startTime": "2026-10-05T00:00:00-04:00",
+          "endTime": "2026-10-06T00:00:00-04:00",
+          "orderBy": "startTime",
+          "pageSize": 5
+        }
+      }
+    ],
+    "first_text_seconds": 9.305769250000594,
+    "first_audio_seconds": 0.1548862920026295,
+    "first_service_result_seconds": 8.16344966700126,
+    "final_tool_result_seconds": 8.16344966700126,
+    "first_speaker_delivery_seconds": 0.15699175000190735,
+    "first_speaker_render_seconds": 0.1917903749999823,
+    "generated_reply_complete_seconds": 15.918723583003157,
+    "outgoing_requests": [
+      {
+        "schema_bytes": 6104,
+        "message_characters": 3731,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_calendar__list_events",
+          "cancel_authorize_integration"
+        ]
+      },
+      {
+        "schema_bytes": 6104,
+        "message_characters": 4772,
+        "tools": [
+          "search_tools",
+          "get_tool_help",
+          "connect_integration",
+          "authorize_integration",
+          "read_tool_result",
+          "google_calendar__list_events",
+          "cancel_authorize_integration"
+        ]
+      }
+    ],
+    "token_usage": [
+      {
+        "prompt_tokens": 2407,
+        "completion_tokens": 114,
+        "total_tokens": 2521,
+        "cache_read_input_tokens": 2403,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      },
+      {
+        "prompt_tokens": 2788,
+        "completion_tokens": 86,
+        "total_tokens": 2874,
+        "cache_read_input_tokens": 2520,
+        "cache_creation_input_tokens": null,
+        "reasoning_tokens": null,
+        "input_audio_tokens": null,
+        "output_audio_tokens": null,
+        "cache_read_input_audio_tokens": null
+      }
+    ],
+    "tool_latency_seconds": [
+      {
+        "tool": "google_calendar.list_events",
+        "seconds": 0.005743332993006334,
+        "status": "completed"
+      }
+    ],
+    "summaries_applied": 0,
+    "summaries": [],
+    "inferences": 2,
+    "tool_calls": [
+      "google_calendar__list_events"
+    ],
+    "tool_statuses": [
+      "completed"
+    ],
+    "audio_bytes": 1190400,
+    "errors": [],
+    "rounds": [
+      {
+        "text": "",
+        "tools": [
+          "google_calendar__list_events"
+        ]
+      },
+      {
+        "text": "Here are your next five events on October 5th:\n\n1. Design review 0 \u2014 9:00 AM\n2. Design review 1 \u2014 10:00 AM\n3. Design review 2 \u2014 11:00 AM\n4. Design review 3 \u2014 12:00 PM\n5. Design review 4 \u2014 1:00 PM",
+        "tools": []
+      }
+    ],
+    "completed": true,
+    "total_seconds": 15.919003999995766,
+    "spoken_text": "I'll look into your calendar. Here are your next five events on October 5th: 1. Design review 0 \u2014 9:00 AM 2. Design review 1 \u2014 10:00 AM 3. Design review 2 \u2014 11:00 AM 4. Design review 3 \u2014 12:00 PM 5. Design review 4 \u2014 1:00 PM",
+    "tool_payload_in_speech": false,
+    "published_schema_bytes": 5159,
+    "intermediate_speech": false,
+    "progress_label": "I'll look into your calendar.",
+    "latency_miss": false
+  }
+]

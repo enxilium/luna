@@ -1,0 +1,293 @@
+2026-10-03 18:24:24.898 | INFO     | pipecat:<module>:54 - ᓚᘏᗢ Pipecat 1.12.0 (Python 3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]) ᓚᘏᗢ
+2026-10-03 18:24:25.664 | INFO     | src.audio.apple:_start:114 - Normal speaker playback and separate Apple echo cancellation are enabled.
+2026-10-03 18:24:25.669 | INFO     | src.audio.apple:_start:114 - Normal speaker playback and separate Apple echo cancellation are enabled.
+2026-10-03 18:24:25.671 | INFO     | src.audio.apple:_start:116 - Apple audio output is enabled; microphone capture is disabled.
+2026-10-03 18:24:25.674 | INFO     | src.audio.apple:_start:114 - Normal speaker playback and separate Apple echo cancellation are enabled.
+2026-10-03 18:24:25.679 | INFO     | src.audio.apple:_start:114 - Normal speaker playback and separate Apple echo cancellation are enabled.
+2026-10-03 18:24:25.684 | INFO     | src.audio.apple:_start:114 - Normal speaker playback and separate Apple echo cancellation are enabled.
+2026-10-03 18:24:25.687 | INFO     | src.audio.apple:_start:114 - Normal speaker playback and separate Apple echo cancellation are enabled.
+2026-10-03 18:24:25.690 | INFO     | src.audio.apple:_start:114 - Normal speaker playback and separate Apple echo cancellation are enabled.
+2026-10-03 18:24:25.692 | INFO     | src.audio.apple:_start:114 - Normal speaker playback and separate Apple echo cancellation are enabled.
+MCP authorization failed
+2026-10-03 18:24:25.765 | WARNING  | src.integrations.mcp:_failure:300 - MCP integration 'test' failed (MCPError)
+MCP authorization failed
+MCP authorization failed
+MCP authorization failed
+MCP authorization failed
+2026-10-03 18:24:25.999 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool test.read_value ended: 0.003s (completed)
+2026-10-03 18:24:26.004 | WARNING  | src.integrations.mcp:from_config:210 - Invalid MCP configuration; integrations are disabled
+2026-10-03 18:24:26.004 | WARNING  | src.integrations.mcp:from_config:251 - Skipping invalid MCP integration configuration
+2026-10-03 18:24:26.004 | WARNING  | src.integrations.mcp:from_config:251 - Skipping invalid MCP integration configuration
+2026-10-03 18:24:26.004 | WARNING  | src.integrations.mcp:from_config:251 - Skipping invalid MCP integration configuration
+MCP authorization failed
+2026-10-03 18:24:26.054 | WARNING  | src.integrations.mcp:_failure:300 - MCP integration 'test' failed (MCPError)
+2026-10-03 18:24:26.054 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool test.read_value ended: 0.004s (failed)
+MCP authorization failed
+MCP authorization failed
+2026-10-03 18:24:26.160 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool test.read_value ended: 0.004s (auth_required)
+MCP authorization failed
+MCP authorization failed
+Token refresh failed: 400
+MCP authorization failed
+MCP authorization failed
+MCP authorization failed
+2026-10-03 18:24:26.415 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool test.read_value ended: 0.004s (auth_required)
+2026-10-03 18:24:26.446 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool test.read_value ended: 0.002s (completed)
+2026-10-03 18:24:26.942 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool one.echo ended: 0.003s (completed)
+2026-10-03 18:24:26.942 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool one.unknown ended: 0.000s (failed)
+2026-10-03 18:24:26.942 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool missing.echo ended: 0.000s (failed)
+MCP authorization failed
+2026-10-03 18:24:27.127 | WARNING  | src.integrations.mcp:_failure:300 - MCP integration 'test' failed (MCPError)
+MCP authorization failed
+2026-10-03 18:24:27.162 | INFO     | src.agent.services:on_output:185 - LLM inference #1 started
+2026-10-03 18:24:27.162 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2528 schema bytes, 3641 message characters
+2026-10-03 18:24:27.191 | INFO     | src.agent.services:on_output:189 - LLM inference #1 first text after 0.030s
+2026-10-03 18:24:27.192 | INFO     | src.agent.services:on_output:193 - LLM inference #1 ended: 0.031s (completed)
+MCP authorization failed
+2026-10-03 18:24:27.211 | INFO     | src.agent.services:on_output:185 - LLM inference #2 started
+2026-10-03 18:24:27.211 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2528 schema bytes, 4012 message characters
+2026-10-03 18:24:27.216 | INFO     | src.agent.services:on_output:189 - LLM inference #2 first text after 0.005s
+2026-10-03 18:24:27.217 | INFO     | src.agent.services:on_output:193 - LLM inference #2 ended: 0.006s (completed)
+2026-10-03 18:24:27.240 | INFO     | src.agent.services:on_output:185 - LLM inference #3 started
+2026-10-03 18:24:27.240 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2528 schema bytes, 4913 message characters
+2026-10-03 18:24:27.247 | INFO     | src.agent.services:on_output:189 - LLM inference #3 first text after 0.008s
+2026-10-03 18:24:27.248 | INFO     | src.agent.services:on_output:193 - LLM inference #3 ended: 0.008s (completed)
+2026-10-03 18:24:27.275 | INFO     | src.agent.services:on_output:185 - LLM inference #4 started
+2026-10-03 18:24:27.275 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2690 schema bytes, 5795 message characters
+2026-10-03 18:24:27.281 | INFO     | src.agent.services:on_output:189 - LLM inference #4 first text after 0.005s
+2026-10-03 18:24:27.282 | INFO     | src.agent.services:on_output:193 - LLM inference #4 ended: 0.006s (completed)
+2026-10-03 18:24:27.289 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool test.read_value ended: 0.007s (completed)
+2026-10-03 18:24:27.293 | INFO     | src.agent.services:on_output:185 - LLM inference #5 started
+2026-10-03 18:24:27.293 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2690 schema bytes, 6249 message characters
+2026-10-03 18:24:27.299 | INFO     | src.agent.services:on_output:189 - LLM inference #5 first text after 0.006s
+2026-10-03 18:24:27.299 | INFO     | src.agent.services:on_output:193 - LLM inference #5 ended: 0.006s (completed)
+MCP authorization failed
+2026-10-03 18:24:27.343 | INFO     | src.agent.services:on_output:185 - LLM inference #1 started
+2026-10-03 18:24:27.343 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2528 schema bytes, 3641 message characters
+2026-10-03 18:24:27.347 | INFO     | src.agent.services:on_output:189 - LLM inference #1 first text after 0.005s
+2026-10-03 18:24:27.348 | INFO     | src.agent.services:on_output:193 - LLM inference #1 ended: 0.005s (completed)
+MCP authorization failed
+2026-10-03 18:24:27.365 | INFO     | src.agent.services:on_output:185 - LLM inference #2 started
+2026-10-03 18:24:27.366 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2528 schema bytes, 4012 message characters
+2026-10-03 18:24:27.370 | INFO     | src.agent.services:on_output:189 - LLM inference #2 first text after 0.005s
+2026-10-03 18:24:27.371 | INFO     | src.agent.services:on_output:193 - LLM inference #2 ended: 0.006s (completed)
+2026-10-03 18:24:27.389 | INFO     | src.agent.services:on_output:185 - LLM inference #3 started
+2026-10-03 18:24:27.389 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2528 schema bytes, 4578 message characters
+2026-10-03 18:24:27.396 | INFO     | src.agent.services:on_output:189 - LLM inference #3 first text after 0.007s
+2026-10-03 18:24:27.396 | INFO     | src.agent.services:on_output:193 - LLM inference #3 ended: 0.007s (completed)
+2026-10-03 18:24:27.397 | INFO     | src.agent.services:on_output:185 - LLM inference #4 started
+2026-10-03 18:24:27.397 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2528 schema bytes, 4959 message characters
+2026-10-03 18:24:27.406 | INFO     | src.agent.services:on_output:189 - LLM inference #4 first text after 0.010s
+2026-10-03 18:24:27.407 | INFO     | src.agent.services:on_output:193 - LLM inference #4 ended: 0.011s (completed)
+MCP authorization failed
+2026-10-03 18:24:27.446 | INFO     | src.agent.services:run_tts:137 - TTS synthesis [a57b155d-526b-4406-9dbc-1aea4eb09d88] started (32 characters)
+2026-10-03 18:24:27.603 | INFO     | src.agent.services:run_tts:143 - TTS synthesis [a57b155d-526b-4406-9dbc-1aea4eb09d88] first audio after 0.157s
+2026-10-03 18:24:27.605 | INFO     | src.agent.services:on_output:185 - LLM inference #1 started
+2026-10-03 18:24:27.605 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2528 schema bytes, 3975 message characters
+2026-10-03 18:24:27.627 | INFO     | src.agent.services:run_tts:154 - TTS synthesis [a57b155d-526b-4406-9dbc-1aea4eb09d88] ended: 0.181s (completed)
+2026-10-03 18:24:34.416 | INFO     | src.agent.services:on_output:193 - LLM inference #1 ended: 6.810s (completed)
+MCP authorization failed
+2026-10-03 18:24:34.443 | INFO     | src.agent.services:on_output:185 - LLM inference #2 started
+2026-10-03 18:24:34.443 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2528 schema bytes, 4309 message characters
+2026-10-03 18:24:36.680 | INFO     | src.agent.services:on_output:193 - LLM inference #2 ended: 2.237s (completed)
+2026-10-03 18:24:36.710 | INFO     | src.agent.services:on_output:185 - LLM inference #3 started
+2026-10-03 18:24:36.710 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2528 schema bytes, 5180 message characters
+2026-10-03 18:24:37.499 | INFO     | src.agent.services:on_output:189 - LLM inference #3 first text after 0.789s
+2026-10-03 18:24:38.120 | INFO     | src.agent.services:run_tts:137 - TTS synthesis [11b70d2f-fbd8-464f-9481-0eca40468d71] started (45 characters)
+2026-10-03 18:24:38.468 | INFO     | src.agent.services:run_tts:143 - TTS synthesis [11b70d2f-fbd8-464f-9481-0eca40468d71] first audio after 0.348s
+2026-10-03 18:24:38.507 | INFO     | src.agent.services:run_tts:154 - TTS synthesis [11b70d2f-fbd8-464f-9481-0eca40468d71] ended: 0.386s (completed)
+2026-10-03 18:24:39.076 | INFO     | src.agent.services:on_output:193 - LLM inference #3 ended: 2.366s (completed)
+2026-10-03 18:24:39.077 | INFO     | src.agent.services:on_output:185 - LLM inference #4 started
+2026-10-03 18:24:39.077 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2690 schema bytes, 6006 message characters
+2026-10-03 18:24:39.085 | INFO     | src.agent.services:run_tts:137 - TTS synthesis [11b70d2f-fbd8-464f-9481-0eca40468d71] started (56 characters)
+2026-10-03 18:24:39.380 | INFO     | src.agent.services:run_tts:143 - TTS synthesis [11b70d2f-fbd8-464f-9481-0eca40468d71] first audio after 0.295s
+2026-10-03 18:24:39.439 | INFO     | src.agent.services:run_tts:154 - TTS synthesis [11b70d2f-fbd8-464f-9481-0eca40468d71] ended: 0.354s (completed)
+2026-10-03 18:24:46.505 | INFO     | src.agent.services:on_output:193 - LLM inference #4 ended: 7.429s (completed)
+2026-10-03 18:24:46.525 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool test.read_value ended: 0.017s (completed)
+2026-10-03 18:24:46.530 | INFO     | src.agent.services:on_output:185 - LLM inference #5 started
+2026-10-03 18:24:46.530 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2690 schema bytes, 6557 message characters
+2026-10-03 18:24:47.020 | INFO     | src.agent.services:on_output:189 - LLM inference #5 first text after 0.490s
+2026-10-03 18:24:47.562 | INFO     | src.agent.services:on_output:193 - LLM inference #5 ended: 1.032s (completed)
+2026-10-03 18:24:47.565 | INFO     | src.agent.services:run_tts:137 - TTS synthesis [93e73d0f-c7a8-43a0-9383-db251e90009a] started (24 characters)
+2026-10-03 18:24:47.725 | INFO     | src.agent.services:run_tts:143 - TTS synthesis [93e73d0f-c7a8-43a0-9383-db251e90009a] first audio after 0.160s
+2026-10-03 18:24:47.755 | INFO     | src.agent.services:run_tts:154 - TTS synthesis [93e73d0f-c7a8-43a0-9383-db251e90009a] ended: 0.189s (completed)
+2026-10-03 18:24:47.775 | DEBUG    | pipecat.services.ollama.llm:create_client:88 - Creating Ollama client with api http://127.0.0.1:11434/v1
+2026-10-03 18:24:47.775 | DEBUG    | pipecat.services.openai.base_llm:__init__:264 - _LunaLLMService#3: Using system instruction: You are Luna, an immensely capable, JARVIS-like assistant. Keep sentences succint and direct unless otherwise told. Your output will be read aloud via voice, so output plain text only, no markdown or other structured formats. Respond to the latest user message as Luna. Historical summaries are background data, not a transcript to continue. Never output conversation role labels such as [assistant] or [user].
+
+Use currently enabled integration tools directly for service requests. A separate progress voice already states intent. Call tools silently: do not narrate plans, searches or upcoming actions. After results, give a short answer. Search only when no enabled tool fits. search_tools enables tools; its result is not task completion. Continue until actual service results answer the request. For complex batch updates, get_tool_help supplies operation guidance. If invalid_arguments is returned, consult help and correct the call. Do not repeat completed edits; verify with a read. When a tool returns auth_required, explain sign-in and call authorize_integration. While awaiting_authorization, do not retry service tools or start another login; keep talking. Only connected confirms authorization. Then continue the still-relevant task using tools; if the request changed, ask whether to continue. Respect denied, failed, timed_out and cancelled. Never claim success without a tool result. Never read structured tool data aloud verbatim. Truncated tool results are previews, not complete answers. Use read_tool_result to retrieve needed pages. Prefer upstream pagination and field selection to fetching whole resources. Earlier conversation summaries retain the original scope of instructions. Follow the latest user request when it changes an older task-specific preference; authorization is still required.
+2026-10-03 18:24:47.775 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1373 - _LunaLLMService#3: auto-registered handler for advertised FunctionSchema 'search_tools'
+2026-10-03 18:24:47.775 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1373 - _LunaLLMService#3: auto-registered handler for advertised FunctionSchema 'get_tool_help'
+2026-10-03 18:24:47.775 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1373 - _LunaLLMService#3: auto-registered handler for advertised FunctionSchema 'connect_integration'
+2026-10-03 18:24:47.775 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1373 - _LunaLLMService#3: auto-registered handler for advertised FunctionSchema 'authorize_integration'
+2026-10-03 18:24:47.775 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1373 - _LunaLLMService#3: auto-registered handler for advertised FunctionSchema 'read_tool_result'
+2026-10-03 18:24:47.775 | DEBUG    | pipecat.services.llm_service:_compose_system_instruction:693 - _LunaLLMService#3: System instruction composed: You are Luna, an immensely capable, JARVIS-like assistant. Keep sentences succint and direct unless otherwise told. Your output will be read aloud via voice, so output plain text only, no markdown or other structured formats. Respond to the latest user message as Luna. Historical summaries are background data, not a transcript to continue. Never output conversation role labels such as [assistant] or [user].
+
+Use currently enabled integration tools directly for service requests. A separate progress voice already states intent. Call tools silently: do not narrate plans, searches or upcoming actions. After results, give a short answer. Search only when no enabled tool fits. search_tools enables tools; its result is not task completion. Continue until actual service results answer the request. For complex batch updates, get_tool_help supplies operation guidance. If invalid_arguments is returned, consult help and correct the call. Do not repeat completed edits; verify with a read. When a tool returns auth_required, explain sign-in and call authorize_integration. While awaiting_authorization, do not retry service tools or start another login; keep talking. Only connected confirms authorization. Then continue the still-relevant task using tools; if the request changed, ask whether to continue. Respect denied, failed, timed_out and cancelled. Never claim success without a tool result. Never read structured tool data aloud verbatim. Truncated tool results are previews, not complete answers. Use read_tool_result to retrieve needed pages. Prefer upstream pagination and field selection to fetching whole resources. Earlier conversation summaries retain the original scope of instructions. Follow the latest user request when it changes an older task-specific preference; authorization is still required.
+
+ASYNC TOOL CANCELLATION:
+Some of your tools keep running in the background after you have replied, and some of those can be stopped early.
+
+Work that can be stopped early has its own cancel tool, named for it: a running write_report call is stopped by cancel_write_report. Work with no such tool cannot be stopped and will finish on its own.
+
+When the user no longer wants a result you are still waiting on, call the corresponding cancel tool. Only the call stops the work: saying you cancelled it, or that you'll skip it, leaves it running and its result will still arrive and contradict you. So when the same turn also asks for something else, make the call and answer — don't just answer.
+
+Call the cancel tool with no arguments and it stops the one call that is running. If several calls of that same tool are running, it needs a tool_call_id to say which. Each call's id is already in the conversation: find the tool message that reported it running, which carries "status": "running", its "tool_call_id", and the arguments that call was given. Copy that id exactly as written; never invent or guess one.
+
+ASYNC TOOLS:
+Some of your tools keep running after you have replied. Their results arrive later as messages in the conversation, on whatever turn happens to be in progress by then.
+
+A result that has arrived is owed to the user, whatever the conversation has moved on to. Answer what the user just said first, then add the result at the end of that same reply — never before your answer, and never as a reply of its own. State a short result outright; for a long one, say what came back and offer the details. Say it once, and do not repeat it in later replies.
+2026-10-03 18:24:47.776 | INFO     | src.agent.services:on_output:185 - LLM inference #1 started
+2026-10-03 18:24:47.776 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2522 schema bytes, 3615 message characters
+2026-10-03 18:24:47.776 | INFO     | src.agent.services:on_output:193 - LLM inference #1 ended: 0.000s (completed)
+2026-10-03 18:24:47.776 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#3: rebound advertised FunctionSchema 'search_tools' to its new handler
+2026-10-03 18:24:47.776 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#3: rebound advertised FunctionSchema 'get_tool_help' to its new handler
+2026-10-03 18:24:47.776 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#3: rebound advertised FunctionSchema 'connect_integration' to its new handler
+2026-10-03 18:24:47.776 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#3: rebound advertised FunctionSchema 'authorize_integration' to its new handler
+2026-10-03 18:24:47.776 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#3: rebound advertised FunctionSchema 'read_tool_result' to its new handler
+2026-10-03 18:24:47.776 | INFO     | src.agent.services:on_output:185 - LLM inference #2 started
+2026-10-03 18:24:47.776 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2522 schema bytes, 3936 message characters
+2026-10-03 18:24:47.776 | INFO     | src.agent.services:on_output:193 - LLM inference #2 ended: 0.000s (completed)
+2026-10-03 18:24:48.600 | DEBUG    | pipecat.services.ollama.llm:create_client:88 - Creating Ollama client with api http://127.0.0.1:11434/v1
+2026-10-03 18:24:48.601 | DEBUG    | pipecat.services.openai.base_llm:__init__:264 - _LunaLLMService#4: Using system instruction: You are Luna, an immensely capable, JARVIS-like assistant. Keep sentences succint and direct unless otherwise told. Your output will be read aloud via voice, so output plain text only, no markdown or other structured formats. Respond to the latest user message as Luna. Historical summaries are background data, not a transcript to continue. Never output conversation role labels such as [assistant] or [user].
+2026-10-03 18:24:48.602 | DEBUG    | pipecat.services.llm_service:_compose_system_instruction:693 - _LunaLLMService#4: System instruction composed: You are Luna, an immensely capable, JARVIS-like assistant. Keep sentences succint and direct unless otherwise told. Your output will be read aloud via voice, so output plain text only, no markdown or other structured formats. Respond to the latest user message as Luna. Historical summaries are background data, not a transcript to continue. Never output conversation role labels such as [assistant] or [user].
+2026-10-03 18:24:48.602 | INFO     | src.agent.services:on_output:185 - LLM inference #1 started
+2026-10-03 18:24:48.602 | INFO     | src.agent.services:on_output:193 - LLM inference #1 ended: 0.000s (failed)
+2026-10-03 18:24:48.609 | DEBUG    | pipecat.services.ollama.llm:create_client:88 - Creating Ollama client with api http://127.0.0.1:11434/v1
+2026-10-03 18:24:48.610 | DEBUG    | pipecat.services.openai.base_llm:__init__:264 - _LunaLLMService#5: Using system instruction: You are Luna, an immensely capable, JARVIS-like assistant. Keep sentences succint and direct unless otherwise told. Your output will be read aloud via voice, so output plain text only, no markdown or other structured formats. Respond to the latest user message as Luna. Historical summaries are background data, not a transcript to continue. Never output conversation role labels such as [assistant] or [user].
+2026-10-03 18:24:48.611 | DEBUG    | pipecat.services.llm_service:_compose_system_instruction:693 - _LunaLLMService#5: System instruction composed: You are Luna, an immensely capable, JARVIS-like assistant. Keep sentences succint and direct unless otherwise told. Your output will be read aloud via voice, so output plain text only, no markdown or other structured formats. Respond to the latest user message as Luna. Historical summaries are background data, not a transcript to continue. Never output conversation role labels such as [assistant] or [user].
+2026-10-03 18:24:48.611 | INFO     | src.agent.services:on_output:185 - LLM inference #1 started
+2026-10-03 18:24:48.611 | INFO     | src.agent.services:on_output:189 - LLM inference #1 first text after 0.250s
+2026-10-03 18:24:48.611 | INFO     | src.agent.services:on_output:193 - LLM inference #1 ended: 1.500s (completed)
+2026-10-03 18:24:48.611 | INFO     | src.agent.services:on_output:185 - LLM inference #2 started
+2026-10-03 18:24:48.611 | INFO     | src.agent.services:on_output:189 - LLM inference #2 first text after 0.100s
+2026-10-03 18:24:48.611 | INFO     | src.agent.services:on_output:193 - LLM inference #2 ended: 1.000s (completed)
+2026-10-03 18:24:48.617 | DEBUG    | pipecat.services.ollama.llm:create_client:88 - Creating Ollama client with api http://127.0.0.1:11434/v1
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.openai.base_llm:__init__:264 - _LunaLLMService#6: Using system instruction: You are Luna, an immensely capable, JARVIS-like assistant. Keep sentences succint and direct unless otherwise told. Your output will be read aloud via voice, so output plain text only, no markdown or other structured formats. Respond to the latest user message as Luna. Historical summaries are background data, not a transcript to continue. Never output conversation role labels such as [assistant] or [user].
+
+Use currently enabled integration tools directly for service requests. A separate progress voice already states intent. Call tools silently: do not narrate plans, searches or upcoming actions. After results, give a short answer. Search only when no enabled tool fits. search_tools enables tools; its result is not task completion. Continue until actual service results answer the request. For complex batch updates, get_tool_help supplies operation guidance. If invalid_arguments is returned, consult help and correct the call. Do not repeat completed edits; verify with a read. When a tool returns auth_required, explain sign-in and call authorize_integration. While awaiting_authorization, do not retry service tools or start another login; keep talking. Only connected confirms authorization. Then continue the still-relevant task using tools; if the request changed, ask whether to continue. Respect denied, failed, timed_out and cancelled. Never claim success without a tool result. Never read structured tool data aloud verbatim. Truncated tool results are previews, not complete answers. Use read_tool_result to retrieve needed pages. Prefer upstream pagination and field selection to fetching whole resources. Earlier conversation summaries retain the original scope of instructions. Follow the latest user request when it changes an older task-specific preference; authorization is still required.
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_compose_system_instruction:693 - _LunaLLMService#6: System instruction composed: You are Luna, an immensely capable, JARVIS-like assistant. Keep sentences succint and direct unless otherwise told. Your output will be read aloud via voice, so output plain text only, no markdown or other structured formats. Respond to the latest user message as Luna. Historical summaries are background data, not a transcript to continue. Never output conversation role labels such as [assistant] or [user].
+
+Use currently enabled integration tools directly for service requests. A separate progress voice already states intent. Call tools silently: do not narrate plans, searches or upcoming actions. After results, give a short answer. Search only when no enabled tool fits. search_tools enables tools; its result is not task completion. Continue until actual service results answer the request. For complex batch updates, get_tool_help supplies operation guidance. If invalid_arguments is returned, consult help and correct the call. Do not repeat completed edits; verify with a read. When a tool returns auth_required, explain sign-in and call authorize_integration. While awaiting_authorization, do not retry service tools or start another login; keep talking. Only connected confirms authorization. Then continue the still-relevant task using tools; if the request changed, ask whether to continue. Respect denied, failed, timed_out and cancelled. Never claim success without a tool result. Never read structured tool data aloud verbatim. Truncated tool results are previews, not complete answers. Use read_tool_result to retrieve needed pages. Prefer upstream pagination and field selection to fetching whole resources. Earlier conversation summaries retain the original scope of instructions. Follow the latest user request when it changes an older task-specific preference; authorization is still required.
+
+Additional user guidance.
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1373 - _LunaLLMService#6: auto-registered handler for advertised FunctionSchema 'search_tools'
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1373 - _LunaLLMService#6: auto-registered handler for advertised FunctionSchema 'get_tool_help'
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1373 - _LunaLLMService#6: auto-registered handler for advertised FunctionSchema 'connect_integration'
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1373 - _LunaLLMService#6: auto-registered handler for advertised FunctionSchema 'authorize_integration'
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1373 - _LunaLLMService#6: auto-registered handler for advertised FunctionSchema 'read_tool_result'
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_compose_system_instruction:693 - _LunaLLMService#6: System instruction composed: You are Luna, an immensely capable, JARVIS-like assistant. Keep sentences succint and direct unless otherwise told. Your output will be read aloud via voice, so output plain text only, no markdown or other structured formats. Respond to the latest user message as Luna. Historical summaries are background data, not a transcript to continue. Never output conversation role labels such as [assistant] or [user].
+
+Use currently enabled integration tools directly for service requests. A separate progress voice already states intent. Call tools silently: do not narrate plans, searches or upcoming actions. After results, give a short answer. Search only when no enabled tool fits. search_tools enables tools; its result is not task completion. Continue until actual service results answer the request. For complex batch updates, get_tool_help supplies operation guidance. If invalid_arguments is returned, consult help and correct the call. Do not repeat completed edits; verify with a read. When a tool returns auth_required, explain sign-in and call authorize_integration. While awaiting_authorization, do not retry service tools or start another login; keep talking. Only connected confirms authorization. Then continue the still-relevant task using tools; if the request changed, ask whether to continue. Respect denied, failed, timed_out and cancelled. Never claim success without a tool result. Never read structured tool data aloud verbatim. Truncated tool results are previews, not complete answers. Use read_tool_result to retrieve needed pages. Prefer upstream pagination and field selection to fetching whole resources. Earlier conversation summaries retain the original scope of instructions. Follow the latest user request when it changes an older task-specific preference; authorization is still required.
+
+Additional user guidance.
+
+ASYNC TOOL CANCELLATION:
+Some of your tools keep running in the background after you have replied, and some of those can be stopped early.
+
+Work that can be stopped early has its own cancel tool, named for it: a running write_report call is stopped by cancel_write_report. Work with no such tool cannot be stopped and will finish on its own.
+
+When the user no longer wants a result you are still waiting on, call the corresponding cancel tool. Only the call stops the work: saying you cancelled it, or that you'll skip it, leaves it running and its result will still arrive and contradict you. So when the same turn also asks for something else, make the call and answer — don't just answer.
+
+Call the cancel tool with no arguments and it stops the one call that is running. If several calls of that same tool are running, it needs a tool_call_id to say which. Each call's id is already in the conversation: find the tool message that reported it running, which carries "status": "running", its "tool_call_id", and the arguments that call was given. Copy that id exactly as written; never invent or guess one.
+
+ASYNC TOOLS:
+Some of your tools keep running after you have replied. Their results arrive later as messages in the conversation, on whatever turn happens to be in progress by then.
+
+A result that has arrived is owed to the user, whatever the conversation has moved on to. Answer what the user just said first, then add the result at the end of that same reply — never before your answer, and never as a reply of its own. State a short result outright; for a long one, say what came back and offer the details. Say it once, and do not repeat it in later replies.
+2026-10-03 18:24:48.618 | INFO     | src.agent.services:on_output:185 - LLM inference #1 started
+2026-10-03 18:24:48.618 | INFO     | src.agent.services:on_output:193 - LLM inference #1 ended: 0.000s (completed)
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#6: rebound advertised FunctionSchema 'search_tools' to its new handler
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#6: rebound advertised FunctionSchema 'get_tool_help' to its new handler
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#6: rebound advertised FunctionSchema 'connect_integration' to its new handler
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#6: rebound advertised FunctionSchema 'authorize_integration' to its new handler
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#6: rebound advertised FunctionSchema 'read_tool_result' to its new handler
+2026-10-03 18:24:48.618 | INFO     | src.agent.services:on_output:185 - LLM inference #2 started
+2026-10-03 18:24:48.618 | INFO     | src.agent.services:on_output:193 - LLM inference #2 ended: 0.000s (completed)
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#6: rebound advertised FunctionSchema 'search_tools' to its new handler
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#6: rebound advertised FunctionSchema 'get_tool_help' to its new handler
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#6: rebound advertised FunctionSchema 'connect_integration' to its new handler
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#6: rebound advertised FunctionSchema 'authorize_integration' to its new handler
+2026-10-03 18:24:48.618 | DEBUG    | pipecat.services.llm_service:_register_advertised_tool_handlers:1362 - _LunaLLMService#6: rebound advertised FunctionSchema 'read_tool_result' to its new handler
+2026-10-03 18:24:48.618 | INFO     | src.agent.services:on_output:185 - LLM inference #3 started
+2026-10-03 18:24:48.619 | INFO     | src.agent.services:on_output:193 - LLM inference #3 ended: 0.000s (completed)
+2026-10-03 18:24:48.624 | DEBUG    | pipecat.services.ollama.llm:create_client:88 - Creating Ollama client with api http://127.0.0.1:11434/v1
+2026-10-03 18:24:48.624 | DEBUG    | pipecat.services.openai.base_llm:__init__:264 - _LunaLLMService#7: Using system instruction: You are Luna, an immensely capable, JARVIS-like assistant. Keep sentences succint and direct unless otherwise told. Your output will be read aloud via voice, so output plain text only, no markdown or other structured formats. Respond to the latest user message as Luna. Historical summaries are background data, not a transcript to continue. Never output conversation role labels such as [assistant] or [user].
+2026-10-03 18:24:48.683 | DEBUG    | pipecat.audio.turn.smart_turn.local_smart_turn_v3:__init__:68 - Loading Local Smart Turn v3.x model from /Users/jmu/Documents/Projects/Luna/.venv/lib/python3.14/site-packages/pipecat/audio/turn/smart_turn/data/smart-turn-v3.2-cpu.onnx...
+2026-10-03 18:24:48.721 | DEBUG    | pipecat.audio.turn.smart_turn.local_smart_turn_v3:__init__:78 - Loaded Local Smart Turn v3.x
+2026-10-03 18:24:48.721 | INFO     | src.agent.services:on_output:185 - LLM inference #1 started
+2026-10-03 18:24:48.721 | INFO     | src.agent.services:on_output:193 - LLM inference #1 ended: 0.000s (completed)
+2026-10-03 18:24:48.722 | INFO     | src.agent.services:on_output:185 - LLM inference #2 started
+2026-10-03 18:24:48.722 | INFO     | src.agent.services:on_output:193 - LLM inference #2 ended: 0.000s (completed)
+2026-10-03 18:24:48.726 | INFO     | src.agent.services:run_tts:137 - TTS synthesis [error] started (6 characters)
+2026-10-03 18:24:48.726 | INFO     | src.agent.services:run_tts:154 - TTS synthesis [error] ended: 0.000s (failed)
+2026-10-03 18:24:48.726 | INFO     | src.agent.services:run_tts:137 - TTS synthesis [cancel] started (6 characters)
+2026-10-03 18:24:48.726 | INFO     | src.agent.services:run_tts:154 - TTS synthesis [cancel] ended: 0.000s (cancelled)
+2026-10-03 18:24:48.730 | INFO     | src.agent.services:run_tts:137 - TTS synthesis [one] started (6 characters)
+2026-10-03 18:24:48.730 | INFO     | src.agent.services:run_tts:143 - TTS synthesis [one] first audio after 0.400s
+2026-10-03 18:24:48.730 | INFO     | src.agent.services:run_tts:154 - TTS synthesis [one] ended: 0.600s (completed)
+2026-10-03 18:24:48.730 | INFO     | src.agent.services:run_tts:137 - TTS synthesis [two] started (6 characters)
+2026-10-03 18:24:48.730 | INFO     | src.agent.services:run_tts:143 - TTS synthesis [two] first audio after 0.000s
+2026-10-03 18:24:48.730 | INFO     | src.agent.services:run_tts:154 - TTS synthesis [two] ended: 0.000s (cancelled)
+2026-10-03 18:24:48.731 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool docs.update_doc ended: 0.000s (failed)
+2026-10-03 18:24:48.733 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool docs.update_doc ended: 0.000s (failed)
+2026-10-03 18:24:48.733 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool docs.update_doc ended: 0.000s (failed)
+2026-10-03 18:24:48.733 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool docs.update_doc ended: 0.000s (failed)
+2026-10-03 18:24:48.733 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool docs.update_doc ended: 0.000s (completed)
+2026-10-03 18:24:48.751 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool docs.update_doc ended: 0.012s (completed)
+2026-10-03 18:24:48.751 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool docs.read_doc ended: 0.012s (completed)
+2026-10-03 18:24:48.755 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool google_calendar.list_events ended: 0.000s (completed)
+2026-10-03 18:24:48.757 | DEBUG    | pipecat.services.ollama.llm:create_client:88 - Creating Ollama client with api http://127.0.0.1:11434/v1
+2026-10-03 18:24:48.757 | DEBUG    | pipecat.services.openai.base_llm:__init__:264 - _LunaLLMService#8: Using system instruction: You are Luna, an immensely capable, JARVIS-like assistant. Keep sentences succint and direct unless otherwise told. Your output will be read aloud via voice, so output plain text only, no markdown or other structured formats. Respond to the latest user message as Luna. Historical summaries are background data, not a transcript to continue. Never output conversation role labels such as [assistant] or [user].
+
+Use currently enabled integration tools directly for service requests. A separate progress voice already states intent. Call tools silently: do not narrate plans, searches or upcoming actions. After results, give a short answer. Search only when no enabled tool fits. search_tools enables tools; its result is not task completion. Continue until actual service results answer the request. For complex batch updates, get_tool_help supplies operation guidance. If invalid_arguments is returned, consult help and correct the call. Do not repeat completed edits; verify with a read. When a tool returns auth_required, explain sign-in and call authorize_integration. While awaiting_authorization, do not retry service tools or start another login; keep talking. Only connected confirms authorization. Then continue the still-relevant task using tools; if the request changed, ask whether to continue. Respect denied, failed, timed_out and cancelled. Never claim success without a tool result. Never read structured tool data aloud verbatim. Truncated tool results are previews, not complete answers. Use read_tool_result to retrieve needed pages. Prefer upstream pagination and field selection to fetching whole resources. Earlier conversation summaries retain the original scope of instructions. Follow the latest user request when it changes an older task-specific preference; authorization is still required.
+2026-10-03 18:24:48.758 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 2 schema bytes, 486 message characters
+2026-10-03 18:24:48.758 | INFO     | src.agent.services:build_chat_completion_params:60 - LLM request: 1909 schema bytes, 1896 message characters
+2026-10-03 18:24:48.758 | DEBUG    | pipecat.processors.aggregators.llm_context_summarizer:_handle_summary_result:412 - LLMContextSummarizer#4: Received summary result (request_id=test)
+2026-10-03 18:24:48.758 | DEBUG    | pipecat.processors.aggregators.llm_context_summarizer:_clear_summarization_state:250 - LLMContextSummarizer#4: Clearing pending summarization
+2026-10-03 18:24:48.758 | INFO     | pipecat.processors.aggregators.llm_context_summarizer:_apply_summary:504 - LLMContextSummarizer#4: Applied context summary, compressed 4 messages into summary. Context now has 13 messages (was 16)
+2026-10-03 18:24:48.759 | DEBUG    | pipecat.utils.context.llm_context_summarization:get_messages_to_summarize:561 - ContextSummarization: Found function call in progress at index 0, stopping summary before it (was going to summarize up to 3)
+2026-10-03 18:24:48.759 | INFO     | pipecat.utils.context.llm_context_summarization:get_messages_to_summarize:569 - ContextSummarization: Skipping 3 messages with function calls in progress (will summarize after results are available)
+2026-10-03 18:24:48.759 | DEBUG    | pipecat.services.ollama.llm:create_client:88 - Creating Ollama client with api http://127.0.0.1:11434/v1
+2026-10-03 18:24:48.760 | DEBUG    | pipecat.services.openai.base_llm:__init__:264 - _LunaLLMService#9: Using system instruction: You are Luna, an immensely capable, JARVIS-like assistant. Keep sentences succint and direct unless otherwise told. Your output will be read aloud via voice, so output plain text only, no markdown or other structured formats. Respond to the latest user message as Luna. Historical summaries are background data, not a transcript to continue. Never output conversation role labels such as [assistant] or [user].
+2026-10-03 18:24:48.764 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool spotify.playMusic ended: 0.000s (failed)
+2026-10-03 18:24:48.764 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool spotify.searchSpotify ended: 0.000s (completed)
+2026-10-03 18:24:48.764 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool spotify.playMusic ended: 0.000s (completed)
+2026-10-03 18:24:48.764 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool spotify.playMusic ended: 0.000s (completed)
+2026-10-03 18:24:48.764 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool spotify.playMusic ended: 0.000s (completed)
+2026-10-03 18:24:48.764 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool spotify.getNowPlaying ended: 0.000s (completed)
+2026-10-03 18:24:48.764 | INFO     | src.integrations.mcp:call_tool:330 - MCP tool spotify.playMusic ended: 0.000s (completed)
+2026-10-03 18:24:48.766 | DEBUG    | pipecat.services.ollama.llm:create_client:88 - Creating Ollama client with api http://127.0.0.1:11434/v1
+2026-10-03 18:24:48.766 | DEBUG    | pipecat.services.openai.base_llm:__init__:264 - _LunaLLMService#10: Using system instruction: You are Luna, an immensely capable, JARVIS-like assistant. Keep sentences succint and direct unless otherwise told. Your output will be read aloud via voice, so output plain text only, no markdown or other structured formats. Respond to the latest user message as Luna. Historical summaries are background data, not a transcript to continue. Never output conversation role labels such as [assistant] or [user].
+2026-10-03 18:24:48.771 | DEBUG    | pipecat.processors.frame_processor:link:678 - Linking Pipeline#6::Source -> TurnProgressProcessor#5
+2026-10-03 18:24:48.771 | DEBUG    | pipecat.processors.frame_processor:link:678 - Linking TurnProgressProcessor#5 -> Inference#0
+2026-10-03 18:24:48.771 | DEBUG    | pipecat.processors.frame_processor:link:678 - Linking Inference#0 -> _LoggedTTSService#8
+2026-10-03 18:24:48.771 | DEBUG    | pipecat.processors.frame_processor:link:678 - Linking _LoggedTTSService#8 -> Audio#0
+2026-10-03 18:24:48.771 | DEBUG    | pipecat.processors.frame_processor:link:678 - Linking Audio#0 -> Pipeline#6::Sink
+2026-10-03 18:24:48.771 | DEBUG    | pipecat.processors.frame_processor:link:678 - Linking PipelineWorker#3::Source -> Pipeline#6
+2026-10-03 18:24:48.771 | DEBUG    | pipecat.processors.frame_processor:link:678 - Linking Pipeline#6 -> PipelineWorker#3::Sink
+2026-10-03 18:24:48.771 | DEBUG    | pipecat.workers.runner:add_workers:233 - WorkerRunner 'runner-f181a8d8': added worker 'PipelineWorker#3'
+2026-10-03 18:24:48.771 | DEBUG    | pipecat.workers.runner:run:277 - WorkerRunner 'runner-f181a8d8': started running
+2026-10-03 18:24:48.772 | DEBUG    | pipecat.workers.runner:_start_worker:463 - WorkerRunner 'runner-f181a8d8': starting worker 'PipelineWorker#3'
+2026-10-03 18:24:48.774 | DEBUG    | pipecat.pipeline.worker:_wait_for_pipeline_start:1195 - PipelineWorker#3: Starting. Waiting for StartFrame#5 to reach the end of the pipeline...
+2026-10-03 18:24:48.779 | DEBUG    | pipecat.registry.registry:register:132 - Worker 'PipelineWorker#3' ready (local)
+2026-10-03 18:24:48.779 | DEBUG    | pipecat.workers.runner:_send_registry:515 - WorkerRunner 'runner-f181a8d8': broadcasting registry: ['PipelineWorker#3']
+2026-10-03 18:24:48.779 | DEBUG    | pipecat.workers.base_worker:_maybe_activate:1277 - Worker 'PipelineWorker#3': activated
+2026-10-03 18:24:48.779 | DEBUG    | pipecat.pipeline.worker:_wait_for_pipeline_start:1208 - PipelineWorker#3: StartFrame#5 reached the end of the pipeline, pipeline is now ready.
+2026-10-03 18:24:48.780 | DEBUG    | pipecat.services.tts_service:_push_tts_frames:1419 - _LoggedTTSService#8: Generating TTS [I'll look into your calendar.]
+2026-10-03 18:24:48.784 | DEBUG    | pipecat.services.tts_service:_push_tts_frames:1419 - _LoggedTTSService#8: Generating TTS [I'll look into your calendar.]
+2026-10-03 18:24:48.785 | DEBUG    | pipecat.services.tts_service:push_frame:1042 - _LoggedTTSService#8 cleaning up TTS context f920cefc-d7c0-4121-87fd-0227dd8c7ce8
+2026-10-03 18:24:48.786 | DEBUG    | pipecat.pipeline.worker:_cancel:1128 - Cancelling pipeline worker PipelineWorker#3
+2026-10-03 18:24:48.786 | DEBUG    | pipecat.pipeline.worker:_wait_for_pipeline_end:1228 - PipelineWorker#3: Closing. Waiting for CancelFrame#4(reason: None) to reach the end of the pipeline...
+2026-10-03 18:24:48.788 | DEBUG    | pipecat.pipeline.worker:wait_for_cancel:1219 - PipelineWorker#3: CancelFrame#4(reason: None) reached the end of the pipeline.
+2026-10-03 18:24:48.788 | DEBUG    | pipecat.utils.base_object:cleanup:176 - PipelineWorker#3: waiting on event handlers to finish ['on_pipeline_finished']...
+2026-10-03 18:24:48.790 | DEBUG    | pipecat.pipeline.worker:run:878 - Pipeline worker PipelineWorker#3 is finishing...
+2026-10-03 18:24:48.790 | DEBUG    | pipecat.pipeline.worker:run:882 - Pipeline worker PipelineWorker#3 has finished
+2026-10-03 18:24:48.791 | DEBUG    | pipecat.workers.runner:run:320 - WorkerRunner 'runner-f181a8d8': finished running
+2026-10-03 18:24:49.796 | WARNING  | src.agent.turns:process_frame:102 - Progress audio missed the one-second inference gate
+----------------------------------------------------------------------
+Ran 73 tests in 24.163s
+
+OK
+Google credentials are protected and imported into Keychain. Eight Workspace MCP services are configured.
+Google credentials are protected and imported into Keychain. Eight Workspace MCP services are configured.

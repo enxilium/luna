@@ -1,0 +1,25 @@
+{
+  "speech_source": "Qwen 27B, same native tool-enabled inference; no deterministic progress, separate model or TTS gate",
+  "test_command": "LUNA_LIVE_TESTS=1 .venv/bin/python -m unittest discover -s tests -q",
+  "tests_run": 70,
+  "tests_passed": 70,
+  "benchmark_command": ".venv/bin/python -m scripts.benchmark_tools --cases calendar,docs,spotify --repeats 2 --audible --first-utterance-only",
+  "benchmark_task_checks": {
+    "passed": 6,
+    "total": 6
+  },
+  "two_second_misses": 5,
+  "measurement_note": "llm_start_seconds measures pipeline inference start; native rendering is a conservative proxy for speaker onset. Local model/TTS/output are real; remote service effects are synthetic. Initial experiment used preliminary acknowledgement instructions; followup uses the final instruction.",
+  "files_sha256": {
+    "src/agent/turns.py": "328b4ecad41eb83709f365d350f757bb5337cd55fbe4a49c99f22745650a51f4",
+    "src/agent/conversation.py": "c5df2d22bb63c2725640d01546e8c12722a1932fb899ec89cfb429e2f2901572",
+    "src/agent/services.py": "e47a05a63a73ad27124b88dbd0d4be0323bd03fc3c3562477f201203d6100a13",
+    "src/integrations/mcp.py": "d9d24d695c25564aab37e9ae0c06f1df4d3302468d5199e859dc93d264d0c549",
+    "src/integrations/catalog.py": "ff5e7cf26661f64a54f040d7824f678fe6dbaa427399b79f266d047e037ed981",
+    "scripts/inference_tts.py": "cccc97a38dd4cf1ac410bd962c8494dc904ec302fac7f676154b77a60b1a5c9e",
+    "scripts/benchmark_tools.py": "058708e92fdba56540edd5816022b6027079c364d756fc5b1d7aecf6dc769d13",
+    "tests/test_turn_flow.py": "e451152846ce6a752fe815babd9b8544b056964daf12e7306a6a476b28ce271e",
+    "tests/test_mcp_pipeline.py": "023fa6ab99ba42b51715b5a5eda7ce07fe65a329ae1f734018825142e10dbaaa",
+    "scripts/fixtures/mcp-catalog.json": "6e448d19596655b10bcdb58651272eb846a81b543e4e07c33fe6e5e64cefadd6"
+  }
+}
