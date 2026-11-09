@@ -6,9 +6,11 @@ import hashlib
 import json
 import logging
 import secrets
+import threading
 import time
 import webbrowser
 from collections.abc import Awaitable, Callable
+from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Protocol
 from urllib.parse import parse_qs, urlencode, urlsplit
@@ -30,6 +32,7 @@ from mcp.types import CallToolResult
 
 
 Progress = Callable[[dict], Awaitable[None]]
+_KEYCHAIN_LOCK = threading.Lock()
 
 
 class AuthRequired(Exception):
@@ -91,11 +94,13 @@ logging.getLogger("mcp.client.auth.oauth2").addFilter(_SafeOAuthLogs())
 class KeychainTokenStorage:
     """The SDK's TokenStorage contract, with absolute expiry and issuer metadata."""
 
-    def __init__(self, server_url: str, client_id: str | None = None):
+    def __init__(self, server_url: str, client_id: str | None = None, *, interactive: bool = False):
         self.server_url = server_url
         self.client_id = client_id
         self.context: OAuthContext | None = None
         self._lock = asyncio.Lock()
+        self._record: dict | None = None
+        self._interactive = contextvars.ContextVar("keychain_interaction", default=interactive)
         self._account = hashlib.sha256(server_url.encode()).hexdigest()
 
     def _query(self) -> dict:
@@ -107,16 +112,33 @@ class KeychainTokenStorage:
             S.kSecAttrAccount: self._account,
         }
 
+    @contextmanager
+    def _access(self):
+        import Security as S
+
+        # Login-Keychain interaction is process-wide; per-query UI flags do not suppress its dialogs.
+        with _KEYCHAIN_LOCK:
+            status, allowed = S.SecKeychainGetUserInteractionAllowed(None)
+            if status != S.errSecSuccess:
+                raise AuthFailure("keychain_unavailable")
+            if S.SecKeychainSetUserInteractionAllowed(self._interactive.get()) != S.errSecSuccess:
+                raise AuthFailure("keychain_unavailable")
+            try:
+                yield
+            finally:
+                if S.SecKeychainSetUserInteractionAllowed(allowed) != S.errSecSuccess:
+                    raise AuthFailure("keychain_unavailable")
+
     def _read(self) -> dict:
         import Security as S
 
-        status, data = S.SecItemCopyMatching(
-            self._query() | {S.kSecReturnData: True, S.kSecMatchLimit: S.kSecMatchLimitOne}, None
-        )
+        with self._access():
+            status, data = S.SecItemCopyMatching(
+                self._query() | {S.kSecReturnData: True, S.kSecMatchLimit: S.kSecMatchLimitOne}, None
+            )
         if status == S.errSecItemNotFound:
             return {}
-        if status != S.errSecSuccess:
-            raise AuthFailure("keychain_unavailable")
+        self._check_status(status)
         record = json.loads(bytes(data))
         if record.get("server_url") != self.server_url:
             raise AuthFailure("credential_binding_mismatch")
@@ -128,16 +150,34 @@ class KeychainTokenStorage:
 
         payload = json.dumps(record | {"server_url": self.server_url}).encode()
         data = NSData.dataWithBytes_length_(payload, len(payload))
-        status = S.SecItemUpdate(self._query(), {S.kSecValueData: data})
-        if status == S.errSecItemNotFound:
-            status, _ = S.SecItemAdd(self._query() | {S.kSecValueData: data}, None)
+        with self._access():
+            status = S.SecItemUpdate(self._query(), {S.kSecValueData: data})
+            if status == S.errSecItemNotFound:
+                status, _ = S.SecItemAdd(self._query() | {S.kSecValueData: data}, None)
+        self._check_status(status)
+
+    def _check_status(self, status: int) -> None:
+        import Security as S
+
+        if status == S.errSecInteractionNotAllowed or (
+            status == S.errSecAuthFailed and not self._interactive.get()
+        ):
+            raise AuthRequired("keychain_access_required")
         if status != S.errSecSuccess:
             raise AuthFailure("keychain_unavailable")
 
+    async def _load(self) -> dict:
+        async with self._lock:
+            if self._record is None:
+                self._record = await asyncio.to_thread(self._read)
+            return self._record
+
     async def _update(self, values: dict) -> None:
         async with self._lock:
-            record = await asyncio.to_thread(self._read)
-            await asyncio.to_thread(self._write, record | values)
+            record = self._record if self._record is not None else await asyncio.to_thread(self._read)
+            updated = record | values
+            await asyncio.to_thread(self._write, updated)
+            self._record = updated
 
     def _metadata(self) -> dict:
         context = self.context
@@ -155,7 +195,7 @@ class KeychainTokenStorage:
         await self._update(self._metadata())
 
     async def get_tokens(self) -> OAuthToken | None:
-        record = await asyncio.to_thread(self._read)
+        record = await self._load()
         if self.context is not None:
             self.context.token_expiry_time = record.get("expires_at")
             self.context.auth_server_url = record.get("authorization_server")
@@ -173,11 +213,14 @@ class KeychainTokenStorage:
             "expires_at": time.time() + tokens.expires_in if tokens.expires_in is not None else None,
         })
 
+    async def get_token_expiry(self) -> float | None:
+        return (await self._load()).get("expires_at")
+
     async def clear_tokens(self) -> None:
         await self._update({"tokens": None, "expires_at": None})
 
     async def get_client_info(self) -> OAuthClientInformationFull | None:
-        record = await asyncio.to_thread(self._read)
+        record = await self._load()
         if record.get("client_info"):
             return OAuthClientInformationFull.model_validate(record["client_info"])
         if self.client_id:
@@ -401,6 +444,7 @@ class MCPOAuthAdapter:
         return await callback.result
 
     async def authorize(self, report_progress: Progress) -> AuthOutcome:
+        interaction = self.storage._interactive.set(True)
         try:
             async with _Callback(self.redirect_uri) as callback:
                 token = self._interactive.set((callback, report_progress))
@@ -423,3 +467,5 @@ class MCPOAuthAdapter:
             return AuthOutcome("denied")
         except (AuthFailure, OSError):
             return AuthOutcome("failed", "authorization_failed")
+        finally:
+            self.storage._interactive.reset(interaction)

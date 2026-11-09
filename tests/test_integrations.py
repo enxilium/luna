@@ -31,8 +31,8 @@ from src.integrations.spotify import SpotifyAuthAdapter
 
 
 class MemoryStorage(KeychainTokenStorage):
-    def __init__(self, url, record=None):
-        super().__init__(url)
+    def __init__(self, url, record=None, *, interactive=False):
+        super().__init__(url, interactive=interactive)
         self.record = record if record is not None else {}
 
     def _read(self):
@@ -209,10 +209,35 @@ class IntegrationTests(unittest.IsolatedAsyncioTestCase):
     async def test_login_discovers_tools_without_replaying_action(self):
         await self.login()
         self.assertNotIn("tools/call", self.server.calls)
-        self.assertIn("test__read_value", [t.name for t in self.runtime.tools_schema().standard_tools])
+        self.assertIn("test__read_value", self.runtime._catalog)
         result = await self.runtime.call_tool("test", "read_value", {})
         self.assertEqual(result["status"], "completed")
         self.assertEqual(self.server.calls.count("tools/call"), 1)
+
+    async def test_startup_keychain_approval_is_deferred_until_explicit_login(self):
+        storage = KeychainTokenStorage(self.server.url)
+        backing = self.storage
+
+        def read():
+            if not storage._interactive.get():
+                raise AuthRequired("keychain_access_required")
+            return backing._read()
+
+        self.adapter = MCPOAuthAdapter(self.server.url, self.adapter.redirect_uri, storage=storage)
+        self.runtime.integrations["test"].auth = self.adapter
+        with patch.object(storage, "_read", side_effect=read) as reads, patch.object(
+            storage, "_write", side_effect=backing._write,
+        ):
+            await self.runtime.__aenter__()
+            self.assertIsNone(self.runtime._connections["test"].client)
+            self.assertFalse(self.browser_tasks)
+            self.assertEqual((await self.runtime.connect("test"))["reason"], "keychain_access_required")
+            result = await self.runtime.authorize("test", lambda _: asyncio.sleep(0))
+            self.assertEqual(result["status"], "connected")
+            self.assertFalse(storage._interactive.get())
+            self.assertEqual(reads.call_count, 3)
+            self.assertEqual((await self.runtime.call_tool("test", "read_value", {}))["status"], "completed")
+            self.assertEqual(reads.call_count, 3)
 
     async def test_registered_client_public_discovery_offline_scopes_and_restart(self):
         self.server.public_discovery = self.server.confidential_client = True
@@ -367,6 +392,7 @@ class IntegrationTests(unittest.IsolatedAsyncioTestCase):
             names = [t.name for t in schema.standard_tools]
             self.assertIn("one__echo", names)
             self.assertIn("two__echo", names)
+            self.assertNotIn("search_tools", names)
             self.assertEqual((await runtime.call_tool("one", "echo", {"value": 7}))["status"], "completed")
             self.assertEqual((await runtime.call_tool("one", "unknown", {}))["reason"], "unknown_tool")
             self.assertEqual((await runtime.call_tool("missing", "echo", {}))["reason"], "unknown_integration")
@@ -417,12 +443,13 @@ class IntegrationTests(unittest.IsolatedAsyncioTestCase):
         async def receive(result, properties=None):
             results.append((result, properties))
             if result["status"] == "connected":
-                self.assertIn("test__read_value", [t.name for t in context.tools.standard_tools])
+                self.assertIn("test__read_value", [t.name for t in self.runtime.tools_schema().standard_tools])
 
         await self.runtime.connect("test")
         params = SimpleNamespace(arguments={"integration_id": "test"}, context=context, result_callback=receive)
         await self.runtime._authorize_tool(params)
-        self.assertFalse(results[0][1].is_final)
+        self.assertEqual(len(results), 1)
+        self.assertTrue(results[0][1].is_final)
         self.assertTrue(results[-1][1].run_llm)
         self.assertEqual(results[-1][0]["status"], "connected")
         options = self.runtime._authorize_tool

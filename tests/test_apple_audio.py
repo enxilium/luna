@@ -5,7 +5,12 @@ import unittest
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import AVFoundation as AVF
-from pipecat.frames.frames import CancelFrame, EndFrame, OutputAudioRawFrame
+from pipecat.frames.frames import (
+    CancelFrame, EndFrame, InterruptionFrame, OutputAudioRawFrame, PipelineFlushFrame, StartFrame,
+)
+from pipecat.processors.frame_processor import FrameDirection
+from pipecat.transports.base_input import BaseInputTransport
+from pipecat.transports.base_output import BaseOutputTransport
 
 from src.audio.apple import AppleAudioTransport
 
@@ -81,6 +86,40 @@ class AppleAudioTests(unittest.IsolatedAsyncioTestCase):
         capture.inputNode.assert_not_called()
         capture.startAndReturnError_.assert_not_called()
 
+    async def test_delivery_and_render_events_do_not_report_cancelled_audio(self):
+        audio, playback, capture = self.make_audio(capture=False)
+        output = audio.output()
+        rendered = asyncio.get_running_loop().create_future()
+        audio._pending_render = rendered
+        output.create_task = asyncio.create_task
+        output.get_event_loop = asyncio.get_running_loop
+        delivered, completed = [], []
+
+        @output.event_handler('on_audio_delivered')
+        async def on_delivery(transport, frame):
+            delivered.append(frame)
+
+        @output.event_handler('on_audio_rendered')
+        async def on_render(transport, frame):
+            completed.append(frame)
+
+        frame = OutputAudioRawFrame(b'\0\0', 24000, 1)
+        with patch.object(audio, '_write_audio', AsyncMock(return_value=True)):
+            self.assertTrue(await output.write_audio_frame(frame))
+        self.assertEqual(delivered, [frame])
+        self.assertEqual(completed, [])
+        rendered.set_result(None)
+        await asyncio.sleep(0)
+        await asyncio.sleep(0)
+        self.assertEqual(completed, [frame])
+        cancelled = asyncio.get_running_loop().create_future()
+        audio._pending_render = cancelled
+        with patch.object(audio, '_write_audio', AsyncMock(return_value=True)):
+            await output.write_audio_frame(frame)
+        cancelled.cancel()
+        await asyncio.sleep(0)
+        self.assertEqual(completed, [frame])
+
     async def test_configuration_and_start_failures_release_both_engines(self):
         for failure in ('playback_prepare', 'enable', 'format', 'capture_prepare',
                         'playback_start', 'capture_start'):
@@ -119,7 +158,8 @@ class AppleAudioTests(unittest.IsolatedAsyncioTestCase):
         audio._input._capturing = True
         pending = asyncio.get_running_loop().create_future()
         audio._pending_render = pending
-        audio._clear_playback()
+        with patch.object(BaseOutputTransport, 'process_frame', AsyncMock()):
+            await audio.output().process_frame(InterruptionFrame(), FrameDirection.DOWNSTREAM)
         self.assertTrue(pending.cancelled())
         self.assertIsNone(audio._pending_render)
         self.assertTrue(audio._input._capturing)
@@ -176,9 +216,13 @@ class AppleAudioTests(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(second_write.done())
         first.set_result(None)
         self.assertTrue(await second_write)
+        flushed = asyncio.create_task(audio.output().write_transport_frame(PipelineFlushFrame()))
+        await asyncio.sleep(0)
+        self.assertFalse(flushed.done())
         callback = audio._player.scheduleBuffer_completionCallbackType_completionHandler_.call_args.args[2]
         callback(AVF.AVAudioPlayerNodeCompletionDataRendered)
         await audio._drain_playback()
+        await flushed
         capture.stop()
         with self.assertRaisesRegex(RuntimeError, 'echo canceller stopped'):
             await audio._write_audio(frame, loop)
@@ -193,6 +237,82 @@ class AppleAudioTests(unittest.IsolatedAsyncioTestCase):
         output.push_error.assert_awaited_once()
         self.assertTrue(output.push_error.call_args.kwargs['force_treat_as_permanent'])
         self.assertTrue(audio._pending_render.cancelled())
+
+    async def test_failed_startup_never_declares_transport_ready(self):
+        for capture in (False, True):
+            with self.subTest(capture=capture):
+                audio, _, _ = self.make_audio(capture=capture)
+                audio._start = MagicMock(side_effect=RuntimeError('no IO cycle'))
+                transport = audio.input() if capture else audio.output()
+                transport.push_error = AsyncMock()
+                transport.set_transport_ready = AsyncMock()
+                base = BaseInputTransport if capture else BaseOutputTransport
+                with patch.object(base, 'start', AsyncMock()):
+                    await transport.start(StartFrame())
+                transport.set_transport_ready.assert_not_awaited()
+                self.assertTrue(transport.push_error.call_args.kwargs['force_treat_as_permanent'])
+                if capture:
+                    self.assertFalse(transport._capturing)
+
+    async def test_capture_watchdog_detects_stopped_engines_and_missing_callbacks(self):
+        for failure in ('callbacks', 'capture', 'playback'):
+            with self.subTest(failure=failure):
+                audio, playback, capture = self.make_audio()
+                audio._configure(24000)
+                audio._start()
+                source = audio.input()
+                source._capturing = True
+                source._last_capture = 0 if failure == 'callbacks' else 99
+                source.push_error = AsyncMock()
+                if failure != 'callbacks':
+                    (capture if failure == 'capture' else playback).stop()
+                with (
+                    patch('src.audio.apple.time.monotonic', return_value=100),
+                    patch('src.audio.apple.asyncio.sleep', new_callable=AsyncMock),
+                ):
+                    await source._monitor_capture()
+                source.push_error.assert_awaited_once()
+                self.assertTrue(source.push_error.call_args.kwargs['force_treat_as_permanent'])
+                self.assertFalse(source._capturing)
+
+    async def test_capture_watchdog_is_cancelled_with_capture(self):
+        audio, _, _ = self.make_audio()
+        source = audio.input()
+        source.create_task = asyncio.create_task
+
+        async def cancel(task):
+            task.cancel()
+            await asyncio.gather(task, return_exceptions=True)
+
+        source.cancel_task = cancel
+        with (
+            patch.object(BaseInputTransport, 'start', new_callable=AsyncMock),
+            patch.object(BaseInputTransport, 'cancel', new_callable=AsyncMock),
+            patch.object(source, 'set_transport_ready', new_callable=AsyncMock),
+        ):
+            await source.start(StartFrame())
+            watchdog = source._health_task
+            await source.cancel(CancelFrame())
+        self.assertTrue(watchdog.cancelled())
+        self.assertIsNone(source._health_task)
+
+    async def test_sleep_gap_rebuilds_even_if_engines_have_resumed(self):
+        audio, _, _ = self.make_audio()
+        audio._configure(24000)
+        audio._start()
+        source = audio.input()
+        source._capturing = True
+        source._last_capture = 99
+        source.push_error = AsyncMock()
+        with (
+            patch('src.audio.apple.time.time', side_effect=[100, 200]),
+            patch('src.audio.apple.time.monotonic', return_value=100),
+            patch('src.audio.apple.asyncio.sleep', new_callable=AsyncMock),
+        ):
+            await source._monitor_capture()
+        source.push_error.assert_awaited_once()
+        self.assertFalse(source._capturing)
+
 
 
 if __name__ == '__main__':

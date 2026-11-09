@@ -1,60 +1,176 @@
-"""Native Pipecat async tools; opt into local Ollama/VoiceStudio with LUNA_LIVE_TESTS=1."""
+"""Real Pipecat Gemini orchestration against a simulated Live session and local OAuth."""
 
 import asyncio
-import json
 import os
 import socket
 import unittest
+from contextlib import asynccontextmanager
 from unittest.mock import patch
 
 import aiohttp
-from aiohttp import web
-from loguru import logger
-from pipecat.frames.frames import (
-    FunctionCallResultFrame, InterruptionFrame, LLMMessagesAppendFrame, TTSAudioRawFrame,
-)
+from google.genai import types
+from pipecat.frames.frames import InputTextRawFrame, InterruptionFrame
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.worker import PipelineWorker
-from pipecat.processors.aggregators.llm_context import LLMContext
 from pipecat.processors.aggregators.llm_response_universal import (
-    LLMContextAggregatorPair, LLMUserAggregatorParams,
+    LLMContextAggregatorPair,
 )
-from pipecat.processors.frame_processor import FrameDirection, FrameProcessor
-from pipecat.services.ollama.llm import OLLamaLLMService
-from pipecat.turns.user_turn_strategies import ExternalUserTurnStrategies
 from pipecat.workers.runner import WorkerRunner
 
-from src.agent.services import build_llm_service, build_tts_service
+from src.agent.services import build_llm_service
 from src.integrations.auth import MCPOAuthAdapter
 from src.integrations.mcp import MCPIntegration, MCPRuntime
 from tests.test_integrations import MemoryStorage, OAuthServer
 
 
+class FakeGemini:
+    def __init__(self, on_text=None, on_result=None, on_commit=None):
+        self.sessions = []
+        self.on_text, self.on_result, self.on_commit = on_text, on_result, on_commit
+        self.call_count = 0
+
+    @asynccontextmanager
+    async def connect(self, *, model, config):
+        await asyncio.sleep(0.01)
+        session = FakeSession(
+            self,
+            types.LiveConnectConfig.model_validate(
+                config.model_dump(exclude_none=True)
+            ),
+        )
+        self.sessions.append(session)
+        try:
+            yield session
+        finally:
+            await session.close()
+
+
+class FakeSession:
+    def __init__(self, server, config):
+        self.server, self.config = server, config
+        self.messages = asyncio.Queue()
+        self.audio = []
+        self.seeds = []
+        self.responses = []
+        self.closed = False
+        self.functions = {
+            f.name: f for t in config.tools or [] for f in t.function_declarations or []
+        }
+
+    async def receive(self):
+        while (message := await self.messages.get()) is not None:
+            yield message
+
+    async def close(self):
+        if not self.closed:
+            self.closed = True
+            await self.messages.put(None)
+
+    async def send_client_content(self, *, turns=None, turn_complete=False):
+        self.seeds.append(turns)
+        text = (
+            "".join(part.text or "" for part in turns.parts)
+            if isinstance(turns, types.Content)
+            else ""
+        )
+        if (
+            turn_complete
+            and text
+            and not text.startswith("[Function")
+            and self.server.on_text
+        ):
+            await self.server.on_text(self, text)
+        elif turn_complete and self.server.on_commit:
+            await self.server.on_commit(self)
+
+    async def send_realtime_input(self, *, text=None, audio=None, **kwargs):
+        if audio:
+            self.audio.append(audio)
+        if text and text.strip() and self.server.on_text:
+            await self.server.on_text(self, text)
+
+    async def send_tool_response(self, *, function_responses):
+        responses = (
+            function_responses
+            if isinstance(function_responses, list)
+            else [function_responses]
+        )
+        self.responses.extend(responses)
+        if self.server.on_result:
+            for response in responses:
+                await self.server.on_result(self, response)
+
+    async def call(self, name, args=None):
+        self.server.call_count += 1
+        await self.messages.put(
+            types.LiveServerMessage(
+                tool_call=types.LiveServerToolCall(
+                    function_calls=[
+                        types.FunctionCall(
+                            id=f"call-{self.server.call_count}",
+                            name=name,
+                            args=args or {},
+                        )
+                    ]
+                )
+            )
+        )
+
+    async def say(self, text):
+        await self.messages.put(
+            types.LiveServerMessage(
+                server_content=types.LiveServerContent(
+                    model_turn=types.Content(
+                        role="model",
+                        parts=[
+                            types.Part(
+                                inline_data=types.Blob(
+                                    data=b"\x01\0" * 480,
+                                    mime_type="audio/pcm;rate=24000",
+                                )
+                            )
+                        ],
+                    )
+                )
+            )
+        )
+        await self.messages.put(
+            types.LiveServerMessage(
+                server_content=types.LiveServerContent(
+                    output_transcription=types.Transcription(text=text)
+                )
+            )
+        )
+        await self.messages.put(
+            types.LiveServerMessage(
+                server_content=types.LiveServerContent(turn_complete=True)
+            )
+        )
+
+
 class PipelineTests(unittest.IsolatedAsyncioTestCase):
-    @classmethod
-    def setUpClass(cls):
-        logger.disable("pipecat")
-
-    @classmethod
-    def tearDownClass(cls):
-        logger.enable("pipecat")
-
-    async def run_flow(self, *, cancel=False, live=False):
+    async def run_flow(self, *, cancel=False):
         server = await OAuthServer().__aenter__()
         self.addAsyncCleanup(server.__aexit__)
         with socket.socket() as sock:
             sock.bind(("127.0.0.1", 0))
             port = sock.getsockname()[1]
-        storage = MemoryStorage(server.url)
-        auth = MCPOAuthAdapter(server.url, f"http://127.0.0.1:{port}/callback", storage=storage)
-        runtime = MCPRuntime([MCPIntegration("test", "Private test value", server.url, auth)])
+        auth = MCPOAuthAdapter(
+            server.url,
+            f"http://127.0.0.1:{port}/callback",
+            storage=MemoryStorage(server.url),
+        )
+        runtime = MCPRuntime(
+            [MCPIntegration("test", "Private test value", server.url, auth)]
+        )
         self.addAsyncCleanup(runtime.close)
         await runtime.connect("test")
-        release = asyncio.Event()
+        waiting, release, finished = asyncio.Event(), asyncio.Event(), asyncio.Event()
         browsers = []
         loop = asyncio.get_running_loop()
 
         async def browse(url):
+            waiting.set()
             await release.wait()
             async with aiohttp.ClientSession() as session:
                 async with session.get(url) as response:
@@ -64,148 +180,169 @@ class PipelineTests(unittest.IsolatedAsyncioTestCase):
             browsers.append(asyncio.run_coroutine_threadsafe(browse(url), loop))
             return True
 
-        browser = patch("src.integrations.auth.webbrowser.open", open_browser)
-        browser.start()
-        self.addCleanup(browser.stop)
-        self.addCleanup(lambda: [f.cancel() for f in browsers])
-        requests = []
-
-        async def chat(request):
-            body = await request.json()
-            requests.append(body)
-            messages = " ".join(str(m.get("content", "")) for m in body["messages"] if m["role"] != "system")
-            tool, args = None, {}
-            if 'Cancel login.' in messages and not cancelled.is_set():
-                tool, text = "cancel_authorize_integration", "I will cancel sign-in."
-            elif cancelled.is_set():
-                text = "Sign-in was cancelled."
-            elif "tools/call" in server.calls:
-                text = "The value is forty-two."
-            elif any(t["function"]["name"] == "test__read_value" for t in body["tools"]):
-                tool, text = "test__read_value", "I will read it now."
-            elif runtime._authorizing:
-                text = "Please finish signing in."
+        async def text(session, value):
+            if value.startswith("Cancel"):
+                self.assertIn("cancel_authorize_integration", session.functions)
+                await session.call("cancel_authorize_integration")
             else:
-                tool = "authorize_integration" if '"auth_required"' in messages else "connect_integration"
-                args = {"integration_id": "test"}
-                text = "You need to sign in." if tool == "authorize_integration" else "Let me check."
-            response = web.StreamResponse(headers={"Content-Type": "text/event-stream"})
-            await response.prepare(request)
-            deltas = [{"role": "assistant", "content": text}]
-            if tool:
-                deltas.append({"tool_calls": [{"index": 0, "id": f"call-{len(requests)}", "type": "function",
-                                                "function": {"name": tool, "arguments": json.dumps(args)}}]})
-            for delta in deltas:
-                chunk = {"id": "test", "object": "chat.completion.chunk", "created": 0, "model": "test",
-                         "choices": [{"index": 0, "delta": delta, "finish_reason": None}]}
-                await response.write(f"data: {json.dumps(chunk)}\n\n".encode())
-            await response.write(b"data: [DONE]\n\n")
-            return response
+                await session.call("connect_integration", {"integration_id": "test"})
 
-        if live:
-            llm = build_llm_service()
-            llm.append_system_instruction(
-                "Read the user's private value using test tools. Call connect_integration first. "
-                "If auth_required, call authorize_integration. Await its connected result, then "
-                "call test__read_value and say the returned value. While it runs, just ask the user "
-                "to finish signing in. Do not cancel it unless the user explicitly requests cancellation."
+        async def result(session, response):
+            if response.name == "connect_integration":
+                await session.call("authorize_integration", {"integration_id": "test"})
+            elif response.name == "test__read_value":
+                await session.say("The value is forty-two.")
+            elif response.name == "cancel_authorize_integration":
+                await session.say("Sign-in was cancelled.")
+
+        async def commit(session):
+            if "test__read_value" in session.functions:
+                self.assertNotIn("tools/call", server.calls)
+                await session.call("test__read_value")
+
+        fake = FakeGemini(text, result, commit)
+        with (
+            patch.dict(os.environ, {"GOOGLE_API_KEY": "test-key"}),
+            patch("src.integrations.auth.webbrowser.open", open_browser),
+        ):
+            llm = build_llm_service(runtime)
+            llm._client.aio.live.connect = fake.connect
+            self.addAsyncCleanup(llm._client.aio.aclose)
+            self.addCleanup(llm._client.close)
+            user, assistant = LLMContextAggregatorPair(llm.context)
+
+            @assistant.event_handler("on_assistant_turn_stopped")
+            async def on_reply(aggregator, message):
+                finished.set()
+
+            worker = PipelineWorker(
+                Pipeline([user, llm, assistant]),
+                enable_rtvi=False,
+                idle_timeout_secs=None,
+                app_resources=runtime,
             )
-        else:
-            app = web.Application()
-            app.router.add_post("/v1/chat/completions", chat)
-            runner = web.AppRunner(app, access_log=None)
-            await runner.setup()
-            self.addAsyncCleanup(runner.cleanup)
-            site = web.TCPSite(runner, "127.0.0.1", 0)
-            await site.start()
-            url = f"http://127.0.0.1:{site._server.sockets[0].getsockname()[1]}/v1"
-            llm = OLLamaLLMService(base_url=url, settings=OLLamaLLMService.Settings(model="test"))
+            runner = WorkerRunner(handle_sigint=False, handle_sigterm=False)
+            await runner.add_workers(worker)
+            running = asyncio.create_task(runner.run())
+            try:
+                async with asyncio.timeout(10):
+                    await llm.wait_until_ready()
+                    self.assertIn("connect_integration", llm._functions)
+                    self.assertEqual(
+                        fake.sessions[0].functions["authorize_integration"].behavior,
+                        types.Behavior.NON_BLOCKING,
+                    )
+                    await worker.queue_frame(
+                        InputTextRawFrame("Read the private test value.")
+                    )
+                    await waiting.wait()
+                    await worker.queue_frame(InterruptionFrame())
+                    await asyncio.sleep(0.01)
+                    self.assertIn("test", runtime._authorizing)
+                    if cancel:
+                        await worker.queue_frame(InputTextRawFrame("Cancel login."))
+                    else:
+                        release.set()
+                    await finished.wait()
+                    if cancel:
+                        self.assertNotIn("tools/call", server.calls)
+                        self.assertFalse(runtime._authorizing)
+                    else:
+                        self.assertEqual(server.calls.count("tools/call"), 1)
+                        self.assertEqual(len(fake.sessions), 2)
+                        self.assertIn("test__read_value", fake.sessions[-1].functions)
+                        self.assertIn("connected", str(fake.sessions[-1].seeds))
+                    self.assertTrue(
+                        all(
+                            s.functions["authorize_integration"].behavior
+                            == types.Behavior.NON_BLOCKING
+                            for s in fake.sessions
+                        )
+                    )
+            finally:
+                for browser in browsers:
+                    browser.cancel()
+                await worker.cancel()
+                await asyncio.wait_for(running, 3)
 
-        waiting, connected, completed, interrupted, cancelled = [asyncio.Event() for _ in range(5)]
-        spoken, results, audio = [], [], []
-
-        class Probe(FrameProcessor):
-            async def process_frame(probe, frame, direction):
-                await super().process_frame(frame, direction)
-                if direction == FrameDirection.DOWNSTREAM:
-                    if isinstance(frame, InterruptionFrame):
-                        interrupted.set()
-                    if isinstance(frame, FunctionCallResultFrame):
-                        results.append(frame.result)
-                        if isinstance(frame.result, dict) and frame.result.get("status") == "connected":
-                            self.assertNotIn("tools/call", server.calls)
-                            connected.set()
-                    if isinstance(frame, TTSAudioRawFrame):
-                        audio.append(len(frame.audio))
-                await probe.push_frame(frame, direction)
-
-        context = LLMContext(tools=runtime.tools_schema())
-        user, assistant = LLMContextAggregatorPair(context, user_params=LLMUserAggregatorParams(
-            user_turn_strategies=ExternalUserTurnStrategies(enable_interruptions=False),
-        ))
-        tts = build_tts_service()
-        synthesize = tts.run_tts
-
-        async def record_speech(text, context_id):
-            spoken.append(text)
-            if "test" in runtime._authorizing:
-                waiting.set()
-            if live:
-                async for frame in synthesize(text, context_id):
-                    yield frame
-            else:
-                yield TTSAudioRawFrame(b"\0" * 4800, 24000, 1, context_id=context_id)
-            if connected.is_set() and server.calls.count("tools/call"):
-                completed.set()
-
-        tts.run_tts = record_speech
-
-        @llm.event_handler("on_function_calls_cancelled")
-        async def on_cancel(service, calls):
-            cancelled.set()
-
-        worker = PipelineWorker(Pipeline([user, llm, Probe(), tts, Probe(), assistant]),
-                                enable_rtvi=False, idle_timeout_secs=None, app_resources=runtime)
-        runner = WorkerRunner(handle_sigint=False, handle_sigterm=False)
-        await runner.add_workers(worker)
-        running = asyncio.create_task(runner.run())
-        try:
-            async with asyncio.timeout(120 if live else 10):
-                await worker.queue_frame(LLMMessagesAppendFrame(
-                    [{"role": "user", "content": "Read the private value from the test integration."}], run_llm=True))
-                await waiting.wait()
-                await worker.queue_frame(InterruptionFrame())
-                await interrupted.wait()
-                self.assertIn("test", runtime._authorizing)
-                if cancel:
-                    await worker.queue_frame(LLMMessagesAppendFrame(
-                        [{"role": "user", "content": "Cancel login."}], run_llm=True))
-                    await cancelled.wait()
-                    self.assertFalse(runtime._authorizing)
-                    self.assertFalse(connected.is_set())
-                    self.assertNotIn("tools/call", server.calls)
-                else:
-                    release.set()
-                    await completed.wait()
-                    self.assertEqual(server.calls.count("tools/call"), 1)
-                    self.assertIn("test__read_value", [t.name for t in context.tools.standard_tools])
-                    self.assertGreater(sum(audio), 0)
-                speech = " ".join(spoken)
-                for private in ("auth_required", "awaiting_authorization", "structured_content", "access_token", "async_tool"):
-                    self.assertNotIn(private, speech)
-                prompt = json.dumps(context.get_messages()) + json.dumps(requests)
-                self.assertNotIn("token-0", prompt)
-                self.assertNotIn("refresh-1", prompt)
-        finally:
-            await worker.cancel()
-            await asyncio.wait_for(running, 10)
-
-    async def test_completion_runs_inference_without_user_message_or_action_replay(self):
+    async def test_authorization_refreshes_full_catalog_without_action_replay(self):
         await self.run_flow()
 
     async def test_interruption_keeps_login_and_explicit_cancel_stops_it(self):
         await self.run_flow(cancel=True)
 
-    @unittest.skipUnless(os.environ.get("LUNA_LIVE_TESTS") == "1", "Requires local Ollama/Qwen and VoiceStudio")
-    async def test_live_qwen_and_sentence_tts(self):
-        await self.run_flow(live=True)
+
+class LivePipelineTests(unittest.IsolatedAsyncioTestCase):
+    @unittest.skipUnless(
+        os.environ.get("LUNA_LIVE_TESTS") == "1",
+        "Requires GOOGLE_API_KEY and Gemini Live access",
+    )
+    async def test_real_gemini_login_and_catalog_refresh_with_synthetic_private_data(
+        self,
+    ):
+        server = await OAuthServer().__aenter__()
+        self.addAsyncCleanup(server.__aexit__)
+        with socket.socket() as sock:
+            sock.bind(("127.0.0.1", 0))
+            port = sock.getsockname()[1]
+        auth = MCPOAuthAdapter(
+            server.url,
+            f"http://127.0.0.1:{port}/callback",
+            storage=MemoryStorage(server.url),
+        )
+        runtime = MCPRuntime(
+            [MCPIntegration("test", "Private test value", server.url, auth)]
+        )
+        self.addAsyncCleanup(runtime.close)
+        await runtime.connect("test")
+        loop = asyncio.get_running_loop()
+        browsers = []
+
+        async def browse(url):
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as response:
+                    await response.read()
+
+        def open_browser(url):
+            browsers.append(asyncio.run_coroutine_threadsafe(browse(url), loop))
+            return True
+
+        llm = build_llm_service(runtime)
+        self.addAsyncCleanup(llm._client.aio.aclose)
+        self.addCleanup(llm._client.close)
+        user, assistant = LLMContextAggregatorPair(llm.context)
+        finished = asyncio.Event()
+        replies = []
+
+        @assistant.event_handler("on_assistant_turn_stopped")
+        async def on_reply(aggregator, message):
+            replies.append(message.content)
+            text = message.content.lower()
+            if "tools/call" in server.calls and ("42" in text or "forty" in text):
+                finished.set()
+
+        worker = PipelineWorker(
+            Pipeline([user, llm, assistant]),
+            enable_rtvi=False,
+            idle_timeout_secs=None,
+            app_resources=runtime,
+        )
+        runner = WorkerRunner(handle_sigint=False, handle_sigterm=False)
+        await runner.add_workers(worker)
+        with patch("src.integrations.auth.webbrowser.open", open_browser):
+            running = asyncio.create_task(runner.run())
+            try:
+                await llm.wait_until_ready()
+                await worker.queue_frame(
+                    InputTextRawFrame(
+                        "Read the private value from the test integration. Connect first; if sign-in is required, authorize it, wait for completion, then read and report the actual value."
+                    )
+                )
+                await asyncio.wait_for(finished.wait(), 60)
+                self.assertEqual(server.calls.count("tools/call"), 1)
+                self.assertEqual(len(browsers), 1)
+            finally:
+                for browser in browsers:
+                    browser.cancel()
+                await worker.cancel()
+                await asyncio.wait_for(running, 5)

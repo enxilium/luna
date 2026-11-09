@@ -1,0 +1,139 @@
+diff --git a/src/play.ts b/src/play.ts
+index 8390895..fb15112 100644
+--- a/src/play.ts
++++ b/src/play.ts
+@@ -114,35 +114,74 @@ const playMusic = defineTool({
+     const resolvedType = type ?? spotifyUri?.split(':')?.[1];
+ 
+     try {
+-      const activeDeviceId = await ensureActiveDevice(deviceId);
+-
+-      await handleSpotifyRequest(async (spotifyApi) => {
+-        if (!spotifyUri) {
+-          await spotifyApi.player.startResumePlayback(activeDeviceId);
+-          return;
+-        }
+-        if (resolvedType === 'track') {
+-          await spotifyApi.player.startResumePlayback(
+-            activeDeviceId,
+-            undefined,
+-            [spotifyUri],
+-            undefined,
+-            offset,
+-          );
+-        } else {
+-          // album, playlist, artist — use context_uri + optional offset
+-          await spotifyApi.player.startResumePlayback(
+-            activeDeviceId,
+-            spotifyUri,
+-            undefined,
+-            offset !== undefined ? { position: offset } : undefined,
++      let contextUri = spotifyUri;
++      if (resolvedType === 'track') {
++        // shortcut: playback may continue through the album; restore uris when Spotify fixes direct-track playback.
++        const track = await spotifyFetch<{ album?: { uri?: string } }>(
++          `tracks/${spotifyUri?.split(':')[2]}`,
++        );
++        const albumUri = track?.album?.uri;
++        if (
++          typeof albumUri !== 'string' ||
++          !/^spotify:album:[A-Za-z0-9]+$/.test(albumUri)
++        ) {
++          throw new Error(
++            'Could not resolve the requested track to a Spotify album; playback was not attempted.',
+           );
+         }
++        contextUri = albumUri;
++      }
++      const activeDeviceId = await ensureActiveDevice(deviceId);
++      const playbackOffset =
++        resolvedType === 'track'
++          ? { uri: spotifyUri }
++          : offset !== undefined
++            ? { position: offset }
++            : undefined;
++
++      // The SDK wrapper suppresses some parse errors; playback must fail closed.
++      await spotifyFetch('me/player/play', {
++        method: 'PUT',
++        query: { device_id: activeDeviceId },
++        body: {
++          context_uri: contextUri,
++          ...(playbackOffset ? { offset: playbackOffset } : {}),
++        },
+       });
+ 
+-      return {
+-        content: [{ type: 'text', text: `Now playing: ${spotifyUri}` }],
+-      };
++      // Spotify Connect can briefly report the state from before the command.
++      for (let attempt = 0; attempt < 4; attempt++) {
++        if (attempt) await new Promise((resolve) => setTimeout(resolve, 500));
++        const playback = await spotifyFetch<{
++          is_playing: boolean;
++          item?: { uri?: string; linked_from?: { uri?: string } };
++          context?: { uri?: string };
++          device?: { id?: string; volume_percent?: number | null };
++        }>('me/player');
++        const matches =
++          resolvedType === 'track'
++            ? playback?.item?.uri === spotifyUri ||
++              playback?.item?.linked_from?.uri === spotifyUri
++            : playback?.context?.uri === spotifyUri;
++        if (
++          playback?.is_playing &&
++          playback.device?.id === activeDeviceId &&
++          matches
++        ) {
++          if (playback.device.volume_percent === 0) {
++            throw new Error(
++              'Spotify is playing on the selected device, but its volume is 0%.',
++            );
++          }
++          return {
++            content: [{ type: 'text', text: `Now playing: ${spotifyUri}` }],
++          };
++        }
++      }
++      throw new Error(
++        'Spotify accepted the play request, but playback of the requested item on the selected device could not be confirmed. ' +
++          'Check current playback and available devices before retrying.',
++      );
+     } catch (error) {
+       const msg = error instanceof Error ? error.message : String(error);
+       return {
+diff --git a/test/spotify-tools.test.js b/test/spotify-tools.test.js
+index 37d1899..4cb988e 100644
+--- a/test/spotify-tools.test.js
++++ b/test/spotify-tools.test.js
+@@ -125,11 +125,29 @@ const cases = [
+     name: 'playMusic',
+     args: { type: 'track', id: 'track1' },
+     http: [
++      {
++        url: 'tracks/track1',
++        response: {
++          ...track,
++          album: { ...track.album, uri: 'spotify:album:album1' },
++        },
++      },
+       devices,
+       {
+         url: 'me/player/play?device_id=device1',
+         method: 'PUT',
+-        body: { uris: ['spotify:track:track1'] },
++        body: {
++          context_uri: 'spotify:album:album1',
++          offset: { uri: 'spotify:track:track1' },
++        },
++      },
++      {
++        url: 'me/player',
++        response: {
++          is_playing: true,
++          item: { ...track, uri: 'spotify:track:track1' },
++          device,
++        },
+       },
+     ],
+     text: /Now playing/,

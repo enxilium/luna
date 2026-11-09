@@ -9,20 +9,19 @@ from Foundation import NSAttributedString, NSMakeRange, NSMakeRect, NSMakeSize, 
 import objc
 from loguru import logger
 
-from pipecat.frames.frames import LLMTextFrame, LLMMessagesAppendFrame
+from pipecat.frames.frames import LLMTextFrame, InputTextRawFrame
 from pipecat.pipeline.pipeline import Pipeline
 from pipecat.pipeline.worker import PipelineParams, PipelineWorker, ProcessorUnusablePolicy
-from pipecat.processors.aggregators.llm_context import LLMContext
 from pipecat.processors.aggregators.llm_response_universal import (
     LLMContextAggregatorPair,
-    LLMUserAggregatorParams,
 )
 from pipecat.processors.frame_processor import FrameDirection, FrameProcessor
-from pipecat.turns.user_turn_strategies import ExternalUserTurnStrategies
 from pipecat.workers.runner import WorkerRunner
 
-from src.agent.services import build_llm_service, build_tts_service
+from src.agent.services import build_llm_service
 from src.audio.apple import AppleAudioTransport
+from src.integrations.mcp import MCPRuntime
+from src.memory import Memory
 
 
 class ReplyDisplay(FrameProcessor):
@@ -32,32 +31,37 @@ class ReplyDisplay(FrameProcessor):
 
     async def process_frame(self, frame, direction):
         await super().process_frame(frame, direction)
-        if direction == FrameDirection.DOWNSTREAM and isinstance(frame, LLMTextFrame):
+        if direction == FrameDirection.DOWNSTREAM and isinstance(frame, LLMTextFrame) and not frame.skip_tts:
             self.events.put(("text", frame.text))
         await self.push_frame(frame, direction)
 
 
 async def run_pipeline(commands: queue.Queue, events: queue.Queue) -> None:
+    async with MCPRuntime.from_config() as integrations, Memory.open() as memory:
+        await _run_pipeline(commands, events, integrations, memory)
+
+
+async def _run_pipeline(commands, events, integrations, memory=None):
     audio = AppleAudioTransport(audio_in_enabled=False)
-    user, assistant = LLMContextAggregatorPair(
-        LLMContext(),
-        user_params=LLMUserAggregatorParams(
-            user_turn_strategies=ExternalUserTurnStrategies(enable_interruptions=False),
-        ),
-    )
+    llm = build_llm_service(integrations, memory=memory)
+    user, assistant = LLMContextAggregatorPair(llm.context)
+    if memory:
+        memory.attach(user, assistant)
     worker = PipelineWorker(
         Pipeline([
-            user, build_llm_service(), ReplyDisplay(events), build_tts_service(),
+            user, llm, ReplyDisplay(events),
             audio.output(), assistant,
         ]),
         params=PipelineParams(audio_out_sample_rate=24000),
         enable_rtvi=False,
         idle_timeout_secs=None,
         processor_unusable_policy=ProcessorUnusablePolicy.CANCEL,
+        app_resources=integrations,
     )
 
     @worker.event_handler("on_pipeline_started")
     async def on_started(worker, frame):
+        await llm.wait_until_ready()
         events.put(("ready", ""))
 
     @worker.event_handler("on_pipeline_error")
@@ -70,10 +74,10 @@ async def run_pipeline(commands: queue.Queue, events: queue.Queue) -> None:
         events.put(("ready", ""))
 
     async def send_messages():
+        await llm.wait_until_ready()
         while (text := await asyncio.to_thread(commands.get)) is not None:
-            await worker.queue_frame(
-                LLMMessagesAppendFrame([{"role": "user", "content": text}], run_llm=True)
-            )
+            await llm.wait_until_ready()
+            await worker.queue_frame(InputTextRawFrame(text))
 
     runner = WorkerRunner(handle_sigint=False, handle_sigterm=False)
     await runner.add_workers(worker)
@@ -101,7 +105,7 @@ class ChatWindow(NSObject):
         self.window = AK.NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
             NSMakeRect(0, 0, 720, 520), style, AK.NSBackingStoreBuffered, False
         )
-        self.window.setTitle_("Luna — Inference + TTS")
+        self.window.setTitle_("Luna — Gemini Live")
         self.window.setDelegate_(self)
         self.window.setReleasedWhenClosed_(False)
         view = self.window.contentView()
@@ -132,7 +136,7 @@ class ChatWindow(NSObject):
         self.send_button.setEnabled_(False)
         view.addSubview_(self.send_button)
 
-        self.status = AK.NSTextField.labelWithString_("Starting local pipeline…")
+        self.status = AK.NSTextField.labelWithString_("Connecting to Gemini Live…")
         self.status.setFrame_(NSMakeRect(20, 20, 680, 24))
         view.addSubview_(self.status)
         self.timer = NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(
@@ -194,7 +198,7 @@ def main() -> None:
         try:
             asyncio.run(run_pipeline(commands, events))
         except Exception as error:
-            logger.exception("Inference/TTS pipeline failed")
+            logger.exception("Gemini Live pipeline failed")
             events.put(("error", str(error)))
 
     app = AK.NSApplication.sharedApplication()

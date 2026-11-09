@@ -1,0 +1,4393 @@
+{
+  "provenance": "Captured from the installed pinned Spotify MCP through its real SDK Client with mocked HTTP and in-memory credentials. No real Spotify requests or writes.",
+  "source_sha256": {
+    "src/read.ts": "50e29a6365b98e55d7329cbd13c30a9ec82f030648e920bdbc0e63f2ef43373c",
+    "src/play.ts": "d984b17d82631549bd86190fdaf61b5c254104ad89b5ee1fa276cb7bbf18de83",
+    "src/albums.ts": "ef9d808b20fc628dc749462525bc0342b4a7be700c415c1506fe1c4be3fd4be8",
+    "src/playlist.ts": "e499b07bdd91dc3664159aab42b03b6cb9507703b400c7c150d5c23f9e832a58",
+    "src/tool.ts": "8000a22a7c46e2ab8868cfc4a35131faf1cdd0c789bd5a51f78592b7a2166ec2",
+    "src/utils.ts": "b591d5916b2f81c02e487515c37ae9aeb440e4ad12098e2638f8d7ecd754f163"
+  },
+  "tools": [
+    {
+      "name": "searchSpotify",
+      "description": "Search for tracks, albums, artists, playlists, podcast episodes, or shows on Spotify. For episodes and shows, the query matches against title, description, and publisher. Use type \"episode\" to find individual podcast episodes by topic or guest name, and type \"show\" to find podcast series.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The search query. Matches title, description, and publisher for podcasts."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "track",
+              "album",
+              "artist",
+              "playlist",
+              "episode",
+              "show"
+            ],
+            "description": "The type of item to search for: track, album, artist, playlist, episode (podcast episode), or show (podcast series)"
+          },
+          "limit": {
+            "description": "Maximum number of results to return (default: 10, max: 10)",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "offset": {
+            "description": "Index of the first result to return (default: 0). Combine with limit to page past the first 10 results.",
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "query",
+          "type"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "getNowPlaying",
+      "description": "Get information about the currently playing track on Spotify, including device and volume info",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "getMyPlaylists",
+      "description": "Get a list of the current user's playlists on Spotify",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Maximum number of playlists to return (1-50)",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "offset": {
+            "description": "Offset for pagination (0-based index)",
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "getPlaylistTracks",
+      "description": "Get a list of tracks in a Spotify playlist",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "playlistId": {
+            "type": "string",
+            "description": "The Spotify ID of the playlist"
+          },
+          "limit": {
+            "description": "Maximum number of tracks to return (1-50)",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "offset": {
+            "description": "Offset for pagination (0-based index)",
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "playlistId"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "getRecentlyPlayed",
+      "description": "Get a list of recently played tracks on Spotify",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Maximum number of tracks to return (1-50)",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 50
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "getUsersSavedTracks",
+      "description": "Get a list of tracks saved in the user's \"Liked Songs\" library",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Maximum number of tracks to return (1-50)",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "offset": {
+            "description": "Offset for pagination (0-based index)",
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "removeUsersSavedTracks",
+      "description": "Remove one or more tracks from the user's \"Liked Songs\" library (max 40 per request)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "trackIds": {
+            "maxItems": 40,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of Spotify track IDs to remove (max 40)"
+          }
+        },
+        "required": [
+          "trackIds"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "getQueue",
+      "description": "Get a list of the currently playing track and the next items in your Spotify queue",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Maximum number of upcoming items to show (1-50)",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 50
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "getAvailableDevices",
+      "description": "Get information about the user's available Spotify Connect devices",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "getTopTracks",
+      "description": "Get the current user's top (most-played) tracks over a given time range. This is the closest thing Spotify exposes to listening statistics.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "timeRange": {
+            "description": "Time range: short_term (~4 weeks), medium_term (~6 months), or long_term (~1 year). Default: medium_term.",
+            "type": "string",
+            "enum": [
+              "short_term",
+              "medium_term",
+              "long_term"
+            ]
+          },
+          "limit": {
+            "description": "Maximum number of tracks to return (1-50)",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 50
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "getTopArtists",
+      "description": "Get the current user's top (most-played) artists over a given time range. This is the closest thing Spotify exposes to listening statistics.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "timeRange": {
+            "description": "Time range: short_term (~4 weeks), medium_term (~6 months), or long_term (~1 year). Default: medium_term.",
+            "type": "string",
+            "enum": [
+              "short_term",
+              "medium_term",
+              "long_term"
+            ]
+          },
+          "limit": {
+            "description": "Maximum number of artists to return (1-50)",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 50
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "playMusic",
+      "description": "Start playing a Spotify track, album, artist, or playlist. Pass a Spotify URI (e.g. spotify:track:xxx, spotify:album:xxx) via \"uri\". For albums/playlists you can also use \"context_uri\". Device is selected automatically — \"deviceId\" or \"device_id\" are optional.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "description": "Spotify URI to play (e.g. spotify:track:xxx, spotify:album:xxx)",
+            "type": "string"
+          },
+          "context_uri": {
+            "description": "Alias for uri — Spotify context URI for albums/playlists",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of item (only needed with id)",
+            "type": "string",
+            "enum": [
+              "track",
+              "album",
+              "artist",
+              "playlist"
+            ]
+          },
+          "id": {
+            "description": "Spotify ID of the item (use with type)",
+            "type": "string"
+          },
+          "deviceId": {
+            "description": "Spotify device ID to play on (auto-selected if omitted)",
+            "type": "string"
+          },
+          "device_id": {
+            "description": "Alias for deviceId",
+            "type": "string"
+          },
+          "offset": {
+            "description": "Track offset within album/playlist (0-based)",
+            "type": "number"
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "pausePlayback",
+      "description": "Pause Spotify playback on the active device",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "description": "The Spotify device ID to pause playback on",
+            "type": "string"
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "skipToNext",
+      "description": "Skip to the next track in the current Spotify playback queue",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "description": "The Spotify device ID to skip on",
+            "type": "string"
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "skipToPrevious",
+      "description": "Skip to the previous track in the current Spotify playback queue",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "description": "The Spotify device ID to skip on",
+            "type": "string"
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "createPlaylist",
+      "description": "Create a new playlist on Spotify",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the playlist"
+          },
+          "description": {
+            "description": "The description of the playlist",
+            "type": "string"
+          },
+          "public": {
+            "description": "Whether the playlist should be public",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "addTracksToPlaylist",
+      "description": "Add tracks or podcast episodes to a Spotify playlist. Accepts Spotify track IDs, episode IDs, or full Spotify URIs (e.g. spotify:episode:xxx).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "playlistId": {
+            "type": "string",
+            "description": "The Spotify ID of the playlist"
+          },
+          "trackIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of Spotify IDs or URIs to add. Plain IDs are assumed to be tracks. To add podcast episodes, pass full URIs: spotify:episode:{id}."
+          },
+          "position": {
+            "description": "Position to insert the items (0-based index)",
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "playlistId",
+          "trackIds"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "resumePlayback",
+      "description": "Resume Spotify playback on the active device",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "description": "The Spotify device ID to resume playback on",
+            "type": "string"
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "addToQueue",
+      "description": "Adds a track, album, artist or playlist to the playback queue",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "uri": {
+            "description": "The Spotify URI to play (overrides type and id)",
+            "type": "string"
+          },
+          "type": {
+            "description": "The type of item to play",
+            "type": "string",
+            "enum": [
+              "track",
+              "album",
+              "artist",
+              "playlist"
+            ]
+          },
+          "id": {
+            "description": "The Spotify ID of the item to play",
+            "type": "string"
+          },
+          "deviceId": {
+            "description": "The Spotify device ID to add the track to",
+            "type": "string"
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "setVolume",
+      "description": "Set the playback volume to a specific percentage (0-100). Requires Spotify Premium.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "volumePercent": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "The volume to set (0-100)"
+          },
+          "deviceId": {
+            "description": "The Spotify device ID to set volume on",
+            "type": "string"
+          }
+        },
+        "required": [
+          "volumePercent"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "adjustVolume",
+      "description": "Adjust the playback volume up or down by a relative amount. Use positive values to increase, negative to decrease. Requires Spotify Premium.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "adjustment": {
+            "type": "number",
+            "minimum": -100,
+            "maximum": 100,
+            "description": "The amount to adjust volume by (-100 to 100). Positive increases, negative decreases."
+          },
+          "deviceId": {
+            "description": "The Spotify device ID to adjust volume on",
+            "type": "string"
+          }
+        },
+        "required": [
+          "adjustment"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "getAlbums",
+      "description": "Get detailed information about one or more albums by their Spotify IDs",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "albumIds": {
+            "description": "A single album ID or array of album IDs (max 20)",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "maxItems": 20,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "ids": {
+            "description": "Alias for albumIds",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "maxItems": 20,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "getAlbumTracks",
+      "description": "Get tracks from a specific album with pagination support",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "albumId": {
+            "type": "string",
+            "description": "The Spotify ID of the album"
+          },
+          "album_id": {
+            "description": "Alias for albumId",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum number of tracks to return (1-50)",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "offset": {
+            "description": "Offset for pagination (0-based index)",
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "albumId"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "saveOrRemoveAlbumForUser",
+      "description": "Save or remove albums from the user's \"Your Music\" library",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "albumIds": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of Spotify album IDs (max 20)"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "save",
+              "remove"
+            ],
+            "description": "Action to perform: save or remove albums"
+          }
+        },
+        "required": [
+          "albumIds",
+          "action"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "checkUsersSavedAlbums",
+      "description": "Check if albums are saved in the user's \"Your Music\" library",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "albumIds": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of Spotify album IDs to check (max 20)"
+          }
+        },
+        "required": [
+          "albumIds"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "getPlaylist",
+      "description": "Get details of a specific Spotify playlist including tracks count, description and owner",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "playlistId": {
+            "type": "string",
+            "description": "The Spotify ID of the playlist"
+          }
+        },
+        "required": [
+          "playlistId"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "updatePlaylist",
+      "description": "Update the details of a Spotify playlist (name, description, public/private, collaborative)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "playlistId": {
+            "type": "string",
+            "description": "The Spotify ID of the playlist"
+          },
+          "name": {
+            "description": "New name for the playlist",
+            "type": "string"
+          },
+          "description": {
+            "description": "New description for the playlist",
+            "type": "string"
+          },
+          "public": {
+            "description": "Whether the playlist should be public",
+            "type": "boolean"
+          },
+          "collaborative": {
+            "description": "Whether the playlist should be collaborative (requires public to be false)",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "playlistId"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "removeTracksFromPlaylist",
+      "description": "Remove one or more tracks from a Spotify playlist (max 100 tracks per request)",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "playlistId": {
+            "type": "string",
+            "description": "The Spotify ID of the playlist"
+          },
+          "trackIds": {
+            "minItems": 1,
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of Spotify track IDs to remove (max 100)"
+          },
+          "snapshotId": {
+            "description": "The playlist snapshot ID to target a specific version (optional)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "playlistId",
+          "trackIds"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "reorderPlaylistItems",
+      "description": "Reorder a range of tracks within a Spotify playlist by moving them to a new position",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "playlistId": {
+            "type": "string",
+            "description": "The Spotify ID of the playlist"
+          },
+          "rangeStart": {
+            "type": "number",
+            "minimum": 0,
+            "description": "The position of the first item to move (0-based index)"
+          },
+          "insertBefore": {
+            "type": "number",
+            "minimum": 0,
+            "description": "The position where the items should be inserted (0-based index)"
+          },
+          "rangeLength": {
+            "description": "Number of consecutive items to move (defaults to 1)",
+            "type": "number",
+            "minimum": 1
+          },
+          "snapshotId": {
+            "description": "The playlist snapshot ID to target a specific version (optional)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "playlistId",
+          "rangeStart",
+          "insertBefore"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    },
+    {
+      "name": "unfollowPlaylist",
+      "description": "Remove a playlist from the current user's library (unfollow). Note: Spotify does not allow permanent deletion of playlists via the API.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "playlistId": {
+            "type": "string",
+            "description": "The Spotify ID of the playlist to unfollow"
+          }
+        },
+        "required": [
+          "playlistId"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      }
+    }
+  ],
+  "rows": [
+    {
+      "tool": "searchSpotify",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "query": "test",
+        "type": "track",
+        "limit": 2,
+        "offset": 3
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Search results for \"test\" (type: track)\n\n1. \"Test Track\" by Test Artist (3:00) - ID: track1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getNowPlaying",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Nothing is currently playing on Spotify"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getMyPlaylists",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "limit": 2,
+        "offset": 5
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Your Spotify Playlists (6-6 of 8)\n\n6. \"Test Playlist\" (12 tracks) - ID: playlist1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getPlaylistTracks",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1",
+        "limit": 2,
+        "offset": 1
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Tracks in Playlist (2-3 of 3)\n\n2. \"Test Track\" by Test Artist (3:00) - ID: track1\n3. [Removed track]"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getRecentlyPlayed",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "You don't have any recently played tracks on Spotify"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getUsersSavedTracks",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "You don't have any saved tracks in your Liked Songs"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getQueue",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Spotify Queue\n\nNothing is currently playing\n\nNo upcoming items in the queue"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAvailableDevices",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Available Spotify Devices\n\n1. Test Speaker (Speaker)\n   Status: ▶ Active | Volume: 50% | ID: device1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "removeUsersSavedTracks",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "trackIds": [
+          "track1"
+        ]
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully removed 1 track from your Liked Songs"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getTopTracks",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "No top tracks found for this time range."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getTopArtists",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "No top artists found for this time range."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "type": "track",
+        "id": "track1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Now playing: spotify:track:track1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "pausePlayback",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Playback paused"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "skipToNext",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Skipped to next track"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "skipToPrevious",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Skipped to previous track"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "createPlaylist",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "name": "New Playlist"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully created playlist \"New Playlist\"\nPlaylist ID: playlist1\nPlaylist URL: https://open.spotify.com/playlist/playlist1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "addTracksToPlaylist",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1",
+        "trackIds": [
+          "track1",
+          "spotify:episode:episode1"
+        ],
+        "position": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added 2 items to playlist (ID: playlist1)"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "resumePlayback",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Playback resumed"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "addToQueue",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "uri": "spotify:track:track1",
+        "deviceId": "device1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Added item spotify:track:track1 to queue"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "setVolume",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "volumePercent": 25,
+        "deviceId": "device1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Volume set to 25%"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "adjustVolume",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "adjustment": 80,
+        "deviceId": "device1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Volume increased from 50% to 100%"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAlbums",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "ids": "album1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Album Details\n\n**Name**: \"Test Album\"\n**Artists**: Test Artist\n**Release Date**: 2026-01-01\n**Type**: album\n**Total Tracks**: 1\n**ID**: album1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAlbumTracks",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "albumId": "album1",
+        "limit": 2,
+        "offset": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "No tracks found in this album"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "saveOrRemoveAlbumForUser",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "albumIds": [
+          "album1"
+        ],
+        "action": "save"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully saved 1 album to your library"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "checkUsersSavedAlbums",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "albumIds": [
+          "album1"
+        ]
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Album Save Status\n\n1. album1: Saved"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getPlaylist",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Playlist: \"Test Playlist\"\n\n**Owner**: Test User\n**Tracks**: 3\n**Visibility**: Private\n**ID**: playlist1\n**URL**: "
+          }
+        ]
+      }
+    },
+    {
+      "tool": "updatePlaylist",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1",
+        "name": "Renamed",
+        "public": false
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully updated playlist (ID: playlist1)\nFields updated: name, public"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "removeTracksFromPlaylist",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1",
+        "trackIds": [
+          "track1"
+        ],
+        "snapshotId": "snapshot1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully removed 1 track from playlist (ID: playlist1)"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "reorderPlaylistItems",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1",
+        "rangeStart": 2,
+        "insertBefore": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully moved 1 track from position 2 to before position 0 in playlist (ID: playlist1)"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "unfollowPlaylist",
+      "variant": "success",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully unfollowed playlist (ID: playlist1)"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "track-missing-album",
+      "protocol": "legacy",
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Could not resolve the requested track to a Spotify album; playback was not attempted."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "track-invalid-album",
+      "protocol": "legacy",
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Could not resolve the requested track to a Spotify album; playback was not attempted."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "track-lookup-failure",
+      "protocol": "legacy",
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify API GET https://api.spotify.com/v1/tracks/track1 failed (403): {\"error\":{\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playback-not-started",
+      "protocol": "legacy",
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify accepted the play request, but playback of the requested item on the selected device could not be confirmed. Check current playback and available devices before retrying."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playback-paused",
+      "protocol": "legacy",
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify accepted the play request, but playback of the requested item on the selected device could not be confirmed. Check current playback and available devices before retrying."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playback-wrong-track",
+      "protocol": "legacy",
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify accepted the play request, but playback of the requested item on the selected device could not be confirmed. Check current playback and available devices before retrying."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playback-wrong-device",
+      "protocol": "legacy",
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify accepted the play request, but playback of the requested item on the selected device could not be confirmed. Check current playback and available devices before retrying."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playback-muted",
+      "protocol": "legacy",
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify is playing on the selected device, but its volume is 0%."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "play-request-failure",
+      "protocol": "legacy",
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify API PUT https://api.spotify.com/v1/me/player/play?device_id=device1 failed (403): {\"error\":{\"message\":\"Unexpected token in upstream response\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "delayed-playback",
+      "protocol": "legacy",
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Now playing: spotify:track:track1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "relinked-track",
+      "protocol": "legacy",
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Now playing: spotify:track:track1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "album-context",
+      "protocol": "legacy",
+      "args": {
+        "context_uri": "spotify:album:album1",
+        "offset": 2
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Now playing: spotify:album:album1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "artist-context",
+      "protocol": "legacy",
+      "args": {
+        "context_uri": "spotify:artist:artist1",
+        "offset": 2
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Now playing: spotify:artist:artist1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playlist-context",
+      "protocol": "legacy",
+      "args": {
+        "context_uri": "spotify:playlist:playlist1",
+        "offset": 2
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Now playing: spotify:playlist:playlist1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playback-wrong-context",
+      "protocol": "legacy",
+      "args": {
+        "context_uri": "spotify:playlist:playlist1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify accepted the play request, but playback of the requested item on the selected device could not be confirmed. Check current playback and available devices before retrying."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "adjustVolume",
+      "variant": "no-device",
+      "protocol": "legacy",
+      "args": {
+        "adjustment": 10
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "No active device found. Make sure Spotify is open and playing on a device."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "adjustVolume",
+      "variant": "unknown-volume",
+      "protocol": "legacy",
+      "args": {
+        "adjustment": 10
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Unable to get current volume from device."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "album",
+      "protocol": "legacy",
+      "args": {
+        "query": "test",
+        "type": "album"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Search results for \"test\" (type: album)\n\n1. \"Test Album\" by Test Artist - ID: album1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "artist",
+      "protocol": "legacy",
+      "args": {
+        "query": "test",
+        "type": "artist"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Search results for \"test\" (type: artist)\n\n1. Test Artist - ID: artist1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "playlist",
+      "protocol": "legacy",
+      "args": {
+        "query": "test",
+        "type": "playlist"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Search results for \"test\" (type: playlist)\n\n1. \"Test Playlist (Test description tracks)\" by Test User - ID: playlist1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "episode",
+      "protocol": "legacy",
+      "args": {
+        "query": "test",
+        "type": "episode"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Search results for \"test\" (type: episode)\n\n1. \"Test episode\" — Test show (3:00, 2026-01-01) - ID: episode1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "show",
+      "protocol": "legacy",
+      "args": {
+        "query": "test",
+        "type": "show"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Search results for \"test\" (type: show)\n\n1. \"Test show\" by Test publisher (1 episodes) - ID: show1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getNowPlaying",
+      "variant": "playing",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Currently Playing\n\n**Track**: \"Test Track\"\n**Artist**: Test Artist\n**Album**: Test Album\n**Progress**: 0:12 / 3:00\n**ID**: track1\n\n**Device**: Test Speaker (Speaker)\n**Volume**: 50%\n**Shuffle**: Off | **Repeat**: off"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getNowPlaying",
+      "variant": "paused",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Currently Paused\n\n**Track**: \"Test Track\"\n**Artist**: Test Artist\n**Album**: Test Album\n**Progress**: 0:12 / 3:00\n**ID**: track1\n\n**Device**: Test Speaker (Speaker)\n**Volume**: 50%\n**Shuffle**: Off | **Repeat**: off"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getNowPlaying",
+      "variant": "podcast",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Currently playing item is not a track (might be a podcast episode)"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getMyPlaylists",
+      "variant": "empty",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "You don't have any playlists on Spotify"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getMyPlaylists",
+      "variant": "empty-page",
+      "protocol": "legacy",
+      "args": {
+        "offset": 50
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "No playlists found at offset 50 (you have 3 in total)"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAvailableDevices",
+      "variant": "empty",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "No available devices found. Make sure Spotify is open on at least one device."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "empty",
+      "protocol": "legacy",
+      "args": {
+        "query": "test",
+        "type": "track"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "No track results found for \"test\""
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "missing-arguments",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error: Must provide a \"uri\" (e.g. spotify:track:xxx) or both \"type\" and \"id\""
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "query": "test",
+        "type": "track",
+        "limit": 2,
+        "offset": 3
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error searching for tracks: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getNowPlaying",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error getting current track: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getMyPlaylists",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "limit": 2,
+        "offset": 5
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "getPlaylistTracks",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1",
+        "limit": 2,
+        "offset": 1
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Spotify API GET https://api.spotify.com/v1/playlists/playlist1/items?limit=2&offset=1&additional_types=track%2Cepisode failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "getRecentlyPlayed",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "getUsersSavedTracks",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "getQueue",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error fetching queue: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAvailableDevices",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error getting available devices: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "removeUsersSavedTracks",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "trackIds": [
+          "track1"
+        ]
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error removing tracks from Liked Songs: Spotify API error 403: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getTopTracks",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "getTopArtists",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "type": "track",
+        "id": "track1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify API GET https://api.spotify.com/v1/tracks/track1 failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "pausePlayback",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "skipToNext",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "skipToPrevious",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "createPlaylist",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "name": "New Playlist"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error creating playlist: Spotify API POST https://api.spotify.com/v1/me/playlists failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "addTracksToPlaylist",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1",
+        "trackIds": [
+          "track1",
+          "spotify:episode:episode1"
+        ],
+        "position": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error adding items to playlist: Spotify API POST https://api.spotify.com/v1/playlists/playlist1/items failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "resumePlayback",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {},
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error resuming playback: Spotify API GET https://api.spotify.com/v1/me/player/devices failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "addToQueue",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "uri": "spotify:track:track1",
+        "deviceId": "device1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "setVolume",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "volumePercent": 25,
+        "deviceId": "device1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error setting volume: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "adjustVolume",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "adjustment": 80,
+        "deviceId": "device1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error adjusting volume: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAlbums",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "ids": "album1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error getting albums: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAlbumTracks",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "albumId": "album1",
+        "limit": 2,
+        "offset": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error getting album tracks: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "saveOrRemoveAlbumForUser",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "albumIds": [
+          "album1"
+        ],
+        "action": "save"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error saving albums: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "checkUsersSavedAlbums",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "albumIds": [
+          "album1"
+        ]
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error checking saved albums: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getPlaylist",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error getting playlist: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "updatePlaylist",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1",
+        "name": "Renamed",
+        "public": false
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error updating playlist: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "removeTracksFromPlaylist",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1",
+        "trackIds": [
+          "track1"
+        ],
+        "snapshotId": "snapshot1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error removing tracks from playlist: Spotify API DELETE https://api.spotify.com/v1/playlists/playlist1/items failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "reorderPlaylistItems",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1",
+        "rangeStart": 2,
+        "insertBefore": 0
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error reordering playlist items: Spotify API PUT https://api.spotify.com/v1/playlists/playlist1/items failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "unfollowPlaylist",
+      "variant": "failure",
+      "protocol": "legacy",
+      "args": {
+        "playlistId": "playlist1"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Error unfollowing playlist: Spotify API DELETE https://api.spotify.com/v1/playlists/playlist1/followers failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "query": "test",
+        "type": "track",
+        "limit": 2,
+        "offset": 3
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Search results for \"test\" (type: track)\n\n1. \"Test Track\" by Test Artist (3:00) - ID: track1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getNowPlaying",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Nothing is currently playing on Spotify"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getMyPlaylists",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "limit": 2,
+        "offset": 5
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Your Spotify Playlists (6-6 of 8)\n\n6. \"Test Playlist\" (12 tracks) - ID: playlist1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getPlaylistTracks",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1",
+        "limit": 2,
+        "offset": 1
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Tracks in Playlist (2-3 of 3)\n\n2. \"Test Track\" by Test Artist (3:00) - ID: track1\n3. [Removed track]"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getRecentlyPlayed",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "You don't have any recently played tracks on Spotify"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getUsersSavedTracks",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "You don't have any saved tracks in your Liked Songs"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getQueue",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Spotify Queue\n\nNothing is currently playing\n\nNo upcoming items in the queue"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAvailableDevices",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Available Spotify Devices\n\n1. Test Speaker (Speaker)\n   Status: ▶ Active | Volume: 50% | ID: device1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "removeUsersSavedTracks",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "trackIds": [
+          "track1"
+        ]
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully removed 1 track from your Liked Songs"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getTopTracks",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "No top tracks found for this time range."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getTopArtists",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "No top artists found for this time range."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "type": "track",
+        "id": "track1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Now playing: spotify:track:track1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "pausePlayback",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Playback paused"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "skipToNext",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Skipped to next track"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "skipToPrevious",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Skipped to previous track"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "createPlaylist",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "name": "New Playlist"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully created playlist \"New Playlist\"\nPlaylist ID: playlist1\nPlaylist URL: https://open.spotify.com/playlist/playlist1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "addTracksToPlaylist",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1",
+        "trackIds": [
+          "track1",
+          "spotify:episode:episode1"
+        ],
+        "position": 0
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully added 2 items to playlist (ID: playlist1)"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "resumePlayback",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Playback resumed"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "addToQueue",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "uri": "spotify:track:track1",
+        "deviceId": "device1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Added item spotify:track:track1 to queue"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "setVolume",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "volumePercent": 25,
+        "deviceId": "device1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Volume set to 25%"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "adjustVolume",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "adjustment": 80,
+        "deviceId": "device1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Volume increased from 50% to 100%"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAlbums",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "ids": "album1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Album Details\n\n**Name**: \"Test Album\"\n**Artists**: Test Artist\n**Release Date**: 2026-01-01\n**Type**: album\n**Total Tracks**: 1\n**ID**: album1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAlbumTracks",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "albumId": "album1",
+        "limit": 2,
+        "offset": 0
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "No tracks found in this album"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "saveOrRemoveAlbumForUser",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "albumIds": [
+          "album1"
+        ],
+        "action": "save"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully saved 1 album to your library"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "checkUsersSavedAlbums",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "albumIds": [
+          "album1"
+        ]
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Album Save Status\n\n1. album1: Saved"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getPlaylist",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Playlist: \"Test Playlist\"\n\n**Owner**: Test User\n**Tracks**: 3\n**Visibility**: Private\n**ID**: playlist1\n**URL**: "
+          }
+        ]
+      }
+    },
+    {
+      "tool": "updatePlaylist",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1",
+        "name": "Renamed",
+        "public": false
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully updated playlist (ID: playlist1)\nFields updated: name, public"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "removeTracksFromPlaylist",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1",
+        "trackIds": [
+          "track1"
+        ],
+        "snapshotId": "snapshot1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully removed 1 track from playlist (ID: playlist1)"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "reorderPlaylistItems",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1",
+        "rangeStart": 2,
+        "insertBefore": 0
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully moved 1 track from position 2 to before position 0 in playlist (ID: playlist1)"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "unfollowPlaylist",
+      "variant": "success",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Successfully unfollowed playlist (ID: playlist1)"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "track-missing-album",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Could not resolve the requested track to a Spotify album; playback was not attempted."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "track-invalid-album",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Could not resolve the requested track to a Spotify album; playback was not attempted."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "track-lookup-failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify API GET https://api.spotify.com/v1/tracks/track1 failed (403): {\"error\":{\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playback-not-started",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify accepted the play request, but playback of the requested item on the selected device could not be confirmed. Check current playback and available devices before retrying."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playback-paused",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify accepted the play request, but playback of the requested item on the selected device could not be confirmed. Check current playback and available devices before retrying."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playback-wrong-track",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify accepted the play request, but playback of the requested item on the selected device could not be confirmed. Check current playback and available devices before retrying."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playback-wrong-device",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify accepted the play request, but playback of the requested item on the selected device could not be confirmed. Check current playback and available devices before retrying."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playback-muted",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify is playing on the selected device, but its volume is 0%."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "play-request-failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify API PUT https://api.spotify.com/v1/me/player/play?device_id=device1 failed (403): {\"error\":{\"message\":\"Unexpected token in upstream response\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "delayed-playback",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Now playing: spotify:track:track1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "relinked-track",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "uri": "spotify:track:track1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Now playing: spotify:track:track1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "album-context",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "context_uri": "spotify:album:album1",
+        "offset": 2
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Now playing: spotify:album:album1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "artist-context",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "context_uri": "spotify:artist:artist1",
+        "offset": 2
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Now playing: spotify:artist:artist1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playlist-context",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "context_uri": "spotify:playlist:playlist1",
+        "offset": 2
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Now playing: spotify:playlist:playlist1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "playback-wrong-context",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "context_uri": "spotify:playlist:playlist1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify accepted the play request, but playback of the requested item on the selected device could not be confirmed. Check current playback and available devices before retrying."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "adjustVolume",
+      "variant": "no-device",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "adjustment": 10
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "No active device found. Make sure Spotify is open and playing on a device."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "adjustVolume",
+      "variant": "unknown-volume",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "adjustment": 10
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Unable to get current volume from device."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "album",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "query": "test",
+        "type": "album"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Search results for \"test\" (type: album)\n\n1. \"Test Album\" by Test Artist - ID: album1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "artist",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "query": "test",
+        "type": "artist"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Search results for \"test\" (type: artist)\n\n1. Test Artist - ID: artist1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "playlist",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "query": "test",
+        "type": "playlist"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Search results for \"test\" (type: playlist)\n\n1. \"Test Playlist (Test description tracks)\" by Test User - ID: playlist1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "episode",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "query": "test",
+        "type": "episode"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Search results for \"test\" (type: episode)\n\n1. \"Test episode\" — Test show (3:00, 2026-01-01) - ID: episode1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "show",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "query": "test",
+        "type": "show"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Search results for \"test\" (type: show)\n\n1. \"Test show\" by Test publisher (1 episodes) - ID: show1"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getNowPlaying",
+      "variant": "playing",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Currently Playing\n\n**Track**: \"Test Track\"\n**Artist**: Test Artist\n**Album**: Test Album\n**Progress**: 0:12 / 3:00\n**ID**: track1\n\n**Device**: Test Speaker (Speaker)\n**Volume**: 50%\n**Shuffle**: Off | **Repeat**: off"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getNowPlaying",
+      "variant": "paused",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "# Currently Paused\n\n**Track**: \"Test Track\"\n**Artist**: Test Artist\n**Album**: Test Album\n**Progress**: 0:12 / 3:00\n**ID**: track1\n\n**Device**: Test Speaker (Speaker)\n**Volume**: 50%\n**Shuffle**: Off | **Repeat**: off"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getNowPlaying",
+      "variant": "podcast",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Currently playing item is not a track (might be a podcast episode)"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getMyPlaylists",
+      "variant": "empty",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "You don't have any playlists on Spotify"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getMyPlaylists",
+      "variant": "empty-page",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "offset": 50
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "No playlists found at offset 50 (you have 3 in total)"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAvailableDevices",
+      "variant": "empty",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "No available devices found. Make sure Spotify is open on at least one device."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "empty",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "query": "test",
+        "type": "track"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "No track results found for \"test\""
+          }
+        ]
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "missing-arguments",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error: Must provide a \"uri\" (e.g. spotify:track:xxx) or both \"type\" and \"id\""
+          }
+        ]
+      }
+    },
+    {
+      "tool": "searchSpotify",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "query": "test",
+        "type": "track",
+        "limit": 2,
+        "offset": 3
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error searching for tracks: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getNowPlaying",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error getting current track: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getMyPlaylists",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "limit": 2,
+        "offset": 5
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "getPlaylistTracks",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1",
+        "limit": 2,
+        "offset": 1
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Spotify API GET https://api.spotify.com/v1/playlists/playlist1/items?limit=2&offset=1&additional_types=track%2Cepisode failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "getRecentlyPlayed",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "getUsersSavedTracks",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "getQueue",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error fetching queue: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAvailableDevices",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error getting available devices: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "removeUsersSavedTracks",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "trackIds": [
+          "track1"
+        ]
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error removing tracks from Liked Songs: Spotify API error 403: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getTopTracks",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "getTopArtists",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "playMusic",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "type": "track",
+        "id": "track1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error playing music: Spotify API GET https://api.spotify.com/v1/tracks/track1 failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "pausePlayback",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "skipToNext",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "skipToPrevious",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "createPlaylist",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "name": "New Playlist"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error creating playlist: Spotify API POST https://api.spotify.com/v1/me/playlists failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "addTracksToPlaylist",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1",
+        "trackIds": [
+          "track1",
+          "spotify:episode:episode1"
+        ],
+        "position": 0
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error adding items to playlist: Spotify API POST https://api.spotify.com/v1/playlists/playlist1/items failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "resumePlayback",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {},
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error resuming playback: Spotify API GET https://api.spotify.com/v1/me/player/devices failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "addToQueue",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "uri": "spotify:track:track1",
+        "deviceId": "device1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "tool": "setVolume",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "volumePercent": 25,
+        "deviceId": "device1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error setting volume: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "adjustVolume",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "adjustment": 80,
+        "deviceId": "device1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error adjusting volume: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAlbums",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "ids": "album1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error getting albums: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getAlbumTracks",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "albumId": "album1",
+        "limit": 2,
+        "offset": 0
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error getting album tracks: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "saveOrRemoveAlbumForUser",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "albumIds": [
+          "album1"
+        ],
+        "action": "save"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error saving albums: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "checkUsersSavedAlbums",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "albumIds": [
+          "album1"
+        ]
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error checking saved albums: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "getPlaylist",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error getting playlist: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "updatePlaylist",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1",
+        "name": "Renamed",
+        "public": false
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error updating playlist: Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won't help here. Body: {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "removeTracksFromPlaylist",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1",
+        "trackIds": [
+          "track1"
+        ],
+        "snapshotId": "snapshot1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error removing tracks from playlist: Spotify API DELETE https://api.spotify.com/v1/playlists/playlist1/items failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "reorderPlaylistItems",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1",
+        "rangeStart": 2,
+        "insertBefore": 0
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error reordering playlist items: Spotify API PUT https://api.spotify.com/v1/playlists/playlist1/items failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "unfollowPlaylist",
+      "variant": "failure",
+      "protocol": {
+        "pin": "2026-07-28"
+      },
+      "args": {
+        "playlistId": "playlist1"
+      },
+      "result": {
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "spotify-controller",
+            "version": "1.0.0"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error unfollowing playlist: Spotify API DELETE https://api.spotify.com/v1/playlists/playlist1/followers failed (403): {\"error\":{\"status\":403,\"message\":\"Forbidden\"}}"
+          }
+        ]
+      }
+    }
+  ]
+}

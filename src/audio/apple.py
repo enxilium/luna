@@ -1,6 +1,7 @@
 """Local duplex audio with Apple's echo cancellation before Pipecat speech detection."""
 
 import asyncio
+import time
 
 import AVFoundation as AVF
 import numpy as np
@@ -219,25 +220,64 @@ class _AppleInputTransport(BaseInputTransport):
     def __init__(self, audio: AppleAudioTransport, params: TransportParams):
         super().__init__(params)
         self._audio = audio
+        self._register_event_handler("on_audio_captured", sync=True)
         self._capturing = False
         self._resampler = create_stream_resampler()
+        self._last_capture = 0.0
+        self._health_task = None
 
     async def start(self, frame: StartFrame):
         await super().start(frame)
+        self._capturing = False
+        try:
+            self._audio._start()
+        except Exception as error:
+            self._capturing = False
+            await self.push_error(f"Apple audio startup failed: {error}", exception=error,
+                                  force_treat_as_permanent=True)
+            return
         await self.set_transport_ready(frame)
         self._capturing = True
-        self._audio._start()
+        self._last_capture = time.monotonic()
+        self._health_task = self.create_task(self._monitor_capture())
+
+    async def _monitor_capture(self):
+        last_check = time.time()
+        while self._capturing:
+            await asyncio.sleep(1)
+            if not self._capturing:
+                return
+            now = time.time()
+            if (
+                now - last_check > 5
+                or time.monotonic() - self._last_capture > 5
+                or not self._audio._engine.isRunning()
+                or not self._audio._capture_engine.isRunning()
+            ):
+                self._capturing = False
+                await self.push_error(
+                    "Apple audio stopped delivering microphone audio; rebuilding the audio pipeline.",
+                    force_treat_as_permanent=True,
+                )
+                return
+            last_check = now
+
+    async def _stop_capture(self):
+        self._capturing = False
+        if self._health_task is not None:
+            await self.cancel_task(self._health_task)
+            self._health_task = None
 
     async def stop(self, frame: EndFrame):
-        self._capturing = False
+        await self._stop_capture()
         await super().stop(frame)
 
     async def cancel(self, frame: CancelFrame):
-        self._capturing = False
+        await self._stop_capture()
         await super().cancel(frame)
 
     async def cleanup(self):
-        self._capturing = False
+        await self._stop_capture()
         try:
             await super().cleanup()
         finally:
@@ -257,13 +297,16 @@ class _AppleInputTransport(BaseInputTransport):
 
     def _receive_audio(self, audio: bytes, native_rate: int):
         if self._capturing:
+            self._last_capture = time.monotonic()
             self.create_task(self._push_audio(audio, native_rate))
 
     async def _push_audio(self, audio: bytes, native_rate: int):
         try:
             audio = await self._resampler.resample(audio, native_rate, self.sample_rate)
             if self._capturing and audio:
-                await self.push_audio_frame(InputAudioRawFrame(audio, self.sample_rate, 1))
+                frame = InputAudioRawFrame(audio, self.sample_rate, 1)
+                await self._call_event_handler("on_audio_captured", frame)
+                await self.push_audio_frame(frame)
         except Exception as error:
             self._capturing = False
             await self.push_error(
@@ -277,6 +320,9 @@ class _AppleOutputTransport(BaseOutputTransport):
     def __init__(self, audio: AppleAudioTransport, params: TransportParams):
         super().__init__(params)
         self._audio = audio
+        self._register_event_handler("on_audio_delivered", sync=True)
+        self._register_event_handler("on_audio_rendered", sync=True)
+        self._register_event_handler("on_playback_stopped", sync=True)
 
     async def setup(self, setup: FrameProcessorSetup):
         await super().setup(setup)
@@ -285,17 +331,32 @@ class _AppleOutputTransport(BaseOutputTransport):
     async def start(self, frame: StartFrame):
         await super().start(frame)
         if not self._audio._audio_in_enabled:
-            self._audio._start()
+            try:
+                self._audio._start()
+            except Exception as error:
+                await self.push_error(f"Apple audio startup failed: {error}", exception=error,
+                                      force_treat_as_permanent=True)
+                return
         await self.set_transport_ready(frame)
 
     async def process_frame(self, frame: Frame, direction: FrameDirection):
         if isinstance(frame, InterruptionFrame):
             self._audio._clear_playback()
+            await self._call_event_handler("on_playback_stopped")
         await super().process_frame(frame, direction)
 
     async def write_audio_frame(self, frame: OutputAudioRawFrame) -> bool:
         try:
-            return await self._audio._write_audio(frame, self.get_event_loop())
+            delivered = await self._audio._write_audio(frame, self.get_event_loop())
+            if delivered and frame.audio:
+                await self._call_event_handler("on_audio_delivered", frame)
+                rendered = self._audio._pending_render
+                if rendered is not None and self._event_handlers["on_audio_rendered"].handlers:
+                    def on_rendered(future):
+                        if not future.cancelled():
+                            self.create_task(self._call_event_handler("on_audio_rendered", frame))
+                    rendered.add_done_callback(on_rendered)
+            return delivered
         except asyncio.CancelledError:
             self._audio._clear_playback()
             raise
@@ -316,6 +377,8 @@ class _AppleOutputTransport(BaseOutputTransport):
     ):
         if isinstance(frame, BotStoppedSpeakingFrame):
             await self._wait_for_playback()
+            if direction == FrameDirection.DOWNSTREAM:
+                await self._call_event_handler("on_playback_stopped")
         await super().push_frame(frame, direction)
 
     async def _wait_for_playback(self):

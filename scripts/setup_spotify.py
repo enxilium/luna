@@ -18,6 +18,19 @@ from dotenv import dotenv_values
 SPOTIFY_REVISION = "001fea0186ad8f40a0dad7f6f154a47e71962f85"
 NODE_VERSION = "26.8.1"
 DATA = Path.home() / "Library/Application Support/Luna"
+PLAYBACK_PATCH = Path(__file__).resolve().parent / "patches/spotify-playback.patch"
+
+
+def _patch_server(directory: Path) -> None:
+    if subprocess.run(
+        ["git", "apply", "--reverse", "--check", str(PLAYBACK_PATCH)],
+        cwd=directory, capture_output=True,
+    ).returncode == 0:
+        return
+    subprocess.run(
+        ["git", "apply", "--check", str(PLAYBACK_PATCH)], cwd=directory, check=True,
+    )
+    subprocess.run(["git", "apply", str(PLAYBACK_PATCH)], cwd=directory, check=True)
 
 
 def _node() -> Path:
@@ -57,6 +70,7 @@ def setup() -> None:
     revision = subprocess.check_output(["git", "-C", str(directory), "rev-parse", "HEAD"], text=True).strip()
     if revision != SPOTIFY_REVISION:
         raise RuntimeError("Existing Spotify checkout differs from the pinned revision; it was left untouched")
+    _patch_server(directory)
     env = os.environ | {"PATH": f"{node.parent}{os.pathsep}{os.environ.get('PATH', '')}"}
     subprocess.run([str(node.parent / "npm"), "ci"], cwd=directory, env=env, check=True)
     subprocess.run([str(node.parent / "npm"), "run", "build"], cwd=directory, env=env, check=True)
