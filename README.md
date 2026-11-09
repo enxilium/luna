@@ -1,148 +1,198 @@
 # Luna
 
-Local voice assistant using Python 3.14, Pipecat, Ollama, and VoiceStudio.
-Run `main.py` to talk through the Mac's default microphone and audio output.
+Desktop voice assistant using Gemini 3.8 Live, Pipecat, and native macOS audio.
+Gemini handles speech recognition, turn detection, reasoning, tools, and generated
+speech over one persistent connection, opened after the local wake word detector
+hears "Luna". Persistent memory uses a separate local Hindsight/Ollama service.
+VoiceStudio is not needed to run the assistant.
 
-```text
-src/
-  agent/
-    conversation.py  # Pipecat pipeline, turn detection, and audio transport
-    services.py      # Local Ollama and VoiceStudio service connections
-  clients/
-    ollama.py        # Standalone text inference
-    voicestudio.py   # Standalone TTS/STT requests
-  audio/
-    apple.py         # Native macOS capture/playback and microphone echo cancellation
-  integrations/
-    mcp.py           # SDK connections, discovery, and Pipecat tools
-    auth.py          # MCP OAuth, browser callbacks, and Keychain
-    spotify.py       # Upstream Spotify authorization script
-```
-
-## Talk to Luna
-
-Sync Python dependencies on your Mac:
+## Run
 
 ```sh
 uv sync
+uv run python -m scripts.setup_wake_word
 ```
 
-Keep Ollama running at `http://127.0.0.1:11434` with
-`qwen3.8:27b-q4_K_M` installed. Keep VoiceStudio running at
-`http://127.0.0.1:3900` with MLX-Audio available and MLX Whisper selected for STT.
-Install `mlx-community/whisper-large-v3-turbo` in VoiceStudio's Model Catalogue.
-The voice and inference stack needs no cloud service or API key. Optional
-integrations contact the services you configure.
+Add your Google AI Studio key to the project's `.env`:
 
-VoiceStudio's startup preferences at
-`~/Library/Application Support/OmniVoice/prefs.json` pin the ASR engine and
-checkpoint:
-
-```json
-{
-  "asr_backend": "mlx-whisper",
-  "env.OMNIVOICE_ASR_BACKEND": "mlx-whisper",
-  "env.ASR_MODEL": "mlx-community/whisper-large-v3-turbo"
-}
+```dotenv
+GOOGLE_API_KEY=your-api-key
 ```
 
-These are entries in the existing preferences file, not a replacement for it.
-The engine pin prevents the saved performance profile from restoring CPU ASR.
-Restart VoiceStudio after changing its startup preferences. The model weights
-live in VoiceStudio's Hugging Face cache; Luna needs no additional dependencies.
+The root `.env` is loaded automatically and ignored by Git. Existing process
+environment variables take precedence. `.env.example` contains the required key
+name. Gemini API access and billing belong to the key's Google project; MCP
+services retain their separate OAuth credentials in Keychain.
 
 ```sh
 uv run python main.py
 ```
 
-Allow microphone access when macOS asks. If needed, enable it for the app
-launching Python under **System Settings → Privacy & Security → Microphone**.
-Speaker playback uses an ordinary `AVAudioEngine`. A separate native engine
-provides microphone echo cancellation and noise suppression before Pipecat
-detects speech, with its own output running silently. You can use the Mac's
-speakers and still interrupt Luna. Choose your input and output devices in
-macOS Sound settings before launching; restart Luna after changing devices.
+Allow microphone access for the launching app in macOS Privacy & Security.
+Choose input/output devices before starting Luna. Wait for “Waiting for the wake
+word,” then say "Luna". You can continue with your request in the same sentence;
+audio is buffered locally while Gemini connects. After activation, speak and
+interrupt normally. Luna is instructed to recognize natural endings: a closing
+"thanks" after a completed request, "nevermind" when abandoning it, or a goodbye.
+It calls `end_conversation`, finishes any brief closing reply, then disconnects
+Gemini and resumes local wake word listening. Follow-ups such as "thanks, now
+turn it down" keep the conversation open; finishing a task alone does not end it.
+Say "Luna" again to reconnect; press Ctrl+C to stop the app.
+The Mac notch widens sideways on wake, keeping its original height. A moon sits
+on the left and five audio bars on the right: white while listening, blue/purple
+during Luna's speech. They follow the actual microphone and delivered playback
+audio. The indicator collapses after the conversation's closing audio finishes,
+stays visible during connection recovery, and never takes keyboard focus.
+Hover over the island to open the text composer. Click the field to type; Enter
+sends, Shift+Enter inserts a line break. Sending expands it into a scrolling chat
+with simulated, streamed replies. Pin keeps the conversation open when you move
+away; Escape dismisses it. The history button opens previous chats; the compose
+button starts a new one. Chats and their drafts are saved locally across restarts.
+Drag files onto the island to queue them for your next message; remove a queued
+file with its × button. Originals stay in place. Text and files are not connected
+to Gemini, tools, speech, or agent memory yet.
+Hold-to-talk shortcuts are not connected yet.
 
-Start speaking when the terminal says "Luna is listening." Pause at the end
-of your turn to receive a spoken reply. You can interrupt Luna by speaking
-again. Press **Ctrl+C** to stop and release the audio devices.
+Try the interactive text UI without opening the microphone, connecting to Gemini,
+or starting integrations:
 
-The conversation flow is:
-
-```text
-microphone → Apple voice processing → VoiceStudio STT → conversation context → Ollama
-           → VoiceStudio TTS → audio output → assistant context
+```sh
+uv run python main.py --preview
 ```
 
-Pipecat's local Silero VAD and Smart Turn model determine turn boundaries.
-Its context aggregators retain conversation history for the current session
-and handle interruptions. STT sends detected speech segments to VoiceStudio.
+Hover over the top-center island, click the composer, and send a message. The
+preview keeps running until Ctrl+C in the launching terminal.
 
-The Mac-only audio module uses PyObjC to call the native APIs. The capture
-engine uses matching mono I/O formats at the microphone's native rate, with
-cleaned input resampled to 16 kHz. VoiceStudio's 24 kHz mono output passes
-through the normal playback mixer and device format. Speech never passes
-through the capture engine's processed output; macOS supplies system playback
-as the echo reference. Microphone AGC is disabled and other-audio ducking is
-set to static minimum, matching the configuration verified on this Mac. Native
-render completion paces playback with one chunk scheduled ahead to avoid gaps.
-Interruptions clear only the speech player without restarting the echo canceller. Startup
-fails if native processing cannot be enabled; it does not fall back to an
-unfiltered microphone. A stopped echo canceller blocks further playback, and
-a stalled audio device cancels the conversation. Shutdown stops both engines,
-removes the microphone tap, disables processing, and detaches both players.
+See [notch UI design](docs/notch-ui.md) for the native window and future trigger seam.
 
-The two-engine investigation retained normal speaker sound in the user's
-listening check. Two plays of Luna's clip produced no false Silero speech
-starts, while real user speech during playback remained detectable and was
-transcribed locally. The integrated transport's checks cover echo-only playback,
-interruption recovery, and device cleanup. These are short checks on this Mac,
-not a guarantee for every volume, room, accessory, or prolonged conversation.
-The diagnostic microphone recordings do not establish calibrated echo attenuation.
+Missing keys or a failed connection cannot declare the assistant
+ready. The typed interface connects immediately without wake word detection.
 
-References: [Apple voice processing](https://developer.apple.com/videos/play/wwdc2023/10235/)
-and [Apple's AVAudioEngine sample](https://developer.apple.com/documentation/avfaudio/using-voice-processing).
+Wake word detection uses sherpa-onnx 2.0.1 with the tested full-precision chunk-8
+model and threshold 0.25. The setup command downloads and checks the model once
+into `~/Library/Application Support/Luna/models/`. It is already installed on
+this machine. Detection runs locally on the existing echo-cancelled audio stream;
+no Gemini connection opens before activation. A one-second rolling audio buffer
+preserves the wake utterance, and further speech is retained during connection
+setup. These buffers stay in RAM and are cleared on activation, conversation end,
+or shutdown.
 
-The local STT latency budget is 10 seconds with a 15-second turn watchdog;
-final transcripts trigger replies immediately without waiting out these budgets.
-These are safety limits, not fixed delays. A 3.73-second synthesized test clip
-took 0.20 seconds to transcribe with warm MLX Whisper, compared with about
-4.7 seconds on the previous CPU Faster Whisper engine. The first GPU request
-after restart took 2.04 seconds to load the model. These timings cover STT only;
-turn detection, Ollama, and TTS still contribute to the full response time.
+Connection setup has a 10-second deadline per attempt. Temporary connection and
+send failures retry with backoff for up to 30 seconds, while microphone audio is
+buffered locally. If recovery fails, Luna returns to wake word listening; say
+"Luna" again after connectivity returns. Server `GoAway` warnings renew the socket
+before its deadline. Expired or rejected resumption handles fall back to a fresh
+session with recent conversation history. Recovery resends tool results rather
+than repeating completed actions. There is no conversation inactivity timer.
 
-TTS sends each completed sentence as Ollama streams text; Pipecat queues
-audio for playback while subsequent sentences synthesize. VoiceStudio still
-finishes a sentence before returning its audio. First replies can be slower
-while models warm up. The TTS audio idle timeout allows up to 120 seconds for
-batch synthesis; successful replies finish without waiting for that timeout.
+## Persistent memory
 
-INFO logs show each `LLM inference` starting, its first text, and its total
-duration. Each sentence's `TTS synthesis` logs its start, first audio, and total
-duration. These appear in both voice and typed conversations. LLM and TTS work
-can overlap; synthesis timings measure the service request, excluding playback.
+Install [Ollama](https://ollama.com/download), then run this once:
 
-Luna explicitly selects VoiceStudio's `mlx-audio` engine for TTS, with `alloy`
-selecting that engine's default voice. STT explicitly requests `mlx-whisper`,
-which must also be active in VoiceStudio. This prototype does not select saved
-voice profiles.
+```sh
+uv run python -m scripts.setup_memory
+uv run python main.py
+```
 
-Pipecat's Ollama connector uses the OpenAI-compatible endpoint with thinking
-disabled. Its context size comes from Ollama's server/model settings; it does
-not inherit the standalone client's 8K setting. Luna keeps history in memory
-only. The voice entry point loads configured MCP integrations at startup.
+Setup installs Hindsight 1.1.0, a dedicated PostgreSQL instance, local embedding
+and reranking models, and Qwen 3.8 27B for memory processing. It reuses an existing
+matching Ollama model; a fresh download is about 18 GB. This configuration targets
+the current 48 GB Apple Silicon Mac. Two macOS login services start and supervise
+the stack, including after a restart. Gemini remains Luna's voice model.
 
-The integration was verified with three spoken inputs through the real local
-services, conversation recall, sentence synthesis during playback, voice
-interruption clearing queued audio, native Mac speaker writes, and Ctrl+C
-shutdown. Temporary verification scripts and audio were removed.
+Each wake starts a new **conversation**; one app runtime is a **session**.
+Luna receives personal notes and recent context at each wake, and can search
+older details with `recall_memory`. Ordinary finalized conversation text is saved
+automatically. Explicit requests to remember or correct something also use
+`remember_memory`. Extraction and note updates run in the background, so recent
+transcripts bridge the delay. The typed interface shares the same memory.
 
-## MCP integrations
+Storage and memory processing are local and need no paid memory API. Selected
+notes and recall results are sent to Google's Gemini along with the conversation;
+its normal API usage still applies. Transcripts are stored as text, without raw
+audio, under `~/Library/Application Support/Luna/memory/`. Integration credentials
+stay in their existing storage. Without memory setup Luna warns and runs without
+persistent memory; after setup it reports storage failures instead of silently
+discarding conversation text.
 
-Luna uses Pipecat 1.12.0 with its MCP extra and the pinned MCP SDK 2.1.1.
+Stop Luna and the typed interface before wiping test data:
+
+```sh
+uv run python -m scripts.reset_memory --yes
+```
+
+This permanently deletes all Luna transcripts, extracted memories, topic notes,
+pending work, and memory-service logs, then starts an empty memory bank. Models,
+integration configuration, and sign-in credentials are preserved. The command
+refuses to reset an active memory runtime. See [memory design and verification](docs/memory.md).
+
+## Flow
+
+```text
+microphone → Apple echo cancellation → local "Luna" detector
+                                      → Gemini 3.8 Live after wake
+                                      ↔ native MCP tool handlers
+speaker ← normal Apple playback       ← Gemini audio
+```
+
+Audio streams to Gemini as 16 kHz mono PCM; the generated 24 kHz PCM returns
+straight to the speaker. Input/output transcripts come from Gemini. There is no
+local STT, separate TTS service, canned acknowledgement, or second conversational
+model. Gemini owns turn detection and interruption; Pipecat owns
+frames, context, function execution, and session lifecycle.
+
+The Mac transport retains two engines: ordinary speaker playback and a separate
+silent engine for microphone echo cancellation. Interruption clears only speech
+playback. A stopped echo canceller blocks playback; audio startup and device stalls
+trigger a clean audio-pipeline rebuild. A capture watchdog also detects missing
+microphone callbacks after sleep or a device interruption. Failed audio startup
+retries with backoff; Ctrl+C and termination signals stop those retries cleanly.
+
+## Tools and context
+
+Luna publishes every discovered **allowlisted** MCP tool, with its complete
+schema and description, to the Live session. There is no local ranking, tool
+search, six-tool budget, operation-help round, prompt-cache management, or special
+Docs replacement facade. The recorded inventory has 65 upstream tools across
+nine integrations. Connect, authorize, and result-page controls are published too;
+Pipecat adds its native authorization-cancel tool.
+Voice mode also publishes `end_conversation`, a local tool for returning to wake
+word listening without restarting the app or microphone capture.
+
+Canonical argument validation, allowlists, per-integration ordering, authorization,
+and cancellation remain in the MCP runtime. Gemini chooses tools directly.
+Independent integrations can execute concurrently. Playback IDs must be returned
+by Spotify or explicitly supplied by the user. Completed actions are never
+replayed by the runtime on login or reconnect.
+
+MCP discovery reads every catalog page. Reconnect, completed authorization and
+supported list-change notifications refresh that catalog. Live tool declarations
+are fixed at setup in Pipecat 1.12, so actual catalog changes start a new Live
+session, reseeding conversation and completed results. Ordinary turns keep the
+same connection. Native Pipecat async authorization stays active while the user
+speaks, supports explicit cancellation, and returns one final result; Live does
+not support intermediate async result streams.
+
+Most schemas use keywords outside Gemini's OpenAPI schema subset. Luna passes
+them through Gemini's supported `parameters_json_schema` field. The original MCP
+schema remains authoritative at execution time; no constraints are removed to
+make a model call work.
+
+Gemini's built-in sliding-window compression manages long conversations; Luna
+has no parallel summarization model or custom prompt-cache machinery. Equivalent
+text/structured tool results are deduplicated. Responses above 8,192 characters
+remain complete in session memory, with a 4,096-character preview and reference.
+`read_tool_result(result_id, offset=0, limit=4096)` retrieves bounded pages;
+shutdown clears them and expired references return an explicit error. Non-text
+MCP content is retained as serialized data; this text interface is not a media
+renderer.
+
+## MCP configuration
+
 Configure services in `~/Library/Application Support/Luna/mcp.toml`.
-An absent configuration leaves the basic voice conversation available.
-Invalid entries and connection failures do not stop conversation.
+Missing configuration leaves normal conversation available. A failed integration
+does not block the other integrations or basic conversation. Pipecat is pinned to
+1.12.0 and the MCP SDK to 2.1.1.
 
 ```toml
 [integrations.calendar]
@@ -159,29 +209,28 @@ command = "/absolute/path/to/server"
 args = ["--stdio"]
 cwd = "/absolute/path/to/server-directory"
 auth = "none"
-# tools = ["read_item"]  # Optional allowlist; omit to publish all discovered tools.
+# tools = ["read_item"]  # Optional execution/discovery allowlist.
 ```
 
 Use one transport per entry: `url` for Streamable HTTP, or `command`, `args`,
 and optional `cwd` for stdio. Remote HTTP endpoints must use HTTPS. Authentication
-is selected separately: `none`, `mcp_oauth` for HTTP, or `spotify` for the local
-Spotify server. IDs must be unique lowercase names starting with a letter,
+is selected separately: `none`, `mcp_oauth` for HTTP, `google_api` for the local
+Workspace backend, or `spotify` for the local Spotify server. IDs must be unique lowercase names starting with a letter,
 at most 32 characters, using letters, digits, `_`, or `-`.
 Keep secrets out of this file; stdio commands and arguments must also be nonsecret.
 
-Discovered tools are namespaced, such as `calendar__list_events`.
 `connect_integration` discovers or refreshes schemas. A server protecting discovery
 can return `auth_required` before its service tools are available.
 Luna explains the need to sign in and calls `authorize_integration`.
 The browser opens only during that explicit authorization tool, with the
-loopback listener already running. Progress and completion are internal tool
-results; Luna's narration is what reaches sentence TTS.
+loopback listener already running. Gemini receives the final outcome and generates
+the spoken explanation; intermediate authorization status stays in local logs.
 
 Login stays active while you speak. Duplicate login requests return the current
 status. Ask Luna to cancel sign-in to use Pipecat's native
 `cancel_authorize_integration` tool. The five-minute deadline, cancellation,
-and shutdown close the listener or auth process. Completion publishes refreshed
-tools before triggering inference. The runtime never replays your original
+and shutdown close the listener or auth process. Completion refreshes the catalog
+before triggering inference. The runtime never replays your original
 service action after interactive login; Luna decides whether to retry or ask you.
 Terminal outcomes are `connected`, `denied`, `timed_out`, and `failed`;
 Pipecat supplies the explicit cancellation notice.
@@ -189,6 +238,11 @@ Pipecat supplies the explicit cancellation notice.
 Standard MCP OAuth uses the SDK for discovery, registration, PKCE, token exchange,
 issuer binding, and silent refresh. Tokens, absolute expiry, registered client
 information, and refresh metadata live in macOS Keychain under `Luna MCP`.
+Background connections never open Keychain dialogs. If macOS requires approval,
+the service returns `auth_required` with `keychain_access_required`; ask Luna to
+authorize that integration. Explicit sign-in and the Google setup script allow
+Keychain prompts. Each storage instance reuses its loaded record and updates it
+only after a successful Keychain write.
 A registered public client's ID and exact redirect can be configured above.
 Preprovisioned confidential-client information belongs in
 `KeychainTokenStorage.set_client_info`, using the SDK's
@@ -200,52 +254,65 @@ successful authorization.
 
 ### Google Workspace
 
-Google's remote MCP servers use the existing `MCPOAuthAdapter` over Streamable
-HTTP. Follow the [Google setup guide](https://developers.google.com/workspace/guides/configure-mcp-servers)
-to enable the service and MCP APIs, configure consent and test users, and create
-an OAuth **Web application** client. Register this exact redirect:
-`http://127.0.0.1:8765/oauth/callback`.
-Your Cloud project must also be enrolled in the
-[Workspace Developer Preview Program](https://developers.google.com/workspace/preview).
-Successful OAuth or public tool discovery does not establish preview access.
-Signing into `gcloud` alone does not authorize Luna to access Workspace data.
+Workspace defaults to Luna's local MCP backend, which calls the public Gmail,
+Drive, Docs, Sheets, Slides, Calendar, Chat, and People APIs. It publishes the same
+59 recorded Google tool declarations through the existing MCP runtime. Gemini,
+Pipecat, and both conversation entry points use the same flow. Workspace needs no
+additional tool allowlist: only these implemented functions exist.
 
-Download the client JSON, then import it:
+Enable the relevant public APIs in your Google Cloud project, configure OAuth
+consent and test users, and create an OAuth **Web application** client. Register:
+`http://127.0.0.1:8765/oauth/callback`. Public APIs do not require the hosted MCP
+Developer Preview enrollment. Account restrictions, enabled APIs, scopes, and
+Workspace administrator policies still apply. `GOOGLE_API_KEY` is for Gemini;
+Workspace uses its separate OAuth grant.
+
+Import a downloaded OAuth client JSON:
 
 ```sh
 uv run python -m scripts.setup_google ~/Downloads/client_secret_YOUR_CLIENT.json
 uv run python main.py
 ```
 
-Setup moves the JSON to the owner-only
-`~/Library/Application Support/Luna/google-oauth-client.json`, imports the client
-secret into macOS Keychain for each server, and adds these integrations to
-`mcp.toml`: `google_gmail`, `google_drive`, `google_docs`, `google_sheets`,
-`google_slides`, `google_calendar`, `google_chat`, and `google_people`.
-Existing integrations and tokens are preserved. Only public client identity,
-redirect, scopes, and authorization options appear in TOML.
+Setup protects the JSON under `~/Library/Application Support/Luna/`, imports the
+client secret into Keychain, and configures eight `google_*` integrations. Existing
+tokens and unrelated integrations are preserved. For an existing setup, switch
+backends without importing credentials again:
 
-Each service starts with the scopes in Google's guide; Calendar starts with
-read and availability access. The `scopes` entry controls initial consent, and
-explicit server scope challenges can request additional access. Google's
-`authorization_params = { access_type = "offline", prompt = "consent" }`
-requests a refresh token for silent renewal. An OAuth app in testing can have
-short-lived refresh authorization; Luna follows the normal sign-in flow when
-Google revokes or expires it. Each integration keeps its own server-bound
-Keychain record and authorizes lazily when its tools need access.
+```sh
+uv run python -m scripts.setup_google --backend local
+# Switch back when Google's hosted servers are available for your project:
+uv run python -m scripts.setup_google --backend hosted
+```
 
-For example, ask Luna to check Gmail. Google exposes schemas publicly, but an
-unauthorized service call returns `auth_required`. Luna narrates sign-in,
-opens the browser through `authorize_integration`, and receives completion
-without another user message. Completion refreshes tools; the model then
-chooses its next call. The runtime never replays the original action.
+Restart Luna after switching. Each switch saves a timestamped configuration backup.
+The hosted option still requires Google's MCP/API enablement and any current
+[Developer Preview enrollment](https://developers.google.com/workspace/preview).
+Both backends reuse the original service-bound Keychain records.
 
-The adapter normalizes Google's published root-issuer trailing-slash mismatch
-at Google's protected-resource metadata endpoint. SDK issuer validation remains
-strict for all other providers, and the SDK still owns PKCE and token exchange.
-The configured client and callback, real Gmail sign-in, Keychain persistence,
-and silent refresh were verified. A real Gmail tool call currently reports that
-the Cloud project needs preview enrollment; no service action succeeded.
+The local configuration looks like this; retain your existing OAuth fields:
+
+```toml
+[integrations.google_gmail]
+description = "Gmail messages and drafts"
+backend = "workspace"
+service = "gmail"
+auth = "google_api"
+redirect_uri = "http://127.0.0.1:8765/oauth/callback"
+scopes = "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.compose"
+```
+
+Authorization remains explicit through `authorize_integration`, with a checked
+loopback callback, PKCE, silent refresh, and no automatic action replay. Initial
+Calendar scopes permit reads and availability. A supported write scope is requested
+only after an explicit insufficient-scope response. Keychain approval can be needed
+for a new Python process; normal startup never opens that dialog.
+
+A real Gmail inbox metadata read succeeded through the configured local backend
+in 0.58 seconds. See [backend details and measured limits](docs/workspace-backend.md)
+for the full verification, API differences, and rollback instructions. Public API
+adapters preserve tool contracts, but cannot reproduce every hosted semantic-search,
+generated-snippet, or OCR feature.
 
 ### Spotify
 
@@ -264,8 +331,11 @@ uv run python main.py
 ```
 
 Setup checksum-verifies a separate Node 26.8.1 runtime under Luna's application
-data, builds the unchanged [Spotify MCP server](https://github.com/marcelmarais/spotify-mcp-server)
-at revision `001fea0186ad8f40a0dad7f6f154a47e71962f85`, and adds a stdio entry.
+data, builds the [Spotify MCP server](https://github.com/marcelmarais/spotify-mcp-server)
+at revision `001fea0186ad8f40a0dad7f6f154a47e71962f85` with Luna's playback patch,
+and adds a stdio entry. The patch confirms playback and starts named tracks from
+their albums to work around Spotify's silent direct-track failures. Subsequent
+album tracks may continue after the requested song ends.
 It maps the environment names to upstream's `clientId`, `clientSecret`, and
 `redirectUri`. A `localhost` redirect is normalized to `127.0.0.1` in the
 generated configuration; the developer app must allow that exact address.
@@ -280,131 +350,48 @@ to conversation or logs. Setup exposes search, current playback, playlists,
 devices, play, and pause; change the `tools` allowlist to select other upstream tools.
 The upstream login requests its fixed Spotify scopes, including write access.
 
-### Verification
+Spotify returns text and Markdown, including numbered `ID:` fields, bold track IDs,
+plain playback receipts, and errors that sometimes omit the MCP error flag. Luna's
+Spotify adapter handles these formats alongside JSON and structured responses.
+Music IDs retain their track/album/artist/playlist type; device IDs cannot authorize
+music playback. See [format verification](docs/spotify-compatibility.md).
 
-```sh
-uv run python -m unittest tests.test_integrations tests.test_google_setup tests.test_mcp_pipeline -v
-LUNA_LIVE_TESTS=1 uv run python -m unittest tests.test_mcp_pipeline.PipelineTests.test_live_qwen_and_sentence_tts -v
-```
-
-The default suite uses local mock OAuth/MCP servers and stdio processes. It covers
-protected discovery, publication, refresh across restart, rotation, revocation,
-scope challenges, permission and temporary errors, login deduplication, callback
-validation, timeout, cancellation, and shutdown. A running Pipecat pipeline
-verifies background completion, interruption, explicit cancellation, and TTS
-separation without application-level action replay.
-Google-specific checks cover pre-registered confidential clients, public
-discovery, offline authorization, configured scopes, credential import,
-issuer compatibility, and preservation of existing credentials on setup reruns.
-The opt-in check uses real local Qwen and VoiceStudio against mock private data;
-it does not open the microphone or play sound. Native Keychain persistence and
-one real Spotify login followed by a read-only playlist call were also verified.
-
-## Typed inference and speech test
-
-Keep Ollama and VoiceStudio running, then open the Mac chat window:
+## Typed input
 
 ```sh
 uv run python -m scripts.inference_tts
 ```
 
-Type a message and press Enter or click Send. Replies stream into the window
-and play aloud through the same Ollama, Pipecat sentence synthesis, MLX-Audio,
-and speaker playback used by the voice agent. Conversation history stays in
-memory while the window is open. Send becomes available after the spoken reply
-finishes; this test accepts one message at a time.
+This opens the existing Mac chat window with the microphone disabled. Typed text
+and streamed audio use the same Gemini Live service and MCP runtime. The window
+shows Gemini's output transcript; there is no separate inference/TTS stack.
 
-The test never opens the microphone or runs STT, VAD, turn detection, or echo
-cancellation. Close the window to cancel pending work and release playback.
-
-## Audio output comparison
-
-With VoiceStudio running, compare the current native audio paths:
+## Verification
 
 ```sh
-uv run python -m scripts.audio_compare
+uv run python -m unittest discover -s tests -q
+uv run python -m scripts.benchmark_tools --audible --repeats 2 --output /tmp/luna-gemini.json
 ```
 
-Close Luna and other microphone apps first. Choose the output and microphone
-in macOS Sound settings and keep devices and volume fixed for the run. Use
-**Standard** microphone mode in Control Center to match the verified
-configuration. The script uses the current default devices and
-stops if they change. It does not select or require a particular device.
+Tests simulate the Live protocol while exercising the real Pipecat connector,
+including audio formats, readiness, async login, interruption, explicit cancellation,
+catalog refresh, tool ordering, argument validation, allowlists, and result paging.
+The benchmark uses the real Gemini model and optional native speaker output, with
+recorded full schemas and synthetic service effects. It does not edit external
+documents, control real Spotify playback, or open the microphone.
 
-One MLX-Audio clip is synthesized and reused across four tests:
+See [Gemini migration and measurements](docs/gemini-live.md) for results and limits.
+Older Qwen/VoiceStudio experiments in `docs/benchmarks/` are historical and do not
+describe the current pipeline. The old benchmark strategies and local model client
+have been removed.
 
-| Cases | Comparison | What it separates |
-| --- | --- | --- |
-| 01 | Normal playback, microphone closed | Listening reference |
-| 02 | Normal playback with separate native echo cancellation | Speaker quality and echo-only VAD behavior |
-| 03 | Queue cancellation followed by playback, with capture kept alive | Interruption recovery and capture continuity |
-| 04 | Normal playback again after cleanup | Recovery control |
+## Optional audio diagnostics
 
-After each successful playback, enter `g` (good), `d` (degraded), or `u`
-(unsure), optionally followed by a note, such as `d quieter and muffled`.
-Each native test runs in a separate process, so unsupported configurations
-or CoreAudio failures are recorded and the remaining tests can continue.
-Press **Ctrl+C** to stop; completed results remain saved.
+`scripts.audio_compare`, `scripts.tts_alloy`, and `scripts.tts_mlx` remain standalone
+VoiceStudio diagnostics for the native audio transport. They are not part of Luna's
+Gemini pipeline and require VoiceStudio only when explicitly run.
 
-The terminal prints a report directory under `diagnostics/audio/`. It contains
-`report.md` and `report.json`, the original clip, per-case logs and device
-snapshots, plus recordings from the playback mixer and processed microphone. Measurements
-include level, clipping, spectral bands, channel/sample-rate formats, render
-continuity, device volume, microphone mode, bypass, AGC, and ducking settings.
-The microphone recordings are replayed through Luna's default Silero VAD;
-remain quiet to use speech starts as an echo check. No STT or conversation
-runs. Diagnostic files are excluded from Git.
-
-Send the report after the run. Its findings combine your ratings with the
-measurements to locate the responsible layer. Mixer recordings cannot measure
-the speakers' acoustic output or identify an undocumented macOS filter.
-The previous shared voice-processing playback modes have been removed.
-
-For a silent configuration check, use `--prepare-only` (no synthesis or
-playback). `--self-check` checks metering and interpretation without opening
-audio devices. `--no-prompts` plays the cases without collecting ratings.
-`--source-pcm PATH` reuses an existing 24 kHz mono int16 clip without synthesis.
-
-Run the audio ownership and playback regression checks without opening devices:
-
-```sh
-uv run python -m unittest tests.test_apple_audio -q
-```
-
-## Ollama
-
-`src.clients.ollama.stream_response(text)` yields response text chunks from
-`qwen3.8:27b-q4_K_M`. Thinking is disabled and context is limited to 8K.
-Each call is independent; the voice pipeline manages its own history.
-
-## VoiceStudio
-
-`src.clients.voicestudio` exposes two async functions:
-
-- `text_to_speech(text, voice="default")` returns WAV audio bytes. `voice` can
-  also be an engine preset or a saved VoiceStudio profile ID.
-- `speech_to_text(audio)` transcribes WAV audio with MLX Whisper and returns text.
-
-Standalone TTS uses VoiceStudio's active TTS engine through the local `tts-1`
-alias. STT requests the same `mlx-whisper` engine as the voice pipeline and
-rejects a different active engine instead of silently using CPU ASR. No API key
-is needed for the local endpoints.
-
-```python
-import asyncio
-
-from src.clients.voicestudio import speech_to_text, text_to_speech
-
-
-async def example():
-    audio = await text_to_speech("Hello, I am Luna.")
-    print(await speech_to_text(audio))
-
-
-asyncio.run(example())
-```
-
-Empty inputs raise `ValueError`. Connection, HTTP, and timeout errors propagate
-to the caller. These standalone functions make one request per call. The voice
-agent uses Pipecat's native service connectors so streaming, turn management,
-and playback stay within Pipecat.
+References: [Google Gemini 3.8 Live](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-live),
+[Pipecat Gemini Live](https://docs.pipecat.ai/pipecat/features/gemini-live),
+[Pipecat service reference](https://docs.pipecat.ai/api-reference/server/services/s2s/gemini-live),
+[Apple voice processing](https://developer.apple.com/videos/play/wwdc2023/10235/).
