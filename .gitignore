@@ -12,3 +12,6 @@ wheels/
 
 # Generated audio diagnostic reports
 diagnostics/
+
+# Editor build dependencies (the bundle in src/dashboard/web/vendor is committed)
+node_modules/

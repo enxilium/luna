@@ -3,13 +3,14 @@
 import os
 from pathlib import Path
 
-DATA = Path.home() / "Library/Application Support/Luna/memory"
-MODEL = "qwen3.8:27b-q4_K_M"
+from src.paths import HOME, MEMORY_API_PORT, MEMORY_DATABASE, MEMORY_DATABASE_PORT, MEMORY_MODEL as MODEL, OLLAMA_PORT
+
+DATA = HOME / "memory"
 
 
 def database():
     from pg0 import Pg0
-    return Pg0(name="luna-memory", port=55439, username="hindsight", password="hindsight",
+    return Pg0(name=MEMORY_DATABASE, port=MEMORY_DATABASE_PORT, username="hindsight", password="hindsight",
                database="hindsight", data_dir=str(DATA / "postgres"),
                config={"listen_addresses": "127.0.0.1"})
 
@@ -39,15 +40,15 @@ def main():
         raise RuntimeError("The luna-memory database belongs to a different directory.")
     if not info.running:
         info = postgres.start()
-    if info.port != 55439:
+    if info.port != MEMORY_DATABASE_PORT:
         raise RuntimeError("The luna-memory database is using an unexpected port.")
     settings = {
         "HINDSIGHT_API_DATABASE_URL": info.uri,
         "HINDSIGHT_API_HOST": "127.0.0.1",
-        "HINDSIGHT_API_PORT": "8889",
+        "HINDSIGHT_API_PORT": str(MEMORY_API_PORT),
         "HINDSIGHT_API_MCP_ENABLED": "false",
         "HINDSIGHT_API_LLM_PROVIDER": "ollama",
-        "HINDSIGHT_API_LLM_BASE_URL": "http://127.0.0.1:11435/v1",
+        "HINDSIGHT_API_LLM_BASE_URL": f"http://127.0.0.1:{OLLAMA_PORT}/v1",
         "HINDSIGHT_API_LLM_MODEL": MODEL,
         "HINDSIGHT_API_LLM_MAX_CONCURRENT": "1",
         "HINDSIGHT_API_LLM_OLLAMA_NUM_CTX": "32768",

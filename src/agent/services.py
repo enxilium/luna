@@ -4,11 +4,8 @@ import asyncio
 from contextlib import AsyncExitStack
 import json
 import math
-import os
-from pathlib import Path
 import time
 
-from dotenv import load_dotenv
 from google.genai.types import Blob, Content, FunctionResponse, Part, SessionResumptionConfig
 from loguru import logger
 from pipecat.adapters.schemas.function_schema import FunctionSchema
@@ -23,10 +20,10 @@ from pipecat.processors.frame_processor import FrameDirection
 from pipecat.services.google.gemini_live.llm import GeminiLiveLLMService
 
 from src.integrations.mcp import MCPRuntime
+from src.agent.weather import tools as weather_tools
 
 
 MODEL = "gemini-3.8-live"
-ENV_PATH = Path(__file__).resolve().parents[2] / ".env"
 SYSTEM_INSTRUCTION = (
     "You are Luna, a capable desktop voice assistant. Be concise and natural. "
     "Speak directly to the user without markdown or conversation role labels. "
@@ -96,6 +93,7 @@ class _GeminiLiveService(GeminiLiveLLMService):
 
     def _tools_schema(self):
         tools = self.integrations.tools_schema()
+        tools.standard_tools.extend(weather_tools())
         if self.memory:
             tools.standard_tools.extend(self.memory.tools())
         if self._wake_word_enabled:
@@ -577,15 +575,19 @@ class _GeminiLiveService(GeminiLiveLLMService):
             await self._handle_send_error(error)
 
 
+def api_key():
+    from src.setup import gemini_key
+
+    key = gemini_key()
+    if not key:
+        raise ValueError("Luna has no Gemini API key yet. Add one in Luna's setup (or GOOGLE_API_KEY in .env).")
+    return key
+
+
 def build_llm_service(
     integrations: MCPRuntime | None = None, *, defer_connection=False, memory=None
 ) -> _GeminiLiveService:
-    load_dotenv(ENV_PATH)
-    api_key = os.environ.get("GOOGLE_API_KEY", "").strip()
-    if not api_key:
-        raise ValueError(
-            "Set GOOGLE_API_KEY in Luna's .env before starting the assistant."
-        )
+    key = api_key()
     integrations = integrations or MCPRuntime([])
     instruction = SYSTEM_INSTRUCTION
     if defer_connection:
@@ -611,7 +613,7 @@ def build_llm_service(
         integrations,
         memory=memory,
         defer_connection=defer_connection,
-        api_key=api_key,
+        api_key=key,
         settings=GeminiLiveLLMService.Settings(
             model=MODEL,
             voice="Charon",

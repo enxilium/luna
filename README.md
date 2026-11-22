@@ -10,25 +10,59 @@ VoiceStudio is not needed to run the assistant.
 
 ```sh
 uv sync
-uv run python -m scripts.setup_wake_word
+uv run python -m scripts.build_app && open build/Luna.app
 ```
 
-Add your Google AI Studio key to the project's `.env`:
+The first time, Luna opens its setup on the dashboard by itself: your name, a
+Gemini API key from Google AI Studio (checked with Google, then kept in your
+Keychain), the microphone, the wake word model (downloaded in the background,
+about 33 MB), and optionally Calendar, Location and Messages. Until a key and the
+model are there, voice waits and the notch's chat says what's missing; nothing
+quits. Settings → You & your data → Run setup again brings it back.
 
-```dotenv
-GOOGLE_API_KEY=your-api-key
-```
-
-The root `.env` is loaded automatically and ignored by Git. Existing process
-environment variables take precedence. `.env.example` contains the required key
-name. Gemini API access and billing belong to the key's Google project; MCP
-services retain their separate OAuth credentials in Keychain.
+To go through setup as a new user without touching your own Luna (quit it first):
 
 ```sh
-uv run python main.py
+open -n build/Luna.app --args --home ~/LunaFresh     # or: uv run python main.py --home ~/LunaFresh
 ```
 
-Allow microphone access for the launching app in macOS Privacy & Security.
+`--home` keeps all of Luna's data in that folder and its own Gemini key in the
+Keychain; it ignores `GOOGLE_API_KEY` and `.env`. macOS remembers permissions per
+app, not per folder, so the microphone and other access you already gave Luna
+show as allowed.
+
+The installed app and a development build (`main.py`, `build/Luna.app`) share the
+data folder but not their Keychain entries: the installed app uses `Luna`,
+`Luna MCP` and `Luna Dashboard`, a development build the same names with " (dev)"
+added. Deleting a "(dev)" entry in Keychain Access sends the dev build back
+through that step of setup without touching your installed Luna. Spotify's sign-in is a file
+in the data folder (`servers/spotify/spotify-config.json`), so both builds share it.
+The app never reads `.env`: a development build asks for its Gemini key once and keeps
+it under `Luna (dev)`. Scripts and live tests still take `GOOGLE_API_KEY` from the
+environment or the project's `.env` (`.env.example` has the name). Gemini API access
+and billing belong to the key's Google project; MCP services keep their own OAuth
+credentials in Keychain.
+
+```sh
+uv run python -m scripts.build_app && open build/Luna.app   # Luna as one app
+uv run python main.py                                       # the same, from a shell
+```
+
+Luna is one app: opening it starts the notch, wake-word listening and voice
+conversations, and the dashboard, in one process. It sits in the Dock like any app
+and stays in the background until you need it: say "Luna", point at the notch, or
+press the dashboard's shortcut (⌃⌥Space) or click its Dock icon to bring the dashboard to the front. ⌘Q
+in the dashboard quits all of it, and if any part fails to start, nothing keeps
+running half-way. `build/Luna.app` (see `scripts/build_app.py`) runs this
+checkout's Python inside its own process, so macOS asks *Luna* for the
+microphone, Documents folder, Calendar, Location and Messages; output goes to
+`~/Library/Logs/Luna/luna.log`. The build signs Luna with your Apple Development
+certificate (free, created in Xcode → Settings → Accounts → Manage Certificates;
+it also needs Apple's "Worldwide Developer Relations - G3" intermediate certificate
+in your keychain), so macOS keeps its permissions across rebuilds. Without a
+certificate it's ad-hoc signed and asks again after each rebuild.
+
+Allow microphone access for Luna (or, from a shell, the launching app) in macOS Privacy & Security.
 Choose input/output devices before starting Luna. Wait for “Waiting for the wake
 word,” then say "Luna". You can continue with your request in the same sentence;
 audio is buffered locally while Gemini connects. After activation, speak and
@@ -38,19 +72,25 @@ It calls `end_conversation`, finishes any brief closing reply, then disconnects
 Gemini and resumes local wake word listening. Follow-ups such as "thanks, now
 turn it down" keep the conversation open; finishing a task alone does not end it.
 Say "Luna" again to reconnect; press Ctrl+C to stop the app.
-The Mac notch widens sideways on wake, keeping its original height. A moon sits
-on the left and five audio bars on the right: white while listening, blue/purple
-during Luna's speech. They follow the actual microphone and delivered playback
-audio. The indicator collapses after the conversation's closing audio finishes,
+The Mac notch widens sideways on wake, keeping its original height. Luna's mark (a
+ring with one bright bead) sits on the left, and a soft audio line on the right: white
+while listening, violet during Luna's speech. They follow the actual microphone and
+delivered playback audio. While Luna speaks or works, a blue-violet glow lights the
+island's edge. The indicator collapses after the conversation's closing audio finishes,
 stays visible during connection recovery, and never takes keyboard focus.
-Hover over the island to open the text composer. Click the field to type; Enter
-sends, Shift+Enter inserts a line break. Sending expands it into a scrolling chat
-with simulated, streamed replies. Pin keeps the conversation open when you move
-away; Escape dismisses it. The history button opens previous chats; the compose
-button starts a new one. Chats and their drafts are saved locally across restarts.
+The island is frosted glass below a solid black band over the camera. Hover over it
+to open a compact composer with history, new chat and pin in the notch's right wing.
+Click the field to type; Enter sends, Shift+Enter inserts a line break, and the Think
+toggle asks Luna to reason first. Sending (or picking a past chat) expands it into a
+scrolling chat whose replies stream from Gemini text models with the same MCP tools
+and memory as voice (see [Island text chat](#island-text-chat)); the next hover starts
+compact again. History turns the field into search: an empty field shows your last
+three chats, and typing completes a chat title (Tab) and finds chats whose messages
+mention your words. Pin keeps the conversation open when you move away; Escape
+dismisses it. Tools Luna used show as one quiet line above her reply, and a failed
+reply offers Try again in place. Chats and their drafts are saved locally across restarts.
 Drag files onto the island to queue them for your next message; remove a queued
-file with its × button. Originals stay in place. Text and files are not connected
-to Gemini, tools, speech, or agent memory yet.
+file with its × button. Originals stay in place; the model sees only their names.
 Hold-to-talk shortcuts are not connected yet.
 
 Try the interactive text UI without opening the microphone, connecting to Gemini,
@@ -60,8 +100,9 @@ or starting integrations:
 uv run python main.py --preview
 ```
 
-Hover over the top-center island, click the composer, and send a message. The
-preview keeps running until Ctrl+C in the launching terminal.
+Hover over the top-center island, click the composer, and send a message. Preview
+mode answers each message with a "doesn't connect to Luna's assistant" notice. It keeps
+running until Ctrl+C in the launching terminal.
 
 See [notch UI design](docs/notch-ui.md) for the native window and future trigger seam.
 
@@ -98,7 +139,10 @@ Setup installs Hindsight 1.1.0, a dedicated PostgreSQL instance, local embedding
 and reranking models, and Qwen 3.8 27B for memory processing. It reuses an existing
 matching Ollama model; a fresh download is about 18 GB. This configuration targets
 the current 48 GB Apple Silicon Mac. Two macOS login services start and supervise
-the stack, including after a restart. Gemini remains Luna's voice model.
+the stack, including after a restart. The Ollama server itself is small (about
+30 MB); the model takes about 18 GB of RAM only while memory processing runs and
+is unloaded one minute after its last request (`OLLAMA_KEEP_ALIVE=1m`). Gemini
+remains Luna's voice and text-chat model.
 
 Each wake starts a new **conversation**; one app runtime is a **session**.
 Luna receives personal notes and recent context at each wake, and can search
@@ -157,7 +201,10 @@ Docs replacement facade. The recorded inventory has 65 upstream tools across
 nine integrations. Connect, authorize, and result-page controls are published too;
 Pipecat adds its native authorization-cancel tool.
 Voice mode also publishes `end_conversation`, a local tool for returning to wake
-word listening without restarting the app or microphone capture.
+word listening without restarting the app or microphone capture. Voice and text
+both get `get_weather` ("Luna, is it going to rain today?"): Open-Meteo's forecast,
+hour by hour from two days back to a week ahead, for where you are (the place the
+dashboard last saw, rounded to about 10 km) or any named place.
 
 Canonical argument validation, allowlists, per-integration ordering, authorization,
 and cancellation remain in the MCP runtime. Gemini chooses tools directly.
@@ -237,7 +284,7 @@ Pipecat supplies the explicit cancellation notice.
 
 Standard MCP OAuth uses the SDK for discovery, registration, PKCE, token exchange,
 issuer binding, and silent refresh. Tokens, absolute expiry, registered client
-information, and refresh metadata live in macOS Keychain under `Luna MCP`.
+information, and refresh metadata live in macOS Keychain under `Luna MCP` (`Luna MCP (dev)` for a development build).
 Background connections never open Keychain dialogs. If macOS requires approval,
 the service returns `auth_required` with `keychain_access_required`; ask Luna to
 authorize that integration. Explicit sign-in and the Google setup script allow
@@ -314,6 +361,26 @@ for the full verification, API differences, and rollback instructions. Public AP
 adapters preserve tool contracts, but cannot reproduce every hosted semantic-search,
 generated-snippet, or OCR feature.
 
+### Quercus (Canvas)
+
+Luna reads UofT's Quercus through [canvas-mcp](https://github.com/vishalsachdev/canvas-mcp)
+1.18.0, read-only. Create a token in Quercus (Account → Settings → Approved
+Integrations → **+ New Access Token**), then:
+
+```sh
+uv run python -m scripts.setup_canvas          # install, paste the token (hidden), register, test
+uv run python -m scripts.setup_canvas --test   # check the stored token later
+uv run python -m scripts.setup_canvas --update # refresh the tool list after upgrading Luna
+uv run python -m scripts.sync_canvas           # sync now (the dashboard also does it every 15 minutes)
+```
+
+The token goes to Keychain and only into the server's environment, never a file. The
+server runs as a student with every Canvas write tool disabled, and Luna publishes only
+its read tools (courses, assignments, quizzes, announcements, grades, modules, pages), so
+you can ask Luna about any of it. The dashboard keeps active courses in step on its own:
+assignments and quizzes become tasks that check themselves off when you submit, deadlines
+follow Canvas, and announcements appear on the course page. Your own edits are kept.
+
 ### Spotify
 
 Create a Spotify developer app and allow `http://127.0.0.1:8888/callback`.
@@ -356,15 +423,104 @@ Spotify adapter handles these formats alongside JSON and structured responses.
 Music IDs retain their track/album/artist/playlist type; device IDs cannot authorize
 music playback. See [format verification](docs/spotify-compatibility.md).
 
-## Typed input
+## Sharing Luna
+
+```sh
+uv run python -m scripts.package_app                                # build/package/Luna-<version>.dmg
+uv run python -m scripts.package_app --with-google --with-spotify   # friends can sign in to Google and Spotify
+uv run python -m scripts.package_app --with-model                   # memory's model inside the app (~18 GB more)
+```
+
+The packaged app carries everything it runs: its own Python and packages, Luna's code,
+uv, Ollama, Node and the prebuilt Spotify server (about 1.5 GB). Friends drag it into
+Applications and open it; setup takes it from there: a Gemini key of their own, the
+microphone, the wake word, and optionally memory (downloads the ~18 GB model, or copies
+it from the app when packaged `--with-model`, which needs it pulled in your Ollama), Google
+(one sign-in for Gmail, Calendar, Drive, Docs, Sheets, Slides, Chat and Contacts),
+Spotify (one sign-in) and Canvas (their school's address and a token). Voice picks up
+whatever they connect without restarting Luna.
+
+Google and Spotify need OAuth apps people sign in through. `--with-google` puts the
+client you imported with `setup_google` into the app and `--with-spotify` the
+`SPOTIFY_*` app from `.env`; without them those rows say "Not in this copy". While
+those apps are in testing mode, add each friend as a test user (Google Cloud → OAuth
+consent screen → Test users; Spotify Developer Dashboard → your app → User
+Management). Anyone holding the app can sign in through them, so share it only with
+people you trust.
+
+Signing: with your Apple Development certificate it runs normally on your Mac, and on a
+friend's Mac it opens after System Settings → Privacy & Security → Open Anyway. A
+Developer ID Application certificate (paid Apple Developer Program) plus
+`--notarize PROFILE` (from `xcrun notarytool store-credentials`) removes that step.
+Memory's services point into the installed app, so keep Luna in Applications once memory
+is set up.
+
+## Dashboard
+
+The dashboard runs inside Luna, hidden until ⌃⌥Space. For development:
+
+```sh
+uv run python main.py --demo               # all of Luna, with seeded sample data on the dashboard
+uv run python main.py --dashboard          # the dashboard alone, shown at once
+uv run python main.py --dashboard --demo   # the same over seeded sample data
+```
+
+A frosted glass window (the notch's material) that ⌃⌥Space or the Dock icon brings
+to the front from any app. It behaves like an ordinary window: switching apps leaves it
+where it is, and ⌘W closes it while Luna keeps running; the shortcut can be changed in Settings. A
+top bar switches between Home, Projects, Academia and Settings. Home is your day:
+a greeting with what's left today and the weather where you are (Open-Meteo, from
+your location rounded to about 10 km), your calendar (Luna's own events, plus
+macOS Calendar read-only until you move over) as a 24-hour day, a week or a month
+with a "now" line, plus every task with a due
+date (overdue first; tasks have due dates, not times), with today's picks lit up
+(due by tomorrow, plus up to three Luna chooses each midnight through Gemini Live),
+a folded list of what you finished lately, invitations you
+haven't answered, and the projects you pinned or touched last. Projects hold tasks
+and notes and read your music, code and writing folders (bounces with waveforms,
+git, word counts); progress is finished tasks over all tasks, repeating ones aside.
+Academia holds courses (a code, a colour, an icon) with their tasks, events and
+notes. Notes and task descriptions share one Markdown editor with Read and Edit
+modes (⌘E), KaTeX maths, two-column blocks, images and files; notes are `.md` files
+in the project's or course's folder. Messages (iMessage,
+plus Instagram, LinkedIn and more through Beeper Desktop or Beeper Server) open from the top bar.
+Everything stays in `~/Library/Application Support/Luna/dashboard.sqlite3`. It
+isn't connected to the voice agent yet. See [the dashboard
+notes](docs/dashboard.md).
+
+## Island text chat
+
+Typed chats in the notch use `generate_content` with text output, not the voice
+session, so they never speak. The Think toggle (brain mode, saved with chat
+history) chooses the first model:
+
+| Think | First choice | Next when its quota is used up | Last resort |
+| --- | --- | --- | --- |
+| Off | `gemini-3.5-flash-lite` | `gemini-3.8-flash` | `gemini-3.8-live` transcript |
+| On | `gemini-3.8-flash` | `gemini-3.5-flash-lite` | `gemini-3.8-live` transcript |
+
+Google publishes no 3.8 Flash-Lite text model (only `gemini-3.8-flash-lite-tts`), so
+Flash-Lite is the newest GA one; `FAST_MODEL` in `src/agent/text.py` sets it.
+A 429 marks that model unavailable for its `retryDelay` (60 s if none). When both
+are unavailable, the reply comes from a one-turn `gemini-3.8-live` session: audio
+is discarded and its output transcription becomes the text. Tool results already
+gathered in the turn carry over to the next model as text, so a fallback never
+repeats a tool call. The UI never names the model that answered; the route is in
+the log. If all three are out of quota, the reply fails with a plain usage-limit message.
+
+Each island chat is its own memory conversation (its chat ID). Failed or
+interrupted replies are kept on screen but are not sent back to the model.
+
+## Typed Live diagnostic
 
 ```sh
 uv run python -m scripts.inference_tts
 ```
 
-This opens the existing Mac chat window with the microphone disabled. Typed text
-and streamed audio use the same Gemini Live service and MCP runtime. The window
-shows Gemini's output transcript; there is no separate inference/TTS stack.
+This opens a separate Mac chat window (not the notch island) with the microphone
+disabled. Typed text and streamed audio use the same Gemini Live service and MCP
+runtime. The window shows Gemini's output transcript; there is no separate
+inference/TTS stack.
 
 ## Verification
 

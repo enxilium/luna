@@ -20,9 +20,10 @@ class GeminiServiceTests(unittest.IsolatedAsyncioTestCase):
     def test_missing_key_fails_before_connecting(self):
         with (
             patch.dict(os.environ, {"GOOGLE_API_KEY": ""}),
-            patch.object(services, "ENV_PATH", Path("/nonexistent/.env")),
+            patch("src.setup._keychain_read", return_value=None),
+            patch("src.setup.ENV_PATH", Path("/nonexistent/.env")),
         ):
-            with self.assertRaisesRegex(ValueError, "GOOGLE_API_KEY"):
+            with self.assertRaisesRegex(ValueError, "Gemini API key"):
                 services.build_llm_service()
 
     async def test_model_uses_native_audio_and_provider_compression(self):

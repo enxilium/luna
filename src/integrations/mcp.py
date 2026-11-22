@@ -26,12 +26,14 @@ from pipecat.adapters.schemas.tools_schema import ToolsSchema
 from pipecat.frames.frames import FunctionCallResultProperties
 from pipecat.services.llm_service import FunctionCallParams
 
-from src.integrations.auth import AuthAdapter, AuthFailure, AuthOutcome, MCPOAuthAdapter
+from src.integrations.auth import APITokenAuthAdapter, AuthAdapter, AuthFailure, AuthOutcome, MCPOAuthAdapter
 from src.integrations.spotify import SpotifyAuthAdapter, playback_uri, result_error, result_identifiers
 from src.integrations.schemas import invalid_arguments, model_schema
+from src.paths import HOME
 
 
-CONFIG_PATH = Path.home() / "Library/Application Support/Luna/mcp.toml"
+CONFIG_PATH = HOME / "mcp.toml"
+
 AUTH_TIMEOUT = 295.0  # Leave five seconds for cleanup before Pipecat's 300-second deadline.
 
 INTEGRATION_INSTRUCTIONS = (
@@ -120,6 +122,8 @@ class _Connection:
                     ))
                     server = streamable_http_client(server, http_client=http)
                 elif isinstance(server, StdioServerParameters):
+                    if isinstance(auth, APITokenAuthAdapter):  # the token goes only into this process's environment
+                        server = server.model_copy(update={"env": (server.env or {}) | await asyncio.to_thread(auth.env)})
                     errlog = stack.enter_context(open(os.devnull, "w"))
                     server = stdio_client(server, errlog=errlog)
                 self.client = await stack.enter_async_context(Client(
@@ -222,9 +226,13 @@ class MCPRuntime:
                     validate_http_url(entry["url"])
                     server = entry["url"]
                 else:
+                    env = entry.get("env", {})
+                    if not isinstance(env, dict) or any(not re.fullmatch(r"[A-Z_][A-Z0-9_]*", k) or not isinstance(v, str)
+                                                        for k, v in env.items()):
+                        raise ValueError("env must map variable names to text")
                     server = StdioServerParameters(
                         command=str(Path(entry["command"]).expanduser()), args=entry.get("args", []),
-                        cwd=str(Path(entry["cwd"]).expanduser()) if entry.get("cwd") else None,
+                        cwd=str(Path(entry["cwd"]).expanduser()) if entry.get("cwd") else None, env=env or None,
                     )
                 kind = entry.get("auth", "none")
                 if kind == "mcp_oauth" and isinstance(server, str):
@@ -243,6 +251,11 @@ class MCPRuntime:
                         scopes=entry.get("scopes"),
                     )
                     server = build_server(entry["service"], auth=adapter)
+                elif kind == "api_token" and isinstance(server, StdioServerParameters):
+                    variable = entry["token_env"]
+                    if not isinstance(variable, str) or not re.fullmatch(r"[A-Z_][A-Z0-9_]*", variable):
+                        raise ValueError("token_env must be a variable name")
+                    adapter = APITokenAuthAdapter(f"api-token:{integration_id}", variable)
                 elif kind == "none" and server is not None:
                     adapter = None
                 else:
@@ -327,13 +340,14 @@ class MCPRuntime:
             await connection.close()
             return self._failure(integration_id, cause)
 
-    async def call_tool(self, integration_id: str, name: str, arguments: dict) -> dict:
+    async def call_tool(self, integration_id: str, name: str, arguments: dict, *, bounded: bool = True) -> dict:
+        """`bounded=False` is for local code (e.g. the Quercus sync) that reads the whole result itself, not the model."""
         started = perf_counter()
         outcome = "cancelled"
         try:
             result = await self._call_tool(integration_id, name, arguments)
             outcome = result["status"]
-            return self._bound_result(result)
+            return self._bound_result(result) if bounded else result
         finally:
             logger.info("MCP tool {}.{} ended: {:.3f}s ({})", integration_id, name,
                         perf_counter() - started, outcome)
@@ -442,6 +456,14 @@ class MCPRuntime:
         self._catalog.update(current)
         if old != current:
             self.catalog_revision += 1
+
+    def tool_title(self, name):
+        """(integration_id, display title) for a published tool name, or None; titles come from the MCP server."""
+        tool = self._catalog.get(name)
+        if tool is None:
+            return None
+        title = tool.title or (tool.annotations.title if tool.annotations else None) or tool.name
+        return self._routes[name][0], title
 
     def system_instruction(self):
         return INTEGRATION_INSTRUCTIONS

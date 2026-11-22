@@ -1,16 +1,27 @@
-"""Native, top-anchored shell for Luna's conversation UI."""
+"""Native, top-anchored glass shell for Luna's conversation UI."""
 
 import math
 import time
 
 import AppKit as AK
-from Foundation import NSMakeRect, NSNotificationCenter, NSObject, NSValue
+from Foundation import NSMakeRect, NSNotificationCenter, NSObject
 import objc
 import Quartz as Q
 
-from src.ui.chat import ChatContent, HistoryContent, icon_button, symbol
+from src.ui.chat import (
+    VIOLET, ChatContent, HistoryContent, PointerButton, icon_button, label, release_cursor, rich, symbol, white,
+)
 from src.ui.drop import file_paths, has_files
+from src.ui.glass import PAD, DiamondRing, Surface, Wave
 from src.ui.motion import Spring
+
+
+MARGIN_X, MARGIN_BOTTOM = 48, 72  # Room around the island for the corona glow; clicks there pass through.
+TOOLBAR = 40
+COMPOSE_WIDTH = 440
+DROP_HEIGHT = 140
+CHAT_RADIUS = 12  # Top flare of the chat island; its visible edge starts this far in.
+THINK_PERIOD = 1.4
 
 
 def notch_path(canvas_width, canvas_height, width, height, top_radius, bottom_radius):
@@ -84,7 +95,7 @@ class NotchSurface(AK.NSView):
 
 class NotchWindow(NSObject):
     @objc.python_method
-    def build(self, store=None):
+    def build(self, store=None, submit=None):
         self.expanded = False
         self.hovered = self.pinned = self.suppress_hover = False
         self.entered_at = self.left_at = None
@@ -94,12 +105,13 @@ class NotchWindow(NSObject):
         self.drop_leave_at = None
         self.drag_pasteboard = AK.NSPasteboard.pasteboardWithName_(AK.NSPasteboardNameDrag)
         self.drag_count = self.drag_pasteboard.changeCount()
-        self.motion = Spring((0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+        self.motion = Spring((0,) * 11)
         self.motion_time = time.monotonic()
         self.speaking = False
         self.audio = {"user": ((0,) * 5, 0), "luna": ((0,) * 5, 0)}
         self.levels = (0,) * 5
         self.last_update = time.monotonic()
+        self.glow = 0.0
         self.panel = NotchPanel.alloc().initWithContentRect_styleMask_backing_defer_(
             NSMakeRect(0, 0, 520, 440),
             AK.NSWindowStyleMaskBorderless | AK.NSWindowStyleMaskNonactivatingPanel,
@@ -128,33 +140,35 @@ class NotchWindow(NSObject):
         surface.setWantsLayer_(True)
         surface.registerForDraggedTypes_([AK.NSPasteboardTypeFileURL])
         self.panel.setContentView_(surface)
+        self.surface = Surface(surface)
+        # The shape holds the island path for hit testing; the glass layers fill it.
         self.shape = Q.CAShapeLayer.layer()
-        self.shape.setFillColor_(AK.NSColor.blackColor().CGColor())
-        self.panel.contentView().layer().addSublayer_(self.shape)
+        self.shape.setFillColor_(AK.NSColor.clearColor().CGColor())
+        self.surface.chrome.layer().addSublayer_(self.shape)
         self.foreground = AK.NSView.alloc().initWithFrame_(surface.bounds())
         self.foreground.setWantsLayer_(True)
         surface.addSubview_(self.foreground)
         self.details = self.foreground.layer()
         self.clip = Q.CAShapeLayer.layer()
         self.details.setMask_(self.clip)
-        self.moon = Q.CALayer.layer()
-        self.moon.setContents_(symbol("moon.fill"))
-        self.moon.setContentsGravity_(Q.kCAGravityResizeAspect)
-        self.details.addSublayer_(self.moon)
-        self.visualizer = Q.CAGradientLayer.layer()
-        self.visualizer.setStartPoint_((0, 0))
-        self.visualizer.setEndPoint_((1, 1))
-        self.bars = Q.CAShapeLayer.layer()
-        self.visualizer.setMask_(self.bars)
-        self.details.addSublayer_(self.visualizer)
-        self.history_button = icon_button("clock.arrow.circlepath", "Chat history", self, "showHistory:")
-        self.new_button = icon_button("square.and.pencil", "New chat", self, "newChat:")
-        self.pin_button = icon_button("pin", "Pin conversation", self, "togglePin:")
-        self.foreground.addSubview_(self.history_button)
-        self.foreground.addSubview_(self.new_button)
-        self.foreground.addSubview_(self.pin_button)
+        self.mark = DiamondRing(self.details, 2)
+        self.wave = Wave(self.details, 2)
+        controls = dict(size=26, radius=8, color=white(0.64), point=13)
+        self.history_button = icon_button("clock.arrow.circlepath", "Chat history", self, "showHistory:", **controls)
+        self.title_button = PointerButton.alloc().initWithFrame_(NSMakeRect(0, 0, 200, 28))
+        self.title_button.setBordered_(False)
+        self.title_button.cell().setLineBreakMode_(AK.NSLineBreakByTruncatingTail)
+        self.title_button.setTarget_(self)
+        self.title_button.setAction_("showHistory:")
+        self.title_button.setWantsLayer_(True)
+        self.title_button.layer().setCornerRadius_(8)
+        self.title = None
+        self.new_button = icon_button("square.and.pencil", "New chat", self, "newChat:", **controls)
+        self.pin_button = icon_button("pin", "Pin conversation", self, "togglePin:", **controls)
+        for button in (self.history_button, self.title_button, self.new_button, self.pin_button):
+            self.foreground.addSubview_(button)
         self.chat = ChatContent.alloc().init()
-        self.chat.build(self, store=store)
+        self.chat.build(self, store=store, submit=submit)
         self.chat.view.setWantsLayer_(True)
         self.chat.view.layer().setMasksToBounds_(True)
         self.foreground.addSubview_(self.chat.view)
@@ -164,18 +178,21 @@ class NotchWindow(NSObject):
         self.foreground.addSubview_(self.history.view)
         self.drop_view = AK.NSView.alloc().initWithFrame_(NSMakeRect(0, 0, 260, 80))
         self.drop_view.setWantsLayer_(True)
-        self.drop_view.layer().setCornerRadius_(14)
-        self.drop_view.layer().setBackgroundColor_(AK.NSColor.colorWithSRGBRed_green_blue_alpha_(0.09, 0.07, 0.16, 1).CGColor())
-        self.drop_view.layer().setBorderWidth_(1)
-        self.drop_view.layer().setBorderColor_(AK.NSColor.colorWithSRGBRed_green_blue_alpha_(0.55, 0.43, 0.9, 1).CGColor())
+        self.drop_edge = Q.CAShapeLayer.layer()
+        self.drop_edge.setFillColor_(VIOLET.colorWithAlphaComponent_(0.08).CGColor())
+        self.drop_edge.setStrokeColor_(VIOLET.colorWithAlphaComponent_(0.7).CGColor())
+        self.drop_edge.setLineWidth_(1)
+        self.drop_edge.setLineDashPattern_([5, 4])
+        self.drop_view.layer().addSublayer_(self.drop_edge)
         self.drop_icon = AK.NSImageView.alloc().initWithFrame_(NSMakeRect(0, 0, 24, 24))
-        self.drop_icon.setImage_(symbol("arrow.down.doc"))
+        self.drop_icon.setImage_(symbol("arrow.down.to.line", VIOLET.colorWithAlphaComponent_(0.9), 18))
         self.drop_view.addSubview_(self.drop_icon)
-        self.drop_label = AK.NSTextField.labelWithString_("Drop files to attach")
+        self.drop_label = label("Drop to attach", 13.5, AK.NSColor.whiteColor())
         self.drop_label.setAlignment_(AK.NSTextAlignmentCenter)
-        self.drop_label.setFont_(AK.NSFont.systemFontOfSize_(12))
-        self.drop_label.setTextColor_(AK.NSColor.whiteColor())
         self.drop_view.addSubview_(self.drop_label)
+        self.drop_hint = label("Files go with your next message", 12.5, white(0.64))
+        self.drop_hint.setAlignment_(AK.NSTextAlignmentCenter)
+        self.drop_view.addSubview_(self.drop_hint)
         self.foreground.addSubview_(self.drop_view)
         NSNotificationCenter.defaultCenter().addObserver_selector_name_object_(
             self, "screenChanged:", AK.NSApplicationDidChangeScreenParametersNotification, None,
@@ -199,21 +216,24 @@ class NotchWindow(NSObject):
         self.width = min(2 * math.ceil(((self.closed_width or 197) + 96) / 2), frame.size.width)
         self.height = self.closed_height or 32
         self.chat_width = min(520, frame.size.width - 24)
-        self.chat_height = min(440, frame.size.height - 64)
-        self.canvas_width = self.chat_width + 24
-        self.canvas_height = self.chat_height + 16
+        self.chat_height = min(480, frame.size.height - 120)
+        self.compose_width = min(COMPOSE_WIDTH, self.chat_width)
+        self.transcript_width = self.chat_width - 2 * (CHAT_RADIUS + PAD)
+        self.canvas_width = self.chat_width + 2 * MARGIN_X
+        self.canvas_height = self.chat_height + MARGIN_BOTTOM
         self.panel.setFrame_display_(NSMakeRect(
             frame.origin.x + (frame.size.width - self.canvas_width) / 2,
             frame.origin.y + frame.size.height - self.canvas_height, self.canvas_width, self.canvas_height,
         ), False)
-        self.shape.setFrame_(self.panel.contentView().bounds())
-        self.foreground.setFrame_(self.panel.contentView().bounds())
-        self.clip.setFrame_(self.panel.contentView().bounds())
-        self.moon.setBounds_(NSMakeRect(0, 0, 16, 16))
-        self.moon.setContentsScale_(screen.backingScaleFactor())
-        self.visualizer.setBounds_(NSMakeRect(0, 0, 23, 16))
-        self.bars.setFrame_(self.visualizer.bounds())
-        self.shape.setContentsScale_(screen.backingScaleFactor())
+        bounds = self.panel.contentView().bounds()
+        scale = screen.backingScaleFactor()
+        self.surface.layout(bounds, scale)
+        for layer in (self.shape, self.clip):
+            layer.setFrame_(bounds)
+            layer.setContentsScale_(scale)
+        self.foreground.setFrame_(bounds)
+        for item in (self.mark.layer, self.mark.ring, self.mark.bead, self.wave.layer):
+            item.setContentsScale_(scale)
         self._draw(animate=False)
         self.update_audio()
         self.panel.orderFrontRegardless()
@@ -236,8 +256,15 @@ class NotchWindow(NSObject):
         if self.hovered or self.pinned or self.drop_hover:
             if self.history_open and not self.drop_hover:
                 return "history"
-            return "chat" if self.chat.messages or self.full_chat else "compose"
+            # Hover always starts compact; only sending or picking a chat opens the full window.
+            return "chat" if self.full_chat else "compose"
         return "voice" if self.expanded else "closed"
+
+    @objc.python_method
+    def _settle(self):
+        """Once the island collapses, the next hover starts again from the compact composer."""
+        if not (self.hovered or self.pinned or self.drop_hover):
+            self.full_chat = self.history_open = False
 
     @objc.python_method
     def _present(self):
@@ -269,13 +296,18 @@ class NotchWindow(NSObject):
                     self.left_at = now
                 elif now - self.left_at >= 0.35:
                     self.hovered = False
+                    self._settle()
                     self._present()
         interactive = (inside or self.drop_hover) and self.mode in ("compose", "chat", "history")
+        if not interactive:
+            # An ignoring or collapsing panel gets no mouseExited, so it must hand back any hover cursor itself.
+            release_cursor()
         self.panel.setIgnoresMouseEvents_(not (interactive or self.file_dragging))
 
     @objc.python_method
     def tick(self):
         now = time.monotonic()
+        elapsed = min(now - self.motion_time, 0.2)
         self.update_drag(now=now)
         self.update_hover()
         self.chat.tick(now)
@@ -285,6 +317,38 @@ class NotchWindow(NSObject):
         self.motion_time = now
         if self.mode == "voice":
             self.update_audio()
+        self.update_state(now, elapsed)
+
+    @objc.python_method
+    def update_state(self, now, elapsed):
+        """Drive the mark and the corona from what Luna is doing right now."""
+        text = self.mode in ("compose", "chat", "history")
+        working = text and self.chat.pending is not None
+        voice = self.mode == "voice"
+        level = sum(self.levels) / len(self.levels)
+        if working:
+            state = "thinking"
+        elif voice:
+            state = "speaking" if self.speaking else "listening"
+        elif self.chat.attention:
+            state = "attention"
+        else:
+            state = "ready"
+        reduce = AK.NSWorkspace.sharedWorkspace().accessibilityDisplayShouldReduceMotion()
+        phase = 0.0 if reduce else (now % THINK_PERIOD) / THINK_PERIOD
+        target = 1.0 if working or (voice and self.speaking) else 0.0
+        if reduce:
+            self.glow = target
+        else:
+            self.glow += (target - self.glow) * (1 - math.exp(-elapsed / 0.25))
+            if abs(self.glow - target) < 0.002:
+                self.glow = target
+        Q.CATransaction.begin()
+        Q.CATransaction.setDisableActions_(True)
+        self.mark.set_state(state, level, phase)
+        # Speaking modulates the corona with Luna's voice; work holds it steady.
+        self.surface.set_glow(self.glow * (0.7 + 0.3 * level if voice and self.speaking else 1))
+        Q.CATransaction.commit()
 
     @objc.python_method
     def open_chat(self):
@@ -292,20 +356,35 @@ class NotchWindow(NSObject):
         self._present()
 
     def showHistory_(self, sender):
+        if self.history_open:
+            self.closeHistory_(sender)
+            return
         if not self.chat.flush_draft(force=True):
             return
-        self.history_open = not self.history_open
-        if self.history_open:
-            self.history.refresh()
+        self.history_open = True
+        self.history.search.setStringValue_("")
+        self.history.refresh()
         self.hovered = True
-        self._present()
+        self._draw(animate=True)
+        self.panel.makeKeyWindow()
+        self.panel.makeFirstResponder_(self.history.search)
+        editor = self.history.search.currentEditor()
+        if editor is not None:
+            editor.setInsertionPointColor_(VIOLET)
+
+    def closeHistory_(self, sender):
+        """Esc in search: back to writing, in whichever size the island had before."""
+        self.history_open = False
+        self._draw(animate=True)
+        if self.panel.isKeyWindow():
+            self.panel.makeFirstResponder_(self.chat.prompt)
 
     def newChat_(self, sender):
         if self.chat.new_chat():
             self.history_open = False
-            self.full_chat = True
+            self.full_chat = False
             self.hovered = True
-            self._present()
+            self._draw(animate=True)
             self.panel.makeKeyWindow()
             self.panel.makeFirstResponder_(self.chat.prompt)
 
@@ -362,13 +441,12 @@ class NotchWindow(NSObject):
     def togglePin_(self, sender):
         self.pinned = not self.pinned
         self.hovered = True
-        self.pin_button.setImage_(symbol("pin.fill" if self.pinned else "pin"))
+        self.pin_button.setImage_(symbol("pin.fill" if self.pinned else "pin",
+                                         AK.NSColor.whiteColor() if self.pinned else white(0.64), 13))
         label = "Unpin conversation" if self.pinned else "Pin conversation"
         self.pin_button.setToolTip_(label)
         self.pin_button.setAccessibilityLabel_(label)
-        self.pin_button.layer().setBackgroundColor_(
-            AK.NSColor.colorWithSRGBRed_green_blue_alpha_(0.25, 0.18, 0.38, 1 if self.pinned else 0).CGColor(),
-        )
+        self.pin_button.layer().setBackgroundColor_(white(0.16 if self.pinned else 0).CGColor())
         self.pin_button.setAccessibilityValue_("Pinned" if self.pinned else "Unpinned")
         self._present()
 
@@ -379,6 +457,7 @@ class NotchWindow(NSObject):
         self.hovered = False
         self.entered_at = self.left_at = None
         self.suppress_hover = True
+        self._settle()
         self._present()
 
     @objc.python_method
@@ -399,20 +478,25 @@ class NotchWindow(NSObject):
             old + (new - old) * (1 - math.exp(-elapsed / (0.04 if new > old else 0.14)))
             for old, new in zip(self.levels, target)
         )
-        path = Q.CGPathCreateMutable()
-        for i, level in enumerate(self.levels):
-            height = 2 + 14 * level
-            Q.CGPathAddRoundedRect(path, None, NSMakeRect(i * 5, (16 - height) / 2, 3, height), 1.5, 1.5)
-        colors = (
-            [AK.NSColor.colorWithSRGBRed_green_blue_alpha_(0.35, 0.55, 1, 1).CGColor(),
-             AK.NSColor.colorWithSRGBRed_green_blue_alpha_(0.75, 0.4, 1, 1).CGColor()]
-            if self.speaking else [AK.NSColor.whiteColor().CGColor()] * 2
-        )
+        reduce = AK.NSWorkspace.sharedWorkspace().accessibilityDisplayShouldReduceMotion()
         Q.CATransaction.begin()
         Q.CATransaction.setDisableActions_(True)
-        self.bars.setPath_(path)
-        self.visualizer.setColors_(colors)
+        self.wave.update(self.levels, self.speaking, 0 if reduce else (now % 1.6) / 1.6)
         Q.CATransaction.commit()
+
+    @objc.python_method
+    def _update_title(self):
+        title = self.chat.store.current["title"]
+        key = (title, self.history_open)
+        if key == self.title:
+            return
+        self.title = key
+        # The chevron is a text attachment centred on the cap height, so it always lines up with the title.
+        self.title_button.setAttributedTitle_(rich(
+            [title + "  ", ("chevron.down", white(0.48))], 13.5, AK.NSColor.whiteColor(), AK.NSFontWeightSemibold))
+        self.title_button.setAccessibilityLabel_(f"{title}, show chat history")
+        self.title_button.setToolTip_("Show chat history")
+        self.history_button.layer().setBackgroundColor_(white(0.16 if self.history_open else 0).CGColor())
 
     @objc.python_method
     def _draw(self, *, animate):
@@ -420,70 +504,99 @@ class NotchWindow(NSObject):
             return
         self.mode = self._desired_mode()
         text_mode = self.mode in ("compose", "chat", "history")
-        if self.mode in ("chat", "history"):
-            width, height, top, bottom = self.chat_width, self.chat_height, 10, 24
+        compact = self.compose_width
+        if self.drop_hover and self.mode != "chat":
+            width, height, top, bottom = compact, self.height + DROP_HEIGHT, 10, 26
+        elif self.mode == "chat":
+            width, height, top, bottom = self.chat_width, self.chat_height, CHAT_RADIUS, 30
+        elif self.mode == "history":
+            self.history.view.setFrame_(NSMakeRect(0, 0, compact - 2 * (10 + PAD), 300))
+            height = min(self.chat_height, self.height + self.history.content_height + PAD)
+            width, top, bottom = compact, 10, 26
         elif self.mode == "compose":
-            width, height, top, bottom = self.width, self.height + self.chat.composer_height + 24, 6, 18
+            width, height = compact, self.height + 8 + self.chat.composer_height + PAD
+            top, bottom = 10, 26
         elif self.mode == "voice":
-            width, height, top, bottom = self.width, self.height, 6, 10
+            width, height, top, bottom = self.width, self.height, 6, 12
         else:
             width, height = self.closed_width, self.closed_height
             top, bottom = (6, 10) if width else (0, 0)
         immediate = not animate or AK.NSWorkspace.sharedWorkspace().accessibilityDisplayShouldReduceMotion()
-        target = (width, height, top, bottom,
-                  float(self.mode in ("compose", "chat") and not self.drop_hover),
-                  float(self.mode == "history"), float(self.mode == "voice"),
-                  float(self.mode in ("chat", "history")), float(self.mode in ("chat", "history")),
-                  float(self.drop_hover), self.chat.composer_height)
+        chat = self.mode in ("compose", "chat") and not self.drop_hover
+        target = (width, height, top, bottom, float(chat), float(self.mode == "history" and not self.drop_hover),
+                  float(self.mode == "voice"), float(self.mode == "chat"),
+                  float(self.mode in ("compose", "history") and not self.drop_hover),
+                  float(self.drop_hover), float(self.mode == "chat"))
         self.motion.move_to(target, immediate=immediate, closing=self.mode == "closed")
         self.motion_time = time.monotonic()
         self.panel.interactive = text_mode
         if not text_mode and self.panel.isKeyWindow():
             self.panel.makeFirstResponder_(None)
             self.panel.resignKeyWindow()
+        self.chat.set_placeholder("Reply to Luna" if self.full_chat else "Ask Luna anything")
+        self._update_title()
         self._render_geometry()
 
     @objc.python_method
     def _render_geometry(self):
-        width, height, top, bottom, body_a, history_a, voice_a, pin_a, new_a, drop_a, composer_h = self.motion.value
+        width, height, top, bottom, chat_a, history_a, voice_a, bar_a, wing_a, drop_a, full_a = self.motion.value
         width, height = max(0, width), max(0, height)
         path = notch_path(self.canvas_width, self.canvas_height, width, height, max(0, top), max(0, bottom))
         header_width = max(width, self.width)
         left = (self.canvas_width - header_width) / 2
         header_y = self.canvas_height - self.height / 2
-        body_width = max(1, width - 32)
-        body_height = max(56, height - self.height - 24)
-        body_rect = NSMakeRect((self.canvas_width - width) / 2 + 16,
-                               self.canvas_height - height + 12, body_width, body_height)
-        reveal = min(1, max(0, (height - self.height - 24) / max(56, composer_h)))
+        island_left = (self.canvas_width - width) / 2 + max(0, top)
+        island_right = (self.canvas_width + width) / 2 - max(0, top)
+        toolbar_y = self.canvas_height - self.height - 6 - 28
+        offset = self.height + 4 + TOOLBAR * max(0, min(1, bar_a))
+        # The path's top flare sits outside the visible edge, so content insets by flare + PAD on each side.
+        body_width = max(1, island_right - island_left - 2 * PAD)
+        body_height = max(1, height - offset - PAD)
+        body_rect = NSMakeRect(island_left + PAD, self.canvas_height - height + PAD, body_width, body_height)
+        reveal = min(1, max(0, (height - self.height - 16) / 40))
         reveal = reveal * reveal * (3 - 2 * reveal)
+        bar = max(0, min(1, bar_a))
         Q.CATransaction.begin()
         Q.CATransaction.setDisableActions_(True)
         self.shape.setPath_(path)
         self.clip.setPath_(path)
-        self.shape.setStrokeColor_(AK.NSColor.colorWithSRGBRed_green_blue_alpha_(0.59, 0.43, 0.96, 1).CGColor())
-        self.shape.setLineWidth_(max(0, min(1, drop_a)) * 1.25)
-        self.moon.setPosition_((left + 30, header_y))
-        self.visualizer.setPosition_((left + header_width - 30, header_y))
-        self.visualizer.setOpacity_(max(0, min(1, voice_a)))
-        self.history_button.setFrame_(NSMakeRect(left + header_width - 44, header_y - 14, 28, 28))
-        self.new_button.setFrame_(NSMakeRect(left + header_width - 76, header_y - 14, 28, 28))
-        self.pin_button.setFrame_(NSMakeRect(left + header_width - 108, header_y - 14, 28, 28))
-        text_a = max(body_a, history_a, drop_a)
-        for view, alpha in ((self.history_button, text_a), (self.new_button, new_a), (self.pin_button, pin_a)):
-            alpha = max(0, min(1, alpha))
+        self.surface.update(path, self.canvas_height, height, self.height)
+        self.mark.layer.setPosition_((left + 30, header_y))
+        self.mark.layer.setOpacity_(1 if width > self.closed_width + 20 or not self.closed_width else 0)
+        self.wave.layer.setPosition_((left + header_width - 40, header_y))
+        self.wave.layer.setOpacity_(max(0, min(1, voice_a)))
+        # New chat and pin glide between the notch's right wing (compact) and the chat toolbar.
+        wing_right = left + header_width - 12
+        wing_y = header_y - 13
+        self.history_button.setFrame_(NSMakeRect(wing_right - 3 * 28, wing_y, 26, 26))
+        for index, button in ((1, self.new_button), (0, self.pin_button)):
+            wing_x = wing_right - (index + 1) * 28
+            bar_x = island_right - PAD - (index + 1) * 32
+            size = 26 + 2 * bar
+            button.setFrame_(NSMakeRect(wing_x + (bar_x - wing_x) * bar, wing_y + (toolbar_y - wing_y) * bar,
+                                        size, size))
+        title_width = min(self.title_button.fittingSize().width + 20, max(80, island_right - island_left - 112))
+        self.title_button.setFrame_(NSMakeRect(island_left + PAD, toolbar_y, title_width, 28))
+        compact_controls = max(0, min(1, wing_a))
+        controls = ((self.history_button, compact_controls), (self.title_button, bar),
+                    (self.new_button, max(compact_controls, bar)), (self.pin_button, max(compact_controls, bar)))
+        for view, alpha in controls:
             view.setHidden_(alpha < 0.003)
             view.setAlphaValue_(alpha)
-        for view, alpha in ((self.chat.view, body_a), (self.history.view, history_a), (self.drop_view, drop_a)):
+        for view, alpha in ((self.chat.view, chat_a), (self.history.view, history_a), (self.drop_view, drop_a)):
             alpha = max(0, min(1, alpha)) * reveal
             view.setFrame_(body_rect)
             view.setHidden_(alpha < 0.003)
             view.setAlphaValue_(alpha)
-        self.chat.layout(body_width, body_height, self.mode == "chat" or body_height > 100,
-                         composer_height=max(56, composer_h))
-        self.history.layout(self.chat_width - 32, max(56, self.chat_height - self.height - 24))
-        self.drop_icon.setFrame_(NSMakeRect((body_width - 24) / 2, (body_height - 24) / 2 + 10, 24, 24))
-        self.drop_label.setFrame_(NSMakeRect(8, max(2, body_height / 2 - 24), max(1, body_width - 16), 20))
+        self.chat.layout(body_width, body_height, full_a > 0.5)
+        self.history.layout(body_width, body_height)
+        edge = Q.CGPathCreateWithRoundedRect(NSMakeRect(0.5, 0.5, body_width - 1, body_height - 1), 14, 14, None)
+        self.drop_edge.setFrame_(NSMakeRect(0, 0, body_width, body_height))
+        self.drop_edge.setPath_(edge)
+        middle = body_height / 2
+        self.drop_icon.setFrame_(NSMakeRect((body_width - 24) / 2, middle + 12, 24, 24))
+        self.drop_label.setFrame_(NSMakeRect(8, middle - 10, max(1, body_width - 16), 18))
+        self.drop_hint.setFrame_(NSMakeRect(8, middle - 30, max(1, body_width - 16), 16))
         Q.CATransaction.commit()
 
     @objc.python_method

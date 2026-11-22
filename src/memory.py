@@ -8,7 +8,6 @@ import os
 import time
 from contextlib import asynccontextmanager, contextmanager
 from datetime import datetime, timezone
-from pathlib import Path
 from uuid import uuid4
 
 import asyncpg
@@ -16,10 +15,12 @@ from hindsight_client import Hindsight
 from loguru import logger
 from pipecat.adapters.schemas.function_schema import FunctionSchema
 
-DATA = Path.home() / "Library/Application Support/Luna/memory"
+from src.paths import HOME, MEMORY_API_PORT, MEMORY_DATABASE_PORT
+
+DATA = HOME / "memory"
 CONFIG = DATA / "config.json"
-API_URL = "http://127.0.0.1:8889"
-DATABASE_URL = "postgresql://hindsight:hindsight@127.0.0.1:55439/hindsight"
+API_URL = f"http://127.0.0.1:{MEMORY_API_PORT}"
+DATABASE_URL = f"postgresql://hindsight:hindsight@127.0.0.1:{MEMORY_DATABASE_PORT}/hindsight"
 BANK = "luna"
 MAX_STARTUP_BYTES = 96_000
 NOTES = (

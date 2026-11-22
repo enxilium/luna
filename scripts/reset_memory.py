@@ -5,15 +5,9 @@ import os
 import subprocess
 from pathlib import Path
 
-from scripts.setup_memory import (
-    AGENTS,
-    LABEL,
-    OLLAMA_LABEL,
-    RUNTIME,
-    stop_service,
-    wait_for,
-)
+from src.install.memory import AGENTS, OLLAMA_URL, RUNTIME, stop_service, wait_for
 from src.memory import API_URL, CONFIG, DATA, memory_lock
+from src.paths import MEMORY_LABEL as LABEL, OLLAMA_LABEL
 
 
 def reset():
@@ -30,7 +24,7 @@ def reset():
             if log.exists():
                 log.write_text("")
         subprocess.run(["launchctl", "bootstrap", f"gui/{os.getuid()}", str(AGENTS / f"{OLLAMA_LABEL}.plist")], check=True)
-        wait_for("http://127.0.0.1:11435/api/tags", 30)
+        wait_for(OLLAMA_URL + "/api/tags", 30)
         subprocess.run(["launchctl", "bootstrap", f"gui/{os.getuid()}", str(AGENTS / f"{LABEL}.plist")], check=True)
         wait_for(API_URL + "/health")
     import asyncio

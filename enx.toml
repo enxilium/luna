@@ -1,0 +1,50 @@
+
+[project]
+name = "my-app"
+
+[env]
+development = ".env.development"
+staging = ".env.staging"
+production = ".env.production"
+
+[up]
+steps = ["npm install", "enx run db:migrate"]
+
+[up.linux]
+steps = ["sudo apt-get install -y libssl-dev"]
+
+[up.macos]
+steps = ["brew install openssl"]
+
+[down]
+steps = ["docker compose down"]
+
+[start]
+commands = ["npm run dev"]
+
+[tasks.test]
+command = "npm run test"
+description = "Run the test suite"
+
+[tasks."db:migrate"]
+command = "npx prisma migrate dev"
+description = "Run database migrations"
+
+[tasks."db:seed"]
+command = "npx prisma db seed"
+description = "Seed the database"
+
+[tasks.deploy]
+command = "bash deploy.sh"
+description = "Deploy the application"
+
+[open]
+repo = "https://github.com/myorg/my-app"
+ci = "https://github.com/myorg/my-app/actions"
+docs = "https://myapp.readme.io"
+
+[tasks.kill-dashboard]
+command = "pkill -f \"main.py --dashboard\""
+
+[tasks.open-dashboard]
+command = "uv run python -m scripts.build_dashboard_app && open build/Luna.app"

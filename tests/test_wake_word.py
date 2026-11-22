@@ -15,7 +15,7 @@ from pipecat.pipeline.worker import PipelineParams, PipelineWorker
 from pipecat.processors.frame_processor import FrameProcessor
 from pipecat.workers.runner import WorkerRunner
 
-from scripts import setup_wake_word
+from src.audio import wake_word
 from src.audio.wake_word import MODEL_DIR, MODEL_FILES, SherpaDetector, WakeWordGate
 
 
@@ -218,12 +218,13 @@ class DetectorTests(unittest.TestCase):
             with self.assertRaises(FileNotFoundError):
                 SherpaDetector(model_dir=folder)
             target = Path(folder) / "models" / "model"
+            seen = []
             with (
-                patch.object(setup_wake_word, "MODEL_DIR", target),
-                patch.object(setup_wake_word, "urlopen", return_value=BytesIO(b"bad archive")),
+                patch("urllib.request.urlopen", return_value=BytesIO(b"bad archive")),
                 self.assertRaisesRegex(RuntimeError, "checksum mismatch"),
             ):
-                setup_wake_word.download_model()
+                wake_word.download_model(lambda done, total: seen.append(done), model_dir=target)
+            self.assertEqual(seen, [len(b"bad archive")])
             self.assertEqual(list(target.parent.iterdir()), [])
 
     @unittest.skipUnless(
@@ -231,6 +232,18 @@ class DetectorTests(unittest.TestCase):
         and (MODEL_DIR / "test_wavs" / "en_0.wav").is_file(),
         "Requires the local wake word model from scripts.setup_wake_word",
     )
+    def test_the_model_loads_without_a_utf8_locale(self):
+        # Opened from Finder, Luna has no LANG; tokens.txt is UTF-8, and reading it as ASCII once took Luna down.
+        import os, subprocess, sys
+        env = {k: v for k, v in os.environ.items() if not k.startswith(("LC_", "LANG", "PYTHONUTF8"))}
+        env |= {"LC_ALL": "C", "PYTHONUTF8": "0", "PYTHONCOERCECLOCALE": "0"}
+        code = ("import locale, sys; from src.audio.wake_word import SherpaDetector; "
+                "assert locale.getpreferredencoding(False).lower() in ('ascii', 'us-ascii', 'ansi_x3.4-1968'); "
+                "print(SherpaDetector().phones)")
+        result = subprocess.run([sys.executable, "-c", code], cwd=Path(__file__).resolve().parents[1], env=env,
+                                capture_output=True, text=True, encoding="utf-8")
+        self.assertEqual(result.stdout.strip().splitlines()[-1:], ["L UW1 N AH0"], result.stderr[-2000:])
+
     def test_real_model_handles_silence_and_repeated_upstream_keyword(self):
         detector = SherpaDetector()
         self.assertEqual(detector.phones, "L UW1 N AH0")

@@ -2,7 +2,10 @@
 
 Luna uses `gemini-3.8-live` through Pipecat 1.12.0. Gemini receives the
 microphone stream, detects turns, chooses functions, and generates the audio
-played by the Mac. Typed input uses the same Live session with capture disabled.
+played by the Mac. Typed input (`scripts.inference_tts`) uses the same Live service
+code with capture disabled, in its own process and session. The notch text chat
+normally uses Flash models instead; it opens a one-turn Live session, keeping only
+the output transcript, after both Flash quotas are used up (see README, "Island text chat").
 All spoken words come from Gemini. A local sherpa-onnx detector gates voice startup
 until "Luna" is heard. There is no acknowledgement generator, local conversational
 model, or separate TTS service.
@@ -58,7 +61,10 @@ Ollama client, local summarizer, and prompt-cache management are removed.
 `connect_integration`, `authorize_integration`, and `read_tool_result` remain;
 Pipecat supplies `cancel_authorize_integration`. The recorded inventory produces
 **69 declarations: 65 upstream tools and four controls**, about **203 KB** in
-the recorded outgoing setup. Voice mode adds `end_conversation` to that inventory.
+the recorded outgoing setup. Both modes add the local `get_weather` tool
+(`src/agent/weather.py`), and voice mode adds `end_conversation`.
+When persistent memory is set up, both modes also publish `recall_memory` and
+`remember_memory`.
 Live usage reports roughly 53,000 prompt tokens for
 an initial response with this inventory.
 
@@ -77,19 +83,21 @@ audio frames, interruption, and the session history protocol.
 
 - The adapter uses Gemini's `parameters_json_schema` field. The default
   OpenAPI-schema conversion rejects valid upstream MCP keywords such as
-  `readOnly`, `deprecated`, and `allOf`. Constraints are preserved, and execution
-  still validates the original schema.
+  `readOnly`, `deprecated`, and `allOf`. Local `$ref` pointers are expanded for
+  the model and an unused `$defs` block is dropped (`src/integrations/schemas.py`).
+  Constraints are preserved, and execution still validates the original schema.
 - Setup and Pipecat's StartFrame must use the same context, declarations, and
   registered handlers. Without this, advertised tools can lose their handlers
   during startup. A delayed fake connection and real tool calls verify this.
 - Voice mode defers the shared connection path until the local audio gate
   activates it. Context and catalog updates cannot open an idle connection;
   activation loads the latest catalog. Cancellation stops both connection
-  startup and buffered-audio delivery. Ending a conversation settles its tool
-  result without requesting another response, closes the session, clears its
-  resumption handle, and resets the local detector. Late context/tool updates
-  cannot open an idle connection. Transport reconnection preserves the current
-  conversation; explicit wake activation loads configured memory separately.
+  startup and buffered-audio delivery. The `end_conversation` result goes back
+  to Gemini so it can finish its closing turn. After that turn and its playback
+  drain, Luna drops any results still pending for the conversation instead of
+  sending them, closes the session, clears its resumption handle, and resets the
+  local detector. Transport reconnection preserves the current conversation;
+  explicit wake activation loads configured memory separately.
 - Typed requests are retained in local conversation context and committed with
   `send_client_content(turn_complete=True)`, followed immediately by the Gemini
   3.x realtime trigger. Client content alone did not trigger inference in the

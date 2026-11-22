@@ -17,6 +17,7 @@ from pipecat.transports.base_transport import BaseTransport
 from pipecat.workers.runner import WorkerRunner
 
 from src.agent.services import build_llm_service
+from src.agent.text import TextAgent
 from src.audio.apple import AppleAudioTransport
 from src.audio.levels import pcm_levels
 from src.audio.wake_word import SherpaDetector, WakeWordGate
@@ -121,8 +122,8 @@ def build_worker(transport: BaseTransport, integrations: MCPRuntime, memory=None
     return worker
 
 
-async def run_conversation(*, stopped=None, on_activity=None, on_audio=None) -> None:
-    """Listen and respond through the Mac's default microphone and speakers."""
+async def run_conversation(*, stopped=None, on_activity=None, on_audio=None, text_requests=None, on_text=None) -> None:
+    """Listen and respond through the Mac's default microphone and speakers, and answer typed chats if given."""
     owns_signals = stopped is None
     if stopped is None:
         stopped = asyncio.Event()
@@ -135,7 +136,17 @@ async def run_conversation(*, stopped=None, on_activity=None, on_audio=None) -> 
         loop.add_signal_handler(sig, stopped.set)
     try:
         async with MCPRuntime.from_config() as integrations, Memory.open() as memory:
-            await _run_background(integrations, stopped, memory, on_activity=on_activity, on_audio=on_audio)
+            if text_requests is None:
+                await _run_background(integrations, stopped, memory, on_activity=on_activity, on_audio=on_audio)
+                return
+            # Typed chats survive voice pipeline rebuilds; they share integrations and memory, not the audio session.
+            async with TextAgent(integrations, memory) as text:
+                serving = asyncio.create_task(text.serve(text_requests, on_text))
+                try:
+                    await _run_background(integrations, stopped, memory, on_activity=on_activity, on_audio=on_audio)
+                finally:
+                    text_requests.put(None)
+                    await serving
     finally:
         for sig, handler in previous.items():
             loop.remove_signal_handler(sig)

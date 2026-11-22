@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 from mcp.server.lowlevel import Server
 
-from scripts import setup_google
+from src.install import google as setup_google
 from src.integrations.auth import AuthFailure, MCPOAuthAdapter
 from src.integrations.mcp import MCPRuntime
 from src.integrations.workspace.auth import GoogleAPIAuthAdapter

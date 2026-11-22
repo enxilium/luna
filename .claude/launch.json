@@ -1,0 +1,38 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dashboard",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": [
+        "run",
+        "python",
+        "-m",
+        "src.dashboard.server",
+        "--demo",
+        "--port",
+        "8790",
+        "--token",
+        "dev"
+      ],
+      "port": 8790
+    },
+    {
+      "name": "dashboard-8792",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": [
+        "run",
+        "python",
+        "-m",
+        "src.dashboard.server",
+        "--demo",
+        "--port",
+        "8792",
+        "--token",
+        "dev"
+      ],
+      "port": 8792,
+      "autoPort": false
+    }
+  ]
+}

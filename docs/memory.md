@@ -15,14 +15,26 @@ references, and to search before claiming a topic was never discussed.
    environment only adds the matching client and asyncpg. This avoids mixing the
    service's inference dependencies into the voice pipeline.
 2. macOS LaunchAgents run a dedicated native Ollama server on `127.0.0.1:11435`
-   and Hindsight on `127.0.0.1:8889`. Hindsight starts its dedicated pg0-managed
-   PostgreSQL instance on `127.0.0.1:55439`. None binds to the network interface.
+   (ports, labels and the Postgres name below are your own Luna's; a separate `LUNA_HOME`
+   gets its own, from `src/paths.py`, and shares only Ollama's model files)
+   and Hindsight on `127.0.0.1:8889`. The Hindsight agent runs
+   `scripts/memory_service.py`, which starts a dedicated pg0-managed PostgreSQL
+   instance on `127.0.0.1:55439` before launching Hindsight. Hindsight's LLM calls
+   go to that Ollama server's OpenAI-compatible `/v1` endpoint; embeddings and
+   reranking use local ONNX models. None binds to the network interface.
+   `OLLAMA_KEEP_ALIVE=1m` unloads the model (about 18 GB) one minute after the
+   last request, so RAM is held only while extraction or note refreshes run;
+   Hindsight sends its requests back to back, so a batch loads the model once.
+   Setup writes this into the LaunchAgent; re-run `setup_memory` (or add the key
+   to the installed plist) for an existing install.
 3. Each app runtime has a session UUID. Every wake has a new conversation UUID.
    Connection resumption, tool-catalog refresh, and socket renewal preserve that
    conversation. A new wake clears its transient Gemini history and reloads notes.
-   The typed interface has one conversation per window runtime.
+   The typed Live window has one conversation per window runtime. Each island text
+   chat uses its chat ID as its conversation UUID, so it continues across restarts.
 4. Pipecat's `on_user_turn_message_added` saves finalized voice text; typed input
-   is saved before forwarding. `on_assistant_turn_stopped` saves assistant text,
+   is saved before forwarding. Island chats save the user turn before generation
+   and the reply only once it completes. `on_assistant_turn_stopped` saves assistant text,
    marking interrupted output as possibly unheard. These handlers finish during
    pipeline cleanup. There is no raw audio archive.
 5. A database transaction appends the source turn and a pending conversation

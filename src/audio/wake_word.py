@@ -10,9 +10,11 @@ from pipecat.frames.frames import CancelFrame, EndFrame, InputAudioRawFrame
 from pipecat.processors.frame_processor import FrameDirection, FrameProcessor
 import sherpa_onnx
 
+from src.paths import HOME
+
 
 MODEL_NAME = "sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20"
-MODEL_DIR = Path.home() / "Library/Application Support/Luna/models" / MODEL_NAME
+MODEL_DIR = HOME / "models" / MODEL_NAME
 MODEL_FILES = (
     "encoder-epoch-13-avg-2-chunk-8-left-64.onnx",
     "decoder-epoch-13-avg-2-chunk-8-left-64.onnx",
@@ -20,6 +22,44 @@ MODEL_FILES = (
     "tokens.txt",
     "en.phone",
 )
+MODEL_URL = f"https://github.com/k2-fsa/sherpa-onnx/releases/download/kws-models/{MODEL_NAME}.tar.bz2"
+MODEL_SHA256 = "68447f4fbc67e70eee3a93961f36e81e98f47aef73ce7e7ca00885c6cd3616a6"
+
+
+def model_ready(model_dir=MODEL_DIR):
+    return all((model_dir / name).is_file() for name in MODEL_FILES)
+
+
+def download_model(progress=None, *, model_dir=MODEL_DIR, url=MODEL_URL, sha256=MODEL_SHA256):
+    """Fetch the pinned model once into `model_dir`. `progress(done, total)` follows the download (total may be 0)."""
+    import hashlib
+    import tarfile
+    from urllib.request import urlopen
+
+    if model_dir.exists():
+        if not model_ready(model_dir):
+            raise RuntimeError(f"Incomplete model directory: {model_dir}")
+        return
+    model_dir.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=model_dir.parent) as staging:
+        archive = Path(staging) / "model.tar.bz2"
+        digest = hashlib.sha256()
+        with urlopen(url, timeout=60) as response, archive.open("wb") as output:
+            total, done = int(getattr(response, "headers", {}).get("Content-Length") or 0), 0
+            while chunk := response.read(256 * 1024):
+                digest.update(chunk)
+                output.write(chunk)
+                done += len(chunk)
+                if progress:
+                    progress(done, total)
+        if digest.hexdigest() != sha256:
+            raise RuntimeError("Model checksum mismatch; download discarded.")
+        with tarfile.open(archive) as bundle:
+            bundle.extractall(staging, filter="data")
+        extracted = Path(staging) / model_dir.name
+        if not model_ready(extracted):
+            raise RuntimeError("The downloaded model is missing required files.")
+        extracted.rename(model_dir)
 
 
 class SherpaDetector:
@@ -32,7 +72,7 @@ class SherpaDetector:
                 "Wake word model files are missing. Run uv run python -m scripts.setup_wake_word."
             )
         lexicon = {}
-        for line in (model_dir / "en.phone").read_text().splitlines():
+        for line in (model_dir / "en.phone").read_text(encoding="utf-8").splitlines():
             word, *phones = line.split()
             lexicon[word] = phones
         words = phrase.upper().split()
@@ -42,7 +82,7 @@ class SherpaDetector:
         if missing:
             raise ValueError(f"No English pronunciation in this model for: {', '.join(missing)}")
         phones = [phone for word in words for phone in lexicon[word]]
-        tokens = {line.split()[0] for line in (model_dir / "tokens.txt").read_text().splitlines()}
+        tokens = {line.split()[0] for line in (model_dir / "tokens.txt").read_text(encoding="utf-8").splitlines()}
         if not set(phones) <= tokens:
             raise ValueError("The pronunciation dictionary does not match the model tokens.")
 

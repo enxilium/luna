@@ -30,6 +30,8 @@ from mcp.shared.auth import (
 )
 from mcp.types import CallToolResult
 
+from src.paths import PROFILE, keychain_service
+
 
 Progress = Callable[[dict], Awaitable[None]]
 _KEYCHAIN_LOCK = threading.Lock()
@@ -101,14 +103,15 @@ class KeychainTokenStorage:
         self._lock = asyncio.Lock()
         self._record: dict | None = None
         self._interactive = contextvars.ContextVar("keychain_interaction", default=interactive)
-        self._account = hashlib.sha256(server_url.encode()).hexdigest()
+        # A separate home (LUNA_HOME) keeps its own records, so trying setup as a new user never replaces your sign-ins.
+        self._account = hashlib.sha256((server_url + (f"#{PROFILE}" if PROFILE else "")).encode()).hexdigest()
 
     def _query(self) -> dict:
         import Security as S
 
         return {
             S.kSecClass: S.kSecClassGenericPassword,
-            S.kSecAttrService: "Luna MCP",
+            S.kSecAttrService: keychain_service("Luna MCP"),
             S.kSecAttrAccount: self._account,
         }
 
@@ -229,6 +232,54 @@ class KeychainTokenStorage:
 
     async def set_client_info(self, client_info: OAuthClientInformationFull) -> None:
         await self._update({"client_info": client_info.model_dump(mode="json")})
+
+
+class APITokenAuthAdapter:
+    """A personal API token for a local stdio server (Canvas): kept in Keychain, handed to the server process as one
+    environment variable when it starts. There's no sign-in flow to run from a conversation: setup stores the token
+    (scripts/setup_canvas.py), and a missing or rejected token reports which, so the user can run setup again."""
+
+    http_auth = None
+
+    def __init__(self, resource: str, variable: str, storage: KeychainTokenStorage | None = None):
+        self.variable = variable
+        self.storage = storage or KeychainTokenStorage(resource)
+
+    def env(self) -> dict:
+        """The variable for the server's environment. Never prompts; raises AuthRequired when there's no token."""
+        token = self.storage._read().get("token")
+        if not isinstance(token, str) or not token:
+            raise AuthRequired("token_setup_required")
+        return {self.variable: token}
+
+    def save(self, token: str) -> None:
+        """Store a token (setup only: may show the Keychain prompt)."""
+        token = token.strip()
+        if not token:
+            raise ValueError("empty token")
+        self.storage._interactive.set(True)
+        self.storage._write({"token": token})
+
+    def classify_failure(self, failure) -> AuthRequired | None:
+        if isinstance(failure, AuthRequired):
+            return failure
+        if isinstance(failure, CallToolResult):
+            if not failure.is_error:
+                return None
+            message = " ".join(getattr(item, "text", "") for item in failure.content)
+        else:
+            message = str(failure)
+        message = message.lower()
+        if "401" in message or "invalid access token" in message or "unauthorized" in message:
+            return AuthRequired("token_rejected")
+        return None
+
+    async def authorize(self, report_progress: Progress) -> AuthOutcome:
+        try:
+            await asyncio.to_thread(self.env)
+        except AuthRequired as required:
+            return AuthOutcome("failed", required.reason)
+        return AuthOutcome("connected")
 
 
 class _Callback:

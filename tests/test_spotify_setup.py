@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts.setup_spotify import _patch_server
+from src.install.spotify import _patch_server
 
 
 class SpotifySetupTests(unittest.TestCase):
@@ -22,7 +22,7 @@ class SpotifySetupTests(unittest.TestCase):
             "--- a/server.txt\n+++ b/server.txt\n"
             "@@ -1 +1 @@\n-before\n+after\n"
         )
-        override = patch("scripts.setup_spotify.PLAYBACK_PATCH", playback_patch)
+        override = patch("src.install.spotify.PLAYBACK_PATCH", playback_patch)
         override.start()
         self.addCleanup(override.stop)
 
