@@ -739,7 +739,7 @@ class WorkspaceAuthTests(unittest.IsolatedAsyncioTestCase):
     def callback_uri(self):
         with socket.socket() as listener:
             listener.bind(("127.0.0.1", 0))
-            return f"http://127.0.0.1:{listener.getsockname()[1]}/oauth/callback"
+            return f"http://127.0.0.1:{listener.getsockname()[1]}/"
 
     async def test_google_flow_checks_state_pkce_and_reuses_grant_after_reconnect(self):
         import hashlib

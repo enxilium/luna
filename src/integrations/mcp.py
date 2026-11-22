@@ -247,7 +247,7 @@ class MCPRuntime:
                     from src.integrations.workspace.auth import GoogleAPIAuthAdapter
                     from src.integrations.workspace.server import build_server
                     adapter = GoogleAPIAuthAdapter(
-                        entry["service"], redirect_uri=entry.get("redirect_uri", "http://127.0.0.1:8765/oauth/callback"),
+                        entry["service"], redirect_uri=entry.get("redirect_uri", "http://127.0.0.1:8765/"),
                         scopes=entry.get("scopes"),
                     )
                     server = build_server(entry["service"], auth=adapter)

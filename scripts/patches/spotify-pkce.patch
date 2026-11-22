@@ -1,0 +1,199 @@
+diff --git a/spotify-config.example.json b/spotify-config.example.json
+index bddfc50..9106e27 100644
+--- a/spotify-config.example.json
++++ b/spotify-config.example.json
+@@ -1,6 +1,5 @@
+ {
+   "clientId": "your-client-id",
+-  "clientSecret": "your-client-secret",
+   "redirectUri": "http://127.0.0.1:8888/callback",
+   "accessToken": "run-npm auth to get this",
+   "refreshToken": "run-npm auth to get this",
+diff --git a/src/utils.ts b/src/utils.ts
+index a7fc6bd..94f1c56 100644
+--- a/src/utils.ts
++++ b/src/utils.ts
+@@ -12,7 +12,6 @@ const CONFIG_FILE = path.join(__dirname, '../spotify-config.json');
+ 
+ export interface SpotifyConfig {
+   clientId: string;
+-  clientSecret: string;
+   redirectUri: string;
+   accessToken?: string;
+   refreshToken?: string;
+@@ -22,15 +21,15 @@ export interface SpotifyConfig {
+ export function loadSpotifyConfig(): SpotifyConfig {
+   if (!fs.existsSync(CONFIG_FILE)) {
+     throw new Error(
+-      `Spotify configuration file not found at ${CONFIG_FILE}. Please create one with clientId, clientSecret, and redirectUri.`,
++      `Spotify configuration file not found at ${CONFIG_FILE}. Please create one with clientId and redirectUri.`,
+     );
+   }
+ 
+   try {
+     const config = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+-    if (!(config.clientId && config.clientSecret && config.redirectUri)) {
++    if (!(config.clientId && config.redirectUri)) {
+       throw new Error(
+-        'Spotify configuration must include clientId, clientSecret, and redirectUri.',
++        'Spotify configuration must include clientId and redirectUri.',
+       );
+     }
+     return config;
+@@ -235,14 +234,8 @@ export async function createSpotifyApi(): Promise<SpotifyApi> {
+     return cachedSpotifyApi;
+   }
+ 
+-  // Fallback to client credentials if no user tokens available
+-  cachedSpotifyApi = SpotifyApi.withClientCredentials(
+-    config.clientId,
+-    config.clientSecret,
+-  );
+-  cachedAccessToken = null;
+-
+-  return cachedSpotifyApi;
++  // A public client (PKCE, no secret) has no client-credentials fallback: the user signs in.
++  throw new Error('No access token available. Run "npm run auth" to authenticate.');
+ }
+ 
+ function generateRandomString(length: number): string {
+@@ -257,30 +250,38 @@ function generateRandomString(length: number): string {
+     .join('');
+ }
+ 
+-function base64Encode(str: string): string {
+-  return Buffer.from(str).toString('base64');
++// PKCE (RFC 7636): Spotify's flow for apps that can't keep a client secret.
++function base64Url(bytes: Buffer): string {
++  return bytes.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
++}
++
++function pkcePair(): { verifier: string; challenge: string } {
++  const verifier = base64Url(crypto.randomBytes(64));
++  const challenge = base64Url(crypto.createHash('sha256').update(verifier).digest());
++  return { verifier, challenge };
+ }
+ 
+ async function exchangeCodeForToken(
+   code: string,
+   config: SpotifyConfig,
++  verifier: string,
+ ): Promise<{
+   access_token: string;
+   refresh_token: string;
+   expires_in: number;
+ }> {
+   const tokenUrl = 'https://accounts.spotify.com/api/token';
+-  const authHeader = `Basic ${base64Encode(`${config.clientId}:${config.clientSecret}`)}`;
+ 
+   const params = new URLSearchParams();
+   params.append('grant_type', 'authorization_code');
+   params.append('code', code);
+   params.append('redirect_uri', config.redirectUri);
++  params.append('client_id', config.clientId);
++  params.append('code_verifier', verifier);
+ 
+   const response = await fetch(tokenUrl, {
+     method: 'POST',
+     headers: {
+-      Authorization: authHeader,
+       'Content-Type': 'application/x-www-form-urlencoded',
+     },
+     body: params,
+@@ -307,16 +308,15 @@ async function refreshAccessToken(
+   }
+ 
+   const tokenUrl = 'https://accounts.spotify.com/api/token';
+-  const authHeader = `Basic ${base64Encode(`${config.clientId}:${config.clientSecret}`)}`;
+ 
+   const params = new URLSearchParams();
+   params.append('grant_type', 'refresh_token');
+   params.append('refresh_token', config.refreshToken);
++  params.append('client_id', config.clientId);
+ 
+   const response = await fetch(tokenUrl, {
+     method: 'POST',
+     headers: {
+-      Authorization: authHeader,
+       'Content-Type': 'application/x-www-form-urlencoded',
+     },
+     body: params,
+@@ -383,6 +383,7 @@ export async function authorizeSpotify(): Promise<void> {
+   const callbackPath = redirectUri.pathname || '/callback';
+ 
+   const state = generateRandomString(16);
++  const pkce = pkcePair();
+ 
+   const scopes = [
+     'user-read-private',
+@@ -407,6 +408,8 @@ export async function authorizeSpotify(): Promise<void> {
+     redirect_uri: config.redirectUri,
+     scope: scopes.join(' '),
+     state: state,
++    code_challenge_method: 'S256',
++    code_challenge: pkce.challenge,
+     show_dialog: 'true',
+   });
+ 
+@@ -459,7 +462,7 @@ export async function authorizeSpotify(): Promise<void> {
+         }
+ 
+         try {
+-          const tokens = await exchangeCodeForToken(code, config);
++          const tokens = await exchangeCodeForToken(code, config, pkce.verifier);
+ 
+           config.accessToken = tokens.access_token;
+           config.refreshToken = tokens.refresh_token;
+@@ -538,7 +541,7 @@ export async function authorizeSpotify(): Promise<void> {
+             throw new Error('No authorization code received');
+           }
+ 
+-          const tokens = await exchangeCodeForToken(code, config);
++          const tokens = await exchangeCodeForToken(code, config, pkce.verifier);
+           config.accessToken = tokens.access_token;
+           config.refreshToken = tokens.refresh_token;
+           config.expiresAt = Date.now() + tokens.expires_in * 1000;
+diff --git a/test/auth.test.js b/test/auth.test.js
+index eb98135..e66c2fc 100644
+--- a/test/auth.test.js
++++ b/test/auth.test.js
+@@ -7,10 +7,16 @@ import { configPath, mockConfig, mockHttp } from './helpers.js';
+ const refreshRequest = {
+   url: 'https://accounts.spotify.com/api/token',
+   method: 'POST',
+-  authorization: `Basic ${Buffer.from('test-client:test-secret').toString('base64')}`,
+-  form: { grant_type: 'refresh_token', refresh_token: 'test-refresh' },
++  authorization: null, // PKCE public client: no client secret, so no Basic auth
++  form: { grant_type: 'refresh_token', refresh_token: 'test-refresh', client_id: 'test-client' },
+ };
+ 
++test('without a user sign-in there is no client-credentials fallback', async (t) => {
++  mockConfig(t, { accessToken: undefined, refreshToken: undefined, expiresAt: undefined });
++  mockHttp(t, []);
++  await assert.rejects(createSpotifyApi(), /No access token available/);
++});
++
+ for (const mode of ['sdk', 'direct']) {
+   test(`${mode} refreshes expired tokens, persists rotation, and uses the new token`, async (t) => {
+     const config = mockConfig(t, { expiresAt: 1 });
+diff --git a/test/helpers.js b/test/helpers.js
+index e21535c..4057adc 100644
+--- a/test/helpers.js
++++ b/test/helpers.js
+@@ -12,7 +12,6 @@ export const configPath = fileURLToPath(
+ export function mockConfig(t, overrides = {}) {
+   let config = {
+     clientId: 'test-client',
+-    clientSecret: 'test-secret',
+     redirectUri: 'http://127.0.0.1:8888/callback',
+     accessToken: 'test-access',
+     refreshToken: 'test-refresh',
+@@ -88,7 +87,7 @@ export function mockHttp(t, expected) {
+     assert.equal(request.method, step.method ?? 'GET');
+     assert.equal(
+       request.headers.get('authorization'),
+-      step.authorization ?? 'Bearer test-access',
++      'authorization' in step ? step.authorization : 'Bearer test-access',
+     );
+     if (step.body !== undefined) assert.deepEqual(JSON.parse(body), step.body);
+     if (step.form)

@@ -24,20 +24,19 @@ NODE_VERSION = "26.8.1"
 DATA = HOME
 SERVER = DATA / "servers/spotify"
 CONFIG = SERVER / "spotify-config.json"
-PLAYBACK_PATCH = resources.PATCHES / "spotify-playback.patch"
+# Applied in order: playback guards, then PKCE sign-in and refresh without a client secret (a desktop app can't keep one).
+PATCHES = [resources.PATCHES / "spotify-playback.patch", resources.PATCHES / "spotify-pkce.patch"]
 TOOLS = ["searchSpotify", "getNowPlaying", "getMyPlaylists", "getAvailableDevices", "playMusic", "pausePlayback"]
 
 
 def _patch_server(directory: Path) -> None:
-    if subprocess.run(
-        ["git", "apply", "--reverse", "--check", str(PLAYBACK_PATCH)],
-        cwd=directory, capture_output=True,
-    ).returncode == 0:
-        return
-    subprocess.run(
-        ["git", "apply", "--check", str(PLAYBACK_PATCH)], cwd=directory, check=True,
-    )
-    subprocess.run(["git", "apply", str(PLAYBACK_PATCH)], cwd=directory, check=True)
+    for patch in PATCHES:
+        if subprocess.run(
+            ["git", "apply", "--reverse", "--check", str(patch)], cwd=directory, capture_output=True,
+        ).returncode == 0:
+            continue
+        subprocess.run(["git", "apply", "--check", str(patch)], cwd=directory, check=True)
+        subprocess.run(["git", "apply", str(patch)], cwd=directory, check=True)
 
 
 def _node() -> Path:
@@ -68,8 +67,16 @@ def _node() -> Path:
     return executable
 
 
+def patches_digest() -> str:
+    """Which patches a built server carries; a server built with others (or none) is replaced."""
+    return hashlib.sha256(b"".join(patch.read_bytes() for patch in PATCHES)).hexdigest()
+
+
+MARKER = "luna-patches.sha256"
+
+
 def build(directory: Path, node: Path) -> None:
-    """Clone the pinned revision, apply Luna's playback patch and build (development, and packaging)."""
+    """Clone the pinned revision, apply Luna's patches and build (development, and packaging)."""
     if not directory.exists():
         directory.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run(["git", "clone", "--no-checkout", "https://github.com/marcelmarais/spotify-mcp-server.git",
@@ -82,23 +89,39 @@ def build(directory: Path, node: Path) -> None:
     env = os.environ | {"PATH": f"{node.parent}{os.pathsep}{os.environ.get('PATH', '')}"}
     subprocess.run([str(node.parent / "npm"), "ci"], cwd=directory, env=env, check=True)
     subprocess.run([str(node.parent / "npm"), "run", "build"], cwd=directory, env=env, check=True)
+    (directory / MARKER).write_text(patches_digest() + "\n")
 
 
 def _server(node: Path) -> None:
-    if (SERVER / "build/index.js").exists():
+    marker = SERVER / MARKER
+    if (SERVER / "build/index.js").exists() and marker.is_file() and marker.read_text().strip() == patches_digest():
         return
+    # An older server (say, one that signed in with a client secret) is replaced; only its config is kept.
+    config = CONFIG.read_bytes() if CONFIG.is_file() else None
     prebuilt = resources.spotify_server()
+    if SERVER.exists() and (prebuilt or not (SERVER / ".git").exists()):
+        shutil.rmtree(SERVER)
     if prebuilt:
         SERVER.parent.mkdir(parents=True, exist_ok=True)
         shutil.copytree(prebuilt, SERVER, symlinks=True)
     else:
         build(SERVER, node)
+    if config is not None:
+        with os.fdopen(os.open(CONFIG, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600), "wb") as output:
+            output.write(config)
 
 
 def _credentials() -> None:
     if CONFIG.exists():
         os.chmod(CONFIG, 0o600)
-        return
+        try:
+            config = json.loads(CONFIG.read_text())
+        except (OSError, ValueError):
+            config = {}
+        if "clientSecret" not in config:
+            return
+        # Set up before PKCE: its tokens came from the secret-based flow and can't be refreshed without the secret.
+        CONFIG.unlink()
     app = resources.spotify_app()
     if not app:
         raise InstallError("spotify_app_missing")
@@ -107,7 +130,7 @@ def _credentials() -> None:
         redirect = redirect._replace(netloc=f"127.0.0.1:{redirect.port}")
     if redirect.scheme != "http" or redirect.hostname != "127.0.0.1" or not redirect.port:
         raise InstallError("spotify_app_invalid")
-    payload = {"clientId": app["clientId"], "clientSecret": app["clientSecret"], "redirectUri": redirect.geturl()}
+    payload = {"clientId": app["clientId"], "redirectUri": redirect.geturl()}
     with os.fdopen(os.open(CONFIG, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), "w") as output:
         json.dump(payload, output, indent=2)
 
@@ -143,7 +166,10 @@ def ready():
         config = json.loads(CONFIG.read_text())
     except (OSError, ValueError):
         return False
-    return bool(config.get("refreshToken"))
+    # A sign-in from before PKCE (it kept a client secret) needs redoing, and so does a server built with other patches.
+    marker = SERVER / MARKER
+    current = marker.is_file() and marker.read_text().strip() == patches_digest()
+    return bool(config.get("refreshToken")) and "clientSecret" not in config and current
 
 
 def install(job):

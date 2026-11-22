@@ -9,10 +9,11 @@ Gemini key, the wake word model, and (if you like) memory's model, Google, Spoti
     uv run python -m scripts.package_app --with-google --with-spotify    # friends sign in through your OAuth apps
     uv run python -m scripts.package_app --with-model                    # memory's ~18 GB model inside the app
 
---with-google copies your Google OAuth web client (the one scripts/setup_google.py imported) into the app, and
---with-spotify your SPOTIFY_* app from .env. Anyone with the app can then sign in through them, so only share it with
-people you trust, and add them as test users (Google Cloud → OAuth consent screen; Spotify Developer Dashboard → User
-Management) while those apps are in testing mode.
+--with-google copies your Google OAuth Desktop app client (the one scripts/setup_google.py imported) into the app, and
+--with-spotify your SPOTIFY_* app from .env. Neither carries a real secret: a Desktop app client's secret is public by
+Google's design, and Spotify signs in with PKCE and a client ID alone. While those apps are in testing mode, add the
+people you share Luna with as test users (Google Cloud → OAuth consent screen; Spotify Developer Dashboard → User
+Management).
 
 Signing: a Developer ID Application certificate (paid Apple Developer Program) gives an app friends open without
 warnings, once notarized (--notarize PROFILE, a `xcrun notarytool store-credentials` profile). An Apple Development
@@ -268,7 +269,7 @@ def credentials(resources, google, spotify):
     if spotify:
         app = dev.spotify_app()
         if not app:
-            raise SystemExit("--with-spotify: add SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET and SPOTIFY_REDIRECT_URI to .env.")
+            raise SystemExit("--with-spotify: add SPOTIFY_CLIENT_ID and SPOTIFY_REDIRECT_URI to .env.")
         folder.mkdir(exist_ok=True)
         (folder / "spotify.json").write_text(json.dumps(app))
         step("Your Spotify app (friends sign in through it)")

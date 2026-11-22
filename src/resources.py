@@ -59,7 +59,7 @@ def spotify_server():
 
 
 def google_client():
-    """The Google OAuth web client (JSON bytes) people sign in through, or None.
+    """The Google OAuth Desktop app client (JSON bytes) people sign in through, or None.
 
     Packaged: the one the app was built with. Development: the one your own Luna imported (scripts/setup_google.py)."""
     path = BUNDLE / "credentials/google-oauth-client.json" if BUNDLE else DEFAULT_HOME / "google-oauth-client.json"
@@ -70,7 +70,7 @@ def google_client():
 
 
 def spotify_app():
-    """{"clientId", "clientSecret", "redirectUri"} of the Spotify app people sign in through, or None.
+    """{"clientId", "redirectUri"} of the Spotify app people sign in through (PKCE: no client secret), or None.
 
     Packaged: the one the app was built with. Development: SPOTIFY_* in the checkout's .env."""
     if BUNDLE:
@@ -85,6 +85,5 @@ def spotify_app():
     from dotenv import dotenv_values
 
     values = dotenv_values(env)
-    app = {"clientId": values.get("SPOTIFY_CLIENT_ID"), "clientSecret": values.get("SPOTIFY_CLIENT_SECRET"),
-           "redirectUri": values.get("SPOTIFY_REDIRECT_URI")}
+    app = {"clientId": values.get("SPOTIFY_CLIENT_ID"), "redirectUri": values.get("SPOTIFY_REDIRECT_URI")}
     return app if all(app.values()) else None

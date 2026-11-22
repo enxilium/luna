@@ -140,7 +140,7 @@ class SpotifyAuthAdapter:
             raise AuthFailure("spotify_configuration_invalid") from None
         if not isinstance(config, dict) or not all(
             isinstance(config.get(k), str) and config[k]
-            for k in ("clientId", "clientSecret", "redirectUri")
+            for k in ("clientId", "redirectUri")
         ):
             raise AuthFailure("spotify_configuration_invalid")
         return config

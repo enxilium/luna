@@ -1,4 +1,4 @@
-"""Import a Google web client into Keychain and configure Workspace MCP services (see src/install/google.py).
+"""Import a Google Desktop app client into Keychain and configure Workspace MCP services (see src/install/google.py).
 
     uv run python -m scripts.setup_google ~/Downloads/client_secret_….json   # import (the file moves into Luna's folder)
     uv run python -m scripts.setup_google --backend local|hosted             # switch the Workspace transport
@@ -17,7 +17,7 @@ if __name__ == "__main__":
         "credentials",
         type=Path,
         nargs="?",
-        help="Downloaded Google OAuth web-client JSON",
+        help="Downloaded Google OAuth client JSON (type: Desktop app)",
     )
     parser.add_argument("--backend", choices=("local", "hosted"), default="local")
     try:

@@ -77,7 +77,7 @@ uv run python -m scripts.benchmark_tools --audible --repeats 2 --output /tmp/lun
 | `src/memory.py` | Postgres turns and outbox → Hindsight retain; startup notes; `recall_memory`/`remember_memory` |
 | `src/ui/notch.py`, `glass.py`, `chat.py`, `chats.py`, `motion.py`, `drop.py` | Notch island, glass layers + Diamond Ring mark + corona, text chat, SQLite chat history, spring animation, file drops |
 | `scripts/` | Setup, reset, memory service launcher, benchmark, typed window, VoiceStudio-only audio diagnostics |
-| `scripts/patches/spotify-playback.patch` | Patch applied to the pinned upstream Spotify MCP server |
+| `scripts/patches/spotify-playback.patch`, `spotify-pkce.patch` | Patches applied in order to the pinned upstream Spotify MCP server (playback guards; PKCE sign-in and secret-free refresh) |
 | `scripts/fixtures/` | Recorded MCP catalog (65 tools), 180 Spotify response envelopes, Workspace API fakes |
 | `docs/` | Design and verification notes; `docs/benchmarks/` holds raw historical results (never rewrite them) |
 | `src/dashboard/` | Personal dashboard: `window.py` (glass overlay window, drag strip), `hotkey.py` (global shortcut), `calendar.py` (EventKit events), `location.py` (CoreLocation, town-level), `weather.py` (Open-Meteo), `picks.py` (daily task picks via Gemini Live), `server.py` (loopback aiohttp, token cookie, SSE), `store.py` (SQLite: projects, courses, tasks, notes, events…), `notes.py` (Markdown note files and media), `messages.py` (iMessage `chat.db` + Beeper), `projects.py` (folder scan), `imports.py` (Health, CSV), `web/` (no-build ES modules; `glass.js` is the window bridge, `work.js` the shared task/note pieces), `editor/` (CodeMirror + KaTeX source, built into `web/vendor/editor.js`) |
@@ -174,6 +174,11 @@ Connection supervision (`_connection_task_handler`; Luna owns the whole retry li
 - Workspace: no send or permanent-delete in Gmail; Calendar writes use ETags; Sheets rejects `writeControl`;
   downloads capped at 32 MiB; writes are never retried and partial failures report `completed_requests`.
   Credentials keep the hosted URLs as Keychain keys (`credential_resource`) so both backends share grants.
+- Bundled sign-in apps hold no real secret: Google takes only a Desktop app client (`installed` JSON; public by Google's
+  design, PKCE, redirect `http://127.0.0.1:8765/`), and Spotify signs in with PKCE and refreshes with the client ID alone
+  (`spotify-pkce.patch`; `spotify-config.json` has no `clientSecret`). Never reintroduce a Web client or a Spotify secret.
+  Upgrades: app setup (`configure(replace=True)`) swaps in a different shipped Google client and drops its tokens; Spotify
+  replaces a server whose `luna-patches.sha256` differs and drops a config with `clientSecret` (both then read as not ready).
 
 ## Audio, wake word, UI
 

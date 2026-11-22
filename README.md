@@ -308,8 +308,14 @@ Pipecat, and both conversation entry points use the same flow. Workspace needs n
 additional tool allowlist: only these implemented functions exist.
 
 Enable the relevant public APIs in your Google Cloud project, configure OAuth
-consent and test users, and create an OAuth **Web application** client. Register:
-`http://127.0.0.1:8765/oauth/callback`. Public APIs do not require the hosted MCP
+consent and test users, and create an OAuth client of type **Desktop app**. It needs no
+registered redirect: Luna signs in with PKCE through `http://127.0.0.1:8765/`, a loopback
+address Desktop clients accept on any port. Its client secret isn't confidential (Google
+treats desktop apps as public clients), so a packaged Luna can carry it; Luna refuses a
+Web application client, whose secret must stay on a server. When a newer Luna ships a different
+client, the app's setup shows Google as not connected, swaps the client in on Connect (its entries,
+file and Keychain record) and drops the old tokens; `scripts.setup_google` still refuses to overwrite.
+Public APIs do not require the hosted MCP
 Developer Preview enrollment. Account restrictions, enabled APIs, scopes, and
 Workspace administrator policies still apply. `GOOGLE_API_KEY` is for Gemini;
 Workspace uses its separate OAuth grant.
@@ -345,7 +351,7 @@ description = "Gmail messages and drafts"
 backend = "workspace"
 service = "gmail"
 auth = "google_api"
-redirect_uri = "http://127.0.0.1:8765/oauth/callback"
+redirect_uri = "http://127.0.0.1:8765/"
 scopes = "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.compose"
 ```
 
@@ -384,11 +390,11 @@ follow Canvas, and announcements appear on the course page. Your own edits are k
 ### Spotify
 
 Create a Spotify developer app and allow `http://127.0.0.1:8888/callback`.
-Put these entries in the repository's ignored `.env`:
+Put these entries in the repository's ignored `.env` (no client secret: Luna signs in
+with PKCE, Spotify's flow for apps that can't keep one):
 
 ```dotenv
 SPOTIFY_CLIENT_ID=your-client-id
-SPOTIFY_CLIENT_SECRET=your-client-secret
 SPOTIFY_REDIRECT_URI=http://127.0.0.1:8888/callback
 ```
 
@@ -399,12 +405,15 @@ uv run python main.py
 
 Setup checksum-verifies a separate Node 26.8.1 runtime under Luna's application
 data, builds the [Spotify MCP server](https://github.com/marcelmarais/spotify-mcp-server)
-at revision `001fea0186ad8f40a0dad7f6f154a47e71962f85` with Luna's playback patch,
-and adds a stdio entry. The patch confirms playback and starts named tracks from
+at revision `001fea0186ad8f40a0dad7f6f154a47e71962f85` with Luna's two patches,
+and adds a stdio entry. `spotify-pkce.patch` signs in with PKCE (S256), refreshes with the
+client ID alone, and drops upstream's client-credentials fallback, so no secret exists anywhere.
+The built server carries `luna-patches.sha256`; setup replaces a server built with other patches
+(keeping its config) and drops a config that still has a `clientSecret`, since tokens from that flow
+can't be refreshed without it, so Spotify shows as not connected until you sign in again. The patch confirms playback and starts named tracks from
 their albums to work around Spotify's silent direct-track failures. Subsequent
 album tracks may continue after the requested song ends.
-It maps the environment names to upstream's `clientId`, `clientSecret`, and
-`redirectUri`. A `localhost` redirect is normalized to `127.0.0.1` in the
+It maps the environment names to upstream's `clientId` and `redirectUri`. A `localhost` redirect is normalized to `127.0.0.1` in the
 generated configuration; the developer app must allow that exact address.
 Existing credentials and integration configuration are preserved on reruns.
 

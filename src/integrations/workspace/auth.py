@@ -31,7 +31,7 @@ class GoogleAPIAuthAdapter:
         self,
         service,
         *,
-        redirect_uri="http://127.0.0.1:8765/oauth/callback",
+        redirect_uri="http://127.0.0.1:8765/",
         scopes=None,
         storage=None,
     ):
@@ -123,7 +123,7 @@ class GoogleAPIAuthAdapter:
             if previous and previous.scope:
                 scopes.update(previous.scope.split())
             config = {
-                "web": {
+                "installed": {
                     "client_id": client.client_id,
                     "client_secret": client.client_secret,
                     "auth_uri": "https://accounts.google.com/o/oauth2/v2/auth",

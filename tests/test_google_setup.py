@@ -26,11 +26,11 @@ class GoogleSetupTests(unittest.IsolatedAsyncioTestCase):
         self.data.mkdir()
         self.source = self.root / "download.json"
         self.payload = {
-            "web": {
+            "installed": {
                 "client_id": "test.apps.googleusercontent.com",
                 "client_secret": "test-secret",
                 "token_uri": "https://oauth2.googleapis.com/token",
-                "redirect_uris": [setup_google.REDIRECT_URI],
+                "redirect_uris": ["http://localhost"],
             }
         }
         self.source.write_text(json.dumps(self.payload))
@@ -95,14 +95,44 @@ class GoogleSetupTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(entries["spotify"]["auth"], "spotify")
         await runtime.close()
 
-    async def test_invalid_credentials_and_redirect_leave_files_untouched(self):
-        for change in (
-            {"client_secret": ""},
-            {"redirect_uris": ["http://localhost:9999/wrong"]},
-            {"redirect_uris": setup_google.REDIRECT_URI},
-            {"token_uri": "https://other.example/token"},
+    async def test_the_apps_setup_swaps_in_the_client_this_luna_ships_and_drops_old_tokens(self):
+        # v0.1-alpha shipped a Web client on /oauth/callback; a later Luna ships a Desktop client.
+        await setup_google.setup(self.source, backend="local")
+        old = tomllib.loads(self.config.read_text())["integrations"]
+        for record in self.records.values():
+            record.update(tokens={"access_token": "old", "refresh_token": "old"}, expires_at=123)
+        text = self.config.read_text().replace(setup_google.REDIRECT_URI, "http://127.0.0.1:8765/oauth/callback")
+        self.config.write_text(text)
+        shipped = {"installed": self.payload["installed"] | {"client_id": "new.apps.googleusercontent.com"}}
+        payload = json.dumps(shipped).encode()
+        with self.assertRaises(AuthFailure):  # the command line never overwrites
+            await setup_google.configure(payload)
+        self.assertEqual(self.config.read_text(), text)
+        with patch("src.resources.google_client", return_value=payload):
+            self.assertFalse(await setup_google._signed_in())  # the page offers the sign-in again
+            await setup_google.configure(payload, replace=True)
+        entries = tomllib.loads(self.config.read_text())["integrations"]
+        for name in setup_google.SERVICES:
+            entry = entries["google_" + name]
+            self.assertEqual((entry["client_id"], entry["redirect_uri"]),
+                             ("new.apps.googleusercontent.com", setup_google.REDIRECT_URI))
+            self.assertEqual({k: v for k, v in entry.items() if k not in ("client_id", "redirect_uri")},
+                             {k: v for k, v in old["google_" + name].items() if k not in ("client_id", "redirect_uri")})
+        self.assertEqual(entries["spotify"]["auth"], "spotify")
+        self.assertEqual((self.data / "google-oauth-client.json").read_bytes(), payload)
+        for record in self.records.values():
+            self.assertEqual(record["client_info"]["client_id"], "new.apps.googleusercontent.com")
+            self.assertIsNone(record["tokens"])
+
+    async def test_only_a_desktop_app_client_is_imported_and_others_leave_files_untouched(self):
+        installed = self.payload["installed"]
+        for client in (
+            {"installed": installed | {"client_secret": ""}},
+            {"installed": installed | {"token_uri": "https://other.example/token"}},
+            {"installed": installed | {"client_id": "someone.example.com"}},
+            {"web": installed},  # a Web application client's secret must never ship inside the app
         ):
-            self.source.write_text(json.dumps({"web": self.payload["web"] | change}))
+            self.source.write_text(json.dumps(client))
             source, config = self.source.read_bytes(), self.config.read_bytes()
             with self.assertRaises(AuthFailure):
                 await setup_google.setup(self.source)

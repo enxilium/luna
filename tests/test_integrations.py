@@ -492,7 +492,7 @@ class IntegrationTests(unittest.IsolatedAsyncioTestCase):
         with tempfile.TemporaryDirectory() as temporary:
             directory = Path(temporary)
             path = directory / "spotify-config.json"
-            config = {"clientId": "id", "clientSecret": "secret", "redirectUri": self.adapter.redirect_uri,
+            config = {"clientId": "id", "redirectUri": self.adapter.redirect_uri,
                       "accessToken": "access", "refreshToken": "refresh", "expiresAt": 1}
             path.write_text(json.dumps(config))
             adapter = SpotifyAuthAdapter(directory, sys.executable)
