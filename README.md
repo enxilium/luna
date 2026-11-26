@@ -490,7 +490,8 @@ and notes and read your music, code and writing folders (bounces with waveforms,
 git, word counts); progress is finished tasks over all tasks, repeating ones aside.
 Academia holds courses (a code, a colour, an icon) with their tasks, events and
 notes. Notes and task descriptions share one Markdown editor with Read and Edit
-modes (⌘E), KaTeX maths, two-column blocks, images and files; notes are `.md` files
+modes (⌘E; Edit is a live preview that shows source only for the line or block you're in), KaTeX maths, two-column blocks, tables (edited as a grid; paste them from a chat or a spreadsheet), images, files, and
+components (type `/component`, describe a chart or visual, and Luna writes it into the note, sandboxed with no network); notes are `.md` files
 in the project's or course's folder. Messages (iMessage,
 plus Instagram, LinkedIn and more through Beeper Desktop or Beeper Server) open from the top bar.
 Everything stays in `~/Library/Application Support/Luna/dashboard.sqlite3`. It

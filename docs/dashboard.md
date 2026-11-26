@@ -420,8 +420,7 @@ Failures surface as reason codes, never provider text.
 - **Right-click** a project or course in the rail for a quick colour, Edit…, Pin (projects),
   Archive or Mark as finished, Show in Finder and Delete; a note for Show in Finder and Delete.
 - **Read and Edit.** A document opens in Read mode, or in Edit when it's new or empty, and
-  changes mode only when you ask: ⌘E, or the pencil/book button in its bar. Clicking or
-  moving the cursor never changes how anything looks. Edit mode is also writing mode: the
+  changes mode only when you ask: ⌘E, or the pencil/book button in its bar. Edit mode is also writing mode: the
   rail and the right column slide off the edges and the page widens (one 600 ms view
   transition) to 1040 px of text; pointing at the window's left or right edge brings that
   panel back over the page, and moving off it lets it go. The line at the top of the page
@@ -437,21 +436,39 @@ Failures surface as reason codes, never provider text.
 - **The editor** (`src/dashboard/editor/editor.js`, bundled into `web/vendor/editor.js`) is
   CodeMirror 6 with two modes. **Read** renders everything and isn't editable: Markdown
   marks hide, `$…$` and `$$…$$` render with KaTeX, `::: columns … +++ … :::` sits side by
-  side, images show in place, `> [!note] Title` is a quote-style callout; task boxes still
-  click (and save). **Edit** is the source, styled (headings sized, marks dimmed), and nothing
-  in it depends on where the cursor is: code, callouts and display maths keep a frame around
-  their source, every display equation keeps its rendering underneath (updating as you
-  type), images show under the line that names them, and inline maths under the cursor
-  previews in a tip floating above the line. Notes and task descriptions share it; only
-  the header differs (a task's status, due date, priority and repeat; a note's date).
+  side, images and tables show in place, `> [!note] Title` is a quote-style callout; task boxes still
+  click (and save). **Edit** is a live preview: everything renders as in Read except the
+  area the cursor (or a selection) is in, which shows its source, styled (headings sized,
+  marks dimmed). Notes and task descriptions share it; only the header differs (a task's
+  status, due date, priority and repeat; a note's date).
+  - **Areas.** A line is an area: the line you're on shows its source, and it renders as
+    soon as you leave it (Enter, ↑/↓, a click elsewhere). A block is one area: code, display
+    maths, a callout or columns show their source, framed, while any of their lines holds
+    the cursor (tables stay an editable grid instead; see Tables below). A display equation being edited keeps its rendering underneath
+    (updating as you type), and a line being edited that names an image shows the image
+    under it.
+  - **Capsules.** Blocks nest: inside a callout its frame and `:::` lines show as source,
+    while its other paragraphs and blocks still render on their own (inside the callout's
+    box); leaving it renders the whole callout.
+  - **Finer than a line.** On the line being edited, bold, italics, underline and
+    strikethrough show formatted, their marks only while the cursor is inside that span;
+    inline maths renders the moment the cursor leaves its `$…$` (typing the closing `$`
+    included), and while the cursor is inside it its rendering previews in a tip floating
+    above the line.
+  - **Getting in.** ↑/↓ onto a rendered block step into it (its first line going down, its
+    last going up) and ←/→ onto rendered inline maths step just inside its `$`; CodeMirror
+    would otherwise skip over them whole. Clicking a rendered block puts the cursor in it,
+    and clicking an equation opens its source.
+  - Opening or closing a tall block changes the page's height above the cursor, so the text
+    below can shift, as in Obsidian.
   - **Callouts** are containers, the syntax the notes were written in: `::: kind Title` …
     `:::`. The body is full Markdown (maths, lists, quotes, code). Kinds: `note` (sky), `tip`
     (lagoon), `definition` (violet), `theorem` (orchid), `example` (sand) and `warning`
     (amber). The header names the kind before the title ("Definition  Bootstrap
     Aggregation") so colour is never the only cue; a warning shows ⚠️ instead of a name.
     A title that starts with its own label ("Theorem: Euler's Formula" under `definition`)
-    shows as that kind. Unknown kinds read as notes under their own name. In Edit mode its
-    source is framed in the same box.
+    shows as that kind. Unknown kinds read as notes under their own name. In Edit mode, while
+    the cursor is in it, its source is framed in the same box.
   - **Code blocks** render as a panel with the language's name, a copy button and
     highlighting, in the palette; inside, the same parser highlights the source as you
     type. Fence names and their aliases: Python (`py`), JavaScript/TypeScript (`js`, `ts`,
@@ -460,7 +477,29 @@ Failures surface as reason codes, never provider text.
     Other names show unhighlighted under their own label. `code.js` holds the list.
   - **`/` menu**: headings, lists, to-dos, quote, definition, theorem, example, tip, note,
     warning, block and inline equations, columns, code (the caret lands where the language
-    goes), table, divider, image and file.
+    goes), table, divider, image, file and component.
+  - **Components** (`/component`): a field opens under the line; describe a visual and press
+    Return (Esc closes it, or stops one in progress). `src/dashboard/components.py` sends the
+    request and the open document (its title and text, up to 100,000 characters; the note is
+    data, never instructions) to Gemini through the notch chat's tiers in its default order:
+    `gemini-3.5-flash-lite` (60 s), then `gemini-3.8-flash` (90 s), then a one-turn
+    `gemini-3.8-live` session (60 s). A 429 skips a model for its retry delay; a 503 or a tier
+    running out of time hands this request to the next tier. Flash first was tried and
+    dropped: on 26 November a 20-28 KB animated component took it 66 to over 200 s (and it
+    often answered 503), against about 10 s on Flash-Lite. Every tier must
+    answer by calling `show_component` once with an HTML fragment (forced function calling for
+    Flash; a BLOCKING tool for Live, which otherwise only speaks). The result lands as a fence
+    in the note: `` ```component ``, an HTML comment with the request, then the fragment.
+    Failures show as plain messages under the field (usage limit, no key, couldn't make it),
+    never provider text. Demo mode answers with a fixed chart and never calls Gemini.
+    It renders in Read mode (and under its source in Edit mode) in an
+    `<iframe sandbox="allow-scripts">` built from `srcdoc`: scripts run, but the frame has no
+    origin of its own, so the dashboard's cookie, storage and API are out of reach, and its
+    CSP (`default-src 'none'`, inline scripts and styles, `data:` images and fonts) allows no
+    network at all, so components use no libraries or CDNs. The frame gets the palette as CSS
+    variables (`--ink…`, accents, `--hue-*` triplets, fonts) on a transparent background, and
+    reports its height to the editor (capped at 1,200 px); nothing else crosses. A component
+    inside a callout or columns shows as code.
   - **`$$…$$` inside a line** renders as display maths in its own place, the same way it
     reads inside callouts and columns.
   - **Paragraph spacing**: a blank line between paragraphs is a 12 px paragraph gap, not a
@@ -469,9 +508,31 @@ Failures surface as reason codes, never provider text.
     its gap so the cursor always has a line to sit on, and a blank line grows to a full line
     as you type into it. Callouts and columns space their paragraphs the same way, and their
     headings use the editor's own sizes.
-  - **Formatting keys** (Edit mode): ⌘B bold, ⌘I italic, ⌘⇧C code, ⌘⇧S strikethrough,
-    ⌘⇧E inline maths (each toggles), ⌘K link. ⌘E is taken by Read/Edit, as in Obsidian. Typing `*` `_` `` ` `` `~` `$` or `=` over a
-    selection wraps it; brackets pair as you type (quotes don't).
+  - **Formatting keys** (Edit mode): ⌘B bold, ⌘I italic, ⌘U underline (`__text__`, as in
+    Discord: Markdown has no underline and would read it as bold, so other apps show it bold;
+    three or more underscores, and underscores inside a word, stay as they are), ⌘⇧C code, ⌘⇧S strikethrough, ⌘⇧E inline maths, ⌘K link. ⌘E is taken
+    by Read/Edit, as in Obsidian. Each toggles: with nothing selected the marks go in around
+    the cursor; pressed again right away they go, at the end of the span the cursor steps out
+    past the closing marks (as in Obsidian), and anywhere else inside it the span is
+    unwrapped.
+    Typing `*` `_` `` ` `` `~` `$` or `=` over a selection wraps it; brackets pair as you
+    type (quotes don't).
+  - **Tables** (GFM: a header row, a `| --- | :---: |` delimiter row, rows up to a blank
+    line or a line without a pipe) render in Read mode with column alignment and inline
+    Markdown and maths in cells; wide ones scroll sideways. In Edit mode a table is the one
+    block that never turns into source: it stays a grid with a hairline around every cell,
+    and you type straight into it. Click a cell (or ↑/↓ into the table) and type; the cell
+    shows its Markdown while you're in it and renders when you leave, and every keystroke
+    rewrites the table's Markdown, padded so it lines up. Tab/⇧Tab and Enter move between
+    cells (past the last one they add a row), arrows leave the table at its edges, Escape
+    leaves below it, and Backspace at the start of an empty row deletes it. Right-click a
+    cell to insert or delete rows and columns, align a column, or delete the table; the +
+    buttons on its right and below (on hover) add a column and a row. `/table` inserts an
+    empty two-by-two grid with the cursor in its first cell. Pasting fills them in: rich text with a table
+    in it (a Claude or ChatGPT reply, a web page, a spreadsheet) becomes Markdown, keeping
+    headings, lists, emphasis, links, code and KaTeX maths; tab-separated cells become a
+    table; and pasted Markdown tables are padded to line up. Nothing is converted inside
+    code.
   - **LaTeX completion**: a backslash inside maths offers common commands, each shown
     rendered; templates like `\frac{}{}` step through their fields with Tab and out past
     the last brace.

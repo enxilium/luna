@@ -41,7 +41,7 @@ const LANGUAGES = {
 };
 const ALIASES = { py: "python", python3: "python", js: "javascript", mjs: "javascript", node: "javascript", ts: "typescript",
   h: "c", "c++": "cpp", cc: "cpp", cxx: "cpp", hpp: "cpp", postgres: "sql", postgresql: "sql", psql: "sql", plpgsql: "sql",
-  mysql: "sql", sqlite: "sql", rs: "rust", golang: "go", htm: "html", xml: "html", svg: "html", jsonc: "json",
+  mysql: "sql", sqlite: "sql", rs: "rust", golang: "go", htm: "html", xml: "html", svg: "html", component: "html", jsonc: "json",
   sh: "shell", bash: "shell", zsh: "shell", console: "shell", hs: "haskell", tex: "latex", yml: "yaml" };
 const built = new Map();
 

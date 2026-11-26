@@ -18,6 +18,7 @@ from src.dashboard import imports, notes as note_files, projects as project_scan
 from src.dashboard.calendar import open_calendar
 from src.dashboard.location import open_location
 from src.dashboard.canvas import Quercus
+from src.dashboard.components import ComponentError, Components, DemoComponents
 from src.dashboard.picks import DemoPicks, Picks, must
 from src.dashboard.weather import DemoWeather, Weather
 from src.dashboard.hotkey import DEFAULT_SHORTCUT, SHORTCUTS
@@ -51,6 +52,13 @@ PROVIDER_MESSAGES = {
     "keychain_unavailable": "The Keychain couldn't save that token.",
     "unreadable": "Messages' history couldn't be read.",
 }
+COMPONENT_MESSAGES = {
+    "quota": ("Luna has reached its usage limit for now. Try again in a few minutes.", 429),
+    "no_api_key": ("Add your Gemini key in Luna's setup first.", 503),
+    "no_component": ("Luna couldn't make that visual. Try describing it differently.", 502),
+    "too_large": ("That visual came out too large. Try asking for something simpler.", 502),
+    "failed": ("Luna couldn't make that visual. Check your internet connection and try again.", 502),
+}
 
 
 class Events:
@@ -69,7 +77,7 @@ class Events:
 
 class Dashboard:
     def __init__(self, store, hub, *, token=None, port=0, demo=False, calendar=None, location=None, weather=None, picks=None,
-                 quercus=None):
+                 quercus=None, components=None):
         self.store, self.hub = store, hub
         self.calendar = calendar or open_calendar(demo)
         self.location = location or open_location(demo, main_thread=False)
@@ -77,6 +85,7 @@ class Dashboard:
             self.location, lambda: self.store.setting("units", "metric"),
             on_place=lambda lat, lon: self.store.set_setting("weather_place", {"lat": lat, "lon": lon, "at": time.time()})))
         self.picks = picks or (DemoPicks(store) if demo else Picks(store))
+        self.components = components or (DemoComponents() if demo else Components())
         self.quercus = quercus  # keeps courses in step with Quercus; None (demo, tests) means no sync
         self.token = token or secrets.token_urlsafe(24)
         self.port = port
@@ -136,6 +145,7 @@ class Dashboard:
         r.add_delete("/api/notes/{id}", self.delete_note)
         r.add_get("/api/media", self.media)
         r.add_post("/api/media", self.upload)
+        r.add_post("/api/components", self.make_component)
         r.add_post("/api/events", self.save_event)
         r.add_get("/api/events/{id}", self.event)
         r.add_patch("/api/events/{id}", self.save_event)
@@ -594,6 +604,16 @@ class Dashboard:
         await asyncio.to_thread(self.store.delete, "notes", note["id"])
         self.changed("notes", id=note["id"])
         return web.json_response({"ok": True})
+
+    async def make_component(self, request):
+        """/component in the editor: a request plus the document it goes into, answered with the component's HTML."""
+        data = await self.body(request)
+        try:
+            html = await self.components.generate(data.get("prompt"), data.get("document"))
+        except ComponentError as error:
+            message, status = COMPONENT_MESSAGES.get(str(error), COMPONENT_MESSAGES["failed"])
+            return web.json_response({"error": message, "code": str(error)}, status=status)
+        return web.json_response({"html": html})
 
     def _media_root(self, key):
         """`project:<id>`, `course:<id>` or `task` (tasks that belong to nothing)."""

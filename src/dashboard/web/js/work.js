@@ -211,6 +211,16 @@ async function upload(owner, file) {
   return data;
 }
 
+// /component: Luna writes a visual from the request, with this document (title and text) as its context.
+async function component(doc, prompt, body, signal) {
+  const document = doc.title ? `# ${doc.title}\n\n${body}` : body;
+  const response = await fetch("/api/components", { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt, document }), credentials: "same-origin", signal });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || typeof data.html !== "string") throw new Error(data.error || "Luna couldn't make that visual.");
+  return data.html;
+}
+
 // Documents open in Read mode, or Edit for a new or empty one, and change mode only when you ask (⌘E or the button in
 // the bar): never because you clicked or the cursor moved. Edit mode is also the writing layout: the side panels slide
 // away for room to write, and pointing at either window edge brings that panel back over the page.
@@ -275,8 +285,10 @@ function editorHost(doc) {
       el.__editor = createEditor(el, {
         doc: doc.body || "", label: doc.label, placeholder: doc.placeholder, mode,
         resolve: (rel) => mediaUrl(doc.media, rel), upload: (file) => upload(doc.media, file),
+        generate: (prompt, body, signal) => component(doc, prompt, body, signal),
         onChange: (text) => { latest = text; pending.add(save); clearTimeout(timer); timer = setTimeout(() => save.flush(), 500); },
         onBlur: () => save.flush(),
+        contextMenu,
       });
       if (mode === "edit") {
         writing(true);

@@ -80,7 +80,7 @@ uv run python -m scripts.benchmark_tools --audible --repeats 2 --output /tmp/lun
 | `scripts/patches/spotify-playback.patch`, `spotify-pkce.patch` | Patches applied in order to the pinned upstream Spotify MCP server (playback guards; PKCE sign-in and secret-free refresh) |
 | `scripts/fixtures/` | Recorded MCP catalog (65 tools), 180 Spotify response envelopes, Workspace API fakes |
 | `docs/` | Design and verification notes; `docs/benchmarks/` holds raw historical results (never rewrite them) |
-| `src/dashboard/` | Personal dashboard: `window.py` (glass overlay window, drag strip), `hotkey.py` (global shortcut), `calendar.py` (EventKit events), `location.py` (CoreLocation, town-level), `weather.py` (Open-Meteo), `picks.py` (daily task picks via Gemini Live), `server.py` (loopback aiohttp, token cookie, SSE), `store.py` (SQLite: projects, courses, tasks, notes, events…), `notes.py` (Markdown note files and media), `messages.py` (iMessage `chat.db` + Beeper), `projects.py` (folder scan), `imports.py` (Health, CSV), `web/` (no-build ES modules; `glass.js` is the window bridge, `work.js` the shared task/note pieces), `editor/` (CodeMirror + KaTeX source, built into `web/vendor/editor.js`) |
+| `src/dashboard/` | Personal dashboard: `window.py` (glass overlay window, drag strip), `hotkey.py` (global shortcut), `calendar.py` (EventKit events), `location.py` (CoreLocation, town-level), `weather.py` (Open-Meteo), `picks.py` (daily task picks via Gemini Live), `components.py` (`/component` visuals via the text chat's model tiers), `server.py` (loopback aiohttp, token cookie, SSE), `store.py` (SQLite: projects, courses, tasks, notes, events…), `notes.py` (Markdown note files and media), `messages.py` (iMessage `chat.db` + Beeper), `projects.py` (folder scan), `imports.py` (Health, CSV), `web/` (no-build ES modules; `glass.js` is the window bridge, `work.js` the shared task/note pieces), `editor/` (CodeMirror + KaTeX source, built into `web/vendor/editor.js`) |
 | `src/clients/voicestudio.py` | Legacy local TTS/STT client, used only by the optional audio diagnostics |
 
 ## Runtime architecture
@@ -200,8 +200,11 @@ Connection supervision (`_connection_task_handler`; Luna owns the whole retry li
 - Runs inside Luna (`src/ui/app.py`, built hidden: `DashboardApp.build(show=False)`); `--dashboard` runs it alone for
   development. Quitting or failing takes Luna down with it, and the other way round. No agent or memory calls. Its one MCP use is the Quercus keeper
   (`canvas.py` `Quercus`, launch + every 15 min, a fresh canvas-mcp process per sync; `quercus=None` in demo and tests).
-  Its one model call is `picks.py`:
-  a Gemini Live session once a day (never Flash: that quota is the notch chat's). Details in `docs/dashboard.md`.
+  Its model calls: `picks.py`, a Gemini Live session once a day (never Flash: that quota is the notch chat's), and
+  `components.py` (`/component` in the editor, only on a user's request): the notch chat's tiers in its default Flash-Lite → Flash →
+  Live order (60/90/60 s each; a timeout, 503 or 429 hands over to the next), each answering through one forced `show_component` call; the request and the open document are the only
+  context, the document is untrusted data. Components render in an `<iframe sandbox="allow-scripts">` (never add
+  `allow-same-origin`) whose CSP allows no network; they report only their height. Details in `docs/dashboard.md`.
 - The server binds 127.0.0.1 on a random port; every request needs the per-launch token cookie, a loopback Host,
   and same-origin writes. Files are served only from project folders/items and `~/Library/Messages/Attachments`.
 - Never write to `~/Library/Messages/chat.db`. Sending uses `osascript` with text and chat ID as argv. The Beeper token
@@ -230,7 +233,7 @@ Connection supervision (`_connection_task_handler`; Luna owns the whole retry li
   there inside a user's folder, renames with the title, and trashes (never unlinks) on delete. Media is served only
   from inside an owner's root (`notes.resolve`).
 - Weather: `location.py` (CoreLocation on the main thread; never prompts except `POST /api/location/access`, a user click,
-  and only from `build/Luna.app`) + `weather.py` (Open-Meteo; with `picks.py`, the dashboard's only internet calls). Coordinates leave rounded
+  and only from `build/Luna.app`) + `weather.py` (Open-Meteo; with `picks.py` and `components.py`, the dashboard's only internet calls). Coordinates leave rounded
   to 1 decimal; never log them or provider text. Tests fake both; never contact Open-Meteo or Gemini in default tests.
 - `get_weather` (notch process) reads only `weather_place` and `units` from the dashboard DB, read-only; with no saved place it
   returns `location_unavailable` (the notch app never asks for location). Named places go to Open-Meteo's geocoder.
@@ -239,7 +242,12 @@ Connection supervision (`_connection_task_handler`; Luna owns the whole retry li
 - Front end: plain modules, no CDN. The one bundle is the editor (`cd src/dashboard/editor && npm install && npm run build`;
   output and KaTeX fonts are committed, `node_modules` is not); it loads lazily. Re-render through `core.js` `morph`;
   the editor host uses `data-keep` so re-renders never touch it. The editor has Read and Edit modes, switched only by ⌘E or the bar button (new or empty docs open in Edit, others in Read);
-  never make a decoration depend on the cursor or focus, so nothing moves within a mode. Editor block widgets must not have vertical CSS margins
+  Edit is a live preview: everything renders as in Read except the area the cursor is in, decided from the selection's lines
+  (`liveLines`), never from focus. An area is a line, or a whole block (code, display maths, callout, columns; a table instead stays an editable grid,
+  `TableEditWidget`, whose cells write back to the Markdown); blocks nest
+  like capsules, so inside a callout its other paragraphs and blocks still render. On the live line, marks of bold, italics,
+  `__underline__` (Discord-style; Markdown would read it as bold) and strikethrough show only inside their span, and inline maths
+  renders outside its `$…$`. ↑/↓ and ←/→ step into rendered blocks and equations (`enterBlock`, `enterMath`). Editor block widgets must not have vertical CSS margins
   (CodeMirror measures without them, so lines below drift): space them with padding on the `.md-block` wrapper. Page changes go through `transition()` in `core.js` (View
   Transitions; a 1.5 s fallback because a hidden window never paints). Use the motion tokens (`--ease-*`, `--t-*`), and
   never put a live `filter`/`backdrop-filter` on anything full-window: it makes transition captures slow enough to skip; background `load()`s wait while a
